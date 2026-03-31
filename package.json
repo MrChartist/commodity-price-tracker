@@ -1,0 +1,12 @@
+{
+  "name": "commodity-price-tracker",
+  "version": "1.0.0",
+  "description": "Live India Commodity Price Tracker with Import Landed Calculations - Gold, Silver, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel",
+  "author": "Mr. Chartist",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "npx -y serve .",
+    "start": "npx -y serve ."
+  }
+}
