@@ -1,21 +1,19 @@
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:6366f1&height=180&section=header&text=Commodity%20Price%20Tracker&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Live%20India%20Import%20Landed%20Price%20Engine&descSize=16&descAlignY=55&descColor=8b5cf6" width="100%" />
+
 <p align="center">
   <img src="docs/screenshots/01_hero_dashboard.png" alt="India Commodity Price Tracker — Live Dashboard" width="100%">
 </p>
 
-# 📊 India Commodity Price Tracker — Import Landed Price Engine
-
-> **Live Dashboard** that computes real-time India Import Landed Prices for Gold, Silver, Platinum, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel & Lead — purely from international benchmarks + live forex + customs duty math.
+> **Live Dashboard** that computes real-time India Import Landed Prices for Gold, Silver, Platinum, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel & Lead -- purely from international benchmarks + live forex + customs duty math.
 >
-> 🌐 **Live at:** [commodity.mrchartist.com](https://commodity.mrchartist.com/)
->
-> Built by [@mr_chartist](https://twitter.com/mr_chartist)
+> Built by [**Mr. Chartist**](https://github.com/MrChartist) | Part of the [Mr. Chartist Ecosystem](https://mrchartist.com)
 
 <p align="center">
-  <a href="https://commodity.mrchartist.com/"><img src="https://img.shields.io/badge/Live_Dashboard-commodity.mrchartist.com-orange?style=for-the-badge" alt="Live Dashboard"></a>
-  <a href="https://twitter.com/mr_chartist"><img src="https://img.shields.io/badge/Follow-@mr__chartist-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter"></a>
+  <a href="https://commodity.mrchartist.com/"><img src="https://img.shields.io/badge/Live_Dashboard-commodity.mrchartist.com-6366f1?style=for-the-badge" alt="Live Dashboard"></a>
+  <a href="https://twitter.com/mr_chartist"><img src="https://img.shields.io/badge/Follow-@mr__chartist-0d1117?style=for-the-badge&logo=x&logoColor=white" alt="Twitter"></a>
   <a href="https://buymeacoffee.com/mrchartist"><img src="https://img.shields.io/badge/Sponsor-Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
   <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
-  <img src="https://img.shields.io/badge/Backend-Zero_Server-purple?style=for-the-badge" alt="No Backend">
+  <img src="https://img.shields.io/badge/Backend-Zero_Server-8b5cf6?style=for-the-badge" alt="No Backend">
 </p>
 
 ---
@@ -221,6 +219,10 @@ Your support keeps these open-source financial tools free for the entire Indian 
 ---
 
 <p align="center">
-  <b>Made with ❤️ by Mr. Chartist</b><br>
-  <i>Decoding commodity prices for the Indian retail trader.</i>
+  <b>Made with care by <a href="https://github.com/MrChartist">Mr. Chartist</a></b><br>
+  <i>Decoding commodity prices for the Indian retail trader.</i><br><br>
+  <a href="https://mrchartist.com"><img src="https://img.shields.io/badge/mrchartist.com-6366f1?style=flat-square&logo=safari&logoColor=white" alt="Website"/></a>
+  <a href="https://github.com/MrChartist"><img src="https://img.shields.io/badge/More_Projects-0d1117?style=flat-square&logo=github&logoColor=white" alt="GitHub"/></a>
 </p>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:6366f1&height=100&section=footer" width="100%" />
