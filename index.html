@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <!-- SEO Meta Tags -->
-<title>India Commodity Price Tracker | Live Gold, Silver, Crude Oil & More - Mr Chartist</title>
-<meta name="description" content="Track real-time commodity prices in India with import landed calculations. Live Gold, Silver, Platinum, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel & Lead prices with customs duty breakdowns.">
-<meta name="keywords" content="Gold Price India, Silver Price Today, Crude Oil Price, Natural Gas Price, Copper Price, Aluminium Price, Zinc Price, Nickel Price, Commodity Price Tracker, MCX Prices, India Import Landed Price, Live Commodity Rates">
+<title>India Commodity Price Tracker | Live Gold, Silver, Crude Oil, Agri & More - Mr Chartist</title>
+<meta name="description" content="Track real-time commodity prices in India with import landed calculations. Live Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead, Wheat, Corn, Soybean, Sugar, Cotton, Coffee & Cocoa prices with customs duty breakdowns.">
+<meta name="keywords" content="Gold Price India, Silver Price Today, Crude Oil Price, Natural Gas Price, Copper Price, Aluminium Price, Zinc Price, Nickel Price, Wheat Price India, Sugar Price, Cotton Price, Coffee Price, Agri Commodity Prices, Commodity Price Tracker, MCX Prices, India Import Landed Price, Live Commodity Rates">
 <meta name="author" content="Mr. Chartist">
 <meta name="robots" content="index, follow">
 
@@ -16,7 +16,7 @@
 <meta property="og:description" content="Live commodity prices with India import landed calculations. Gold, Silver, Crude Oil, Natural Gas & Base Metals.">
 
 <!-- LLM / AI Discoverability -->
-<meta name="ai:description" content="Real-time commodity price tracker for India. Calculates import landed prices for Gold, Silver, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, and Nickel with customs duty breakdowns including BCD and AIDC.">
+<meta name="ai:description" content="Real-time commodity price tracker for India. Calculates import landed prices for Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead, and agri commodities (Wheat, Corn, Soybean, Soybean Oil, Sugar, Cotton, Coffee, Cocoa) with customs duty breakdowns including BCD, AIDC and SWS.">
 
 <!-- Performance: Preconnect -->
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -33,7 +33,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "India Commodity Price Tracker",
-  "description": "Real-time commodity price tracker for India with import landed calculations for Gold, Silver, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, and Nickel.",
+  "description": "Real-time commodity price tracker for India with import landed calculations for Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead and agri commodities including Wheat, Corn, Soybean, Sugar, Cotton, Coffee and Cocoa.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "All",
   "author": {
@@ -88,6 +88,7 @@
     <button class="cat-tab" data-cat="precious" onclick="filterCategory('precious')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg> Precious Metals</button>
     <button class="cat-tab" data-cat="industrial" onclick="filterCategory('industrial')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Industrial Metals</button>
     <button class="cat-tab" data-cat="energy" onclick="filterCategory('energy')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Energy</button>
+    <button class="cat-tab" data-cat="agri" onclick="filterCategory('agri')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg> Agri</button>
   </div>
 
   <!-- ── COMMODITY CARDS GRID ── -->
@@ -141,25 +142,29 @@
           </div>
           <div class="inner-panel">
             <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Gold & Silver</h3>
-            <p class="methodology-text">Spot price via XAU/USD & XAG/USD → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply 6% duty (5% BCD + 1% AIDC).</p>
+            <p class="methodology-text">Spot price via XAU/USD & XAG/USD → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply 15% duty (10% BCD + 5% AIDC, effective May 13, 2026).</p>
             <p class="methodology-text" style="margin-top:6px"><strong>Purity:</strong> 22K = 24K × (22/24), 18K = 24K × (18/24)</p>
             <p class="methodology-text" style="margin-top:6px"><strong>10g Price:</strong> Per gram × 10</p>
           </div>
           <div class="inner-panel">
             <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Base Metals</h3>
-            <p class="methodology-text">LME prices (USD/MT) via metals.live → Convert to ₹/kg (÷ 1000 × USD/INR) → Apply respective duty rates. Copper: 2.5%, Aluminium: 7.5%, Zinc: 5%, Lead: 5%, Nickel: 0%.</p>
+            <p class="methodology-text">Copper via COMEX (HG=F, USD/lb), Aluminium via CME (ALI=F, USD/MT); Zinc, Nickel & Lead use manually updated LME indicative levels (no free live feed exists) → Convert to ₹/kg → Apply duty incl. SWS. Copper: 5.5%, Aluminium: 8.25%, Zinc: 5.5%, Lead: 5.5%, Nickel: 0%.</p>
           </div>
           <div class="inner-panel">
             <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Energy</h3>
-            <p class="methodology-text">Crude Oil (WTI USD/barrel) → Apply ~5% duty. Natural Gas (USD/MMBtu) → Apply 2.5% duty. No unit conversion needed for standard Indian quotes.</p>
+            <p class="methodology-text">Crude Oil (WTI/Brent USD/barrel) → BCD Re 1/tonne ≈ 0% effective duty. Natural Gas (USD/MMBtu) → 2.75% (BCD 2.5% + SWS). No unit conversion needed for standard Indian quotes.</p>
           </div>
           <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Platinum</h3>
-            <p class="methodology-text">Spot price via XPT/USD → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply 15.39% duty (12.5% BCD + Social Welfare Surcharge).</p>
+            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Platinum & Palladium</h3>
+            <p class="methodology-text">Front-month futures (PL=F, PA=F) → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply ~15.4% duty (10% BCD + 5.4% AIDC, effective May 13, 2026).</p>
+          </div>
+          <div class="inner-panel">
+            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Agri Commodities</h3>
+            <p class="methodology-text">CBOT grains (Wheat, Corn, Soybean — US cents/bushel → ₹/quintal) and ICE softs (Sugar, Cotton, Coffee — US cents/lb → ₹/kg; Cocoa USD/MT → ₹/kg) → Multiply by USD/INR → Apply commodity-specific duty: Wheat 44%, Corn 50%, Sugar & Coffee 100%, Soybean Oil 16.5%, Cocoa 33%, Cotton duty-free till Oct 31, 2026.</p>
           </div>
         </div>
         <div class="methodology-footer">
-          <p>Data sources: Yahoo Finance (international futures), Metals.live (LME metals). Prices are calculated mathematically and are for illustrative purposes only.</p>
+          <p>Data sources: Yahoo Finance (international futures & forex), gold-api.com (precious metals spot backup), manually updated LME indicative levels (Zn/Ni/Pb). Prices are calculated mathematically and are for illustrative purposes only.</p>
           <p style="margin-top:6px;color:var(--t2);font-weight:600">IMPORTANT: This application does NOT display live data from NSE or MCX. All Indian quotes (including Standard Contract Equivalents) are mathematical approximations derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates.</p>
         </div>
       </div>
@@ -184,6 +189,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
       <span class="tab-txt">Energy</span>
     </a>
+    <a href="#" onclick="filterCategory('agri'); document.querySelectorAll('.tabs-wrap .tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); return false;" class="tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg>
+      <span class="tab-txt">Agri</span>
+    </a>
     <a href="/docs.html" class="tab">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
       <span class="tab-txt">Docs</span>
@@ -193,7 +202,7 @@
   <!-- ── FOOTER ── -->
   <footer class="app-footer">
     <p>Built by <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Mr. Chartist</a> · Data for illustrative purposes only</p>
-    <p style="margin-top:4px;font-size:10px;color:var(--t4)">Prices auto-refresh every ~5 seconds · Not financial advice</p>
+    <p style="margin-top:4px;font-size:10px;color:var(--t4)">Prices auto-refresh every ~30 seconds · Not financial advice</p>
   </footer>
 </div>
 
