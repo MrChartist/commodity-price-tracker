@@ -126,7 +126,7 @@
   <!-- ══ HERO ══ -->
   <div class="doc-hero doc-section">
     <h2 style="margin-bottom:8px">How Every Price Is Born</h2>
-    <p>This tracker computes India Import Landed Prices for 10+ commodities in real-time. No NSE/MCX data is used — every number is a pure mathematical derivation from international benchmarks, live forex, and published Indian customs duty rates.</p>
+    <p>This tracker computes India Import Landed Prices for 19 commodities in real-time — precious metals, energy, industrial metals and agri commodities. No NSE/MCX data is used — every number is a pure mathematical derivation from international benchmarks, live forex, and published Indian customs duty rates.</p>
     <img src="docs/screenshots/hero.png" alt="Commodity Price Tracker Engine" style="width:100%;border-radius:12px;margin-top:20px;border:1px solid var(--sep2);box-shadow:0 8px 24px rgba(0,0,0,0.15)">
   </div>
 
@@ -136,6 +136,7 @@
     <a href="#meth-precious" class="qn-link">Precious Metals</a>
     <a href="#meth-industrial" class="qn-link">Industrial Metals</a>
     <a href="#meth-energy" class="qn-link">Energy</a>
+    <a href="#meth-agri" class="qn-link">Agri Commodities</a>
     <a href="#data-sources" class="qn-link">Data Sources</a>
     <a href="#compliance" class="qn-link">Compliance</a>
     <a href="#glossary" class="qn-link">Glossary</a>
@@ -204,7 +205,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg>
         Precious
       </span>
-      Gold, Silver & Platinum
+      Gold, Silver, Platinum & Palladium
     </h2>
     <p>Precious metals use the <strong>Troy Ounce</strong> as the international standard. India manages gold/silver imports tightly due to their impact on the Current Account Deficit (CAD).</p>
 
@@ -212,8 +213,8 @@
       <div class="flow-step">
         <div class="flow-num pm">1</div><div class="flow-line"></div>
         <div class="flow-body">
-          <h4>Source: COMEX Futures (GC=F, SI=F, PL=F)</h4>
-          <p>We fetch the active front-month futures contract price in USD per Troy Ounce from the CME Group's COMEX division via Yahoo Finance CDN.</p>
+          <h4>Source: COMEX/NYMEX Futures (GC=F, SI=F, PL=F, PA=F)</h4>
+          <p>We fetch the active front-month futures contract price in USD per Troy Ounce from the CME Group via Yahoo Finance CDN, with gold-api.com spot as a backup source.</p>
         </div>
       </div>
       <div class="flow-step">
@@ -234,7 +235,7 @@
         <div class="flow-num pm">4</div>
         <div class="flow-body">
           <h4>Apply Import Duties</h4>
-          <p>Gold & Silver: <strong>5% BCD + 1% AIDC = 6% total.</strong> Platinum: <strong>12.5% BCD + 2.89% Surcharge = 15.39% total.</strong></p>
+          <p>Gold & Silver: <strong>10% BCD + 5% AIDC = 15% total.</strong> Platinum & Palladium: <strong>10% BCD + 5.4% AIDC ≈ 15.4% total.</strong> (Rates hiked from 6% / 6.4% by customs notifications effective May 13, 2026.)</p>
         </div>
       </div>
     </div>
@@ -245,12 +246,12 @@
       <table class="duty-table">
         <thead><tr><th>Variant</th><th>Formula</th><th>Example</th></tr></thead>
         <tbody>
-          <tr><td><strong>24K Gold (999)</strong></td><td>Base landed price</td><td class="mono">₹9,250/g</td></tr>
-          <tr><td><strong>22K Gold (916)</strong></td><td>24K × (22 ÷ 24)</td><td class="mono">₹8,479/g</td></tr>
-          <tr><td><strong>18K Gold (750)</strong></td><td>24K × (18 ÷ 24)</td><td class="mono">₹6,938/g</td></tr>
-          <tr><td><strong>999 Silver (Fine)</strong></td><td>Base landed price</td><td class="mono">₹98/g</td></tr>
-          <tr><td><strong>925 Silver (Sterling)</strong></td><td>999 × 0.925</td><td class="mono">₹91/g</td></tr>
-          <tr><td><strong>900 Silver (Coin)</strong></td><td>999 × 0.900</td><td class="mono">₹88/g</td></tr>
+          <tr><td><strong>24K Gold (999)</strong></td><td>Base landed price</td><td class="mono">₹13,440/g</td></tr>
+          <tr><td><strong>22K Gold (916)</strong></td><td>24K × (22 ÷ 24)</td><td class="mono">₹12,320/g</td></tr>
+          <tr><td><strong>18K Gold (750)</strong></td><td>24K × (18 ÷ 24)</td><td class="mono">₹10,080/g</td></tr>
+          <tr><td><strong>999 Silver (Fine)</strong></td><td>Base landed price</td><td class="mono">₹211/g</td></tr>
+          <tr><td><strong>925 Silver (Sterling)</strong></td><td>999 × 0.925</td><td class="mono">₹195/g</td></tr>
+          <tr><td><strong>900 Silver (Coin)</strong></td><td>999 × 0.900</td><td class="mono">₹190/g</td></tr>
         </tbody>
       </table>
     </div>
@@ -270,21 +271,21 @@
       </span>
       Copper, Aluminium, Zinc, Nickel & Lead
     </h2>
-    <p>Base metals are sourced from the <strong>London Metal Exchange (LME)</strong>, the global reference for industrial metals pricing. LME quotes in USD per Metric Tonne.</p>
+    <p>Base metals reference the <strong>London Metal Exchange (LME)</strong> and <strong>CME Group</strong>, the global benchmarks for industrial metals pricing.</p>
 
     <div class="flow-pipeline">
       <div class="flow-step">
         <div class="flow-num im">1</div><div class="flow-line"></div>
         <div class="flow-body">
-          <h4>Source: LME Spot via metals.live</h4>
-          <p>Unlike precious metals, we poll the <strong>metals.live</strong> aggregator (which mirrors LME settlement data) for Copper, Aluminium, Zinc, Nickel, and Lead in USD/MT.</p>
+          <h4>Source: COMEX/CME Futures + LME Indicative Levels</h4>
+          <p><strong>Copper</strong> (HG=F, USD/lb) and <strong>Aluminium</strong> (ALI=F, USD/MT) stream live via Yahoo Finance. <strong>Zinc, Nickel & Lead</strong> have no free live feed (the old metals.live API shut down), so the tracker uses manually updated LME indicative levels, clearly badged "~INDICATIVE" on the cards.</p>
         </div>
       </div>
       <div class="flow-step">
         <div class="flow-num im">2</div><div class="flow-line"></div>
         <div class="flow-body">
-          <h4>Metric Tonne → Kilogram Conversion</h4>
-          <p><strong>1 Metric Tonne = 1,000 kg.</strong> Divide the LME price by 1,000 to arrive at the per-kg USD value for Indian retail comparison.</p>
+          <h4>Convert to Kilogram</h4>
+          <p><strong>1 Metric Tonne = 1,000 kg</strong> (÷ 1,000), and for Copper <strong>1 lb = 0.453592 kg</strong> (÷ 0.453592) to arrive at the per-kg USD value for Indian retail comparison.</p>
         </div>
       </div>
       <div class="flow-step">
@@ -299,12 +300,12 @@
 
     <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Duty Rate Matrix — Industrial Metals</div>
     <table class="duty-table">
-      <thead><tr><th>Metal</th><th>BCD</th><th>AIDC</th><th>Total Duty</th><th>India Unit</th></tr></thead>
+      <thead><tr><th>Metal</th><th>BCD</th><th>SWS</th><th>Total Duty</th><th>India Unit</th></tr></thead>
       <tbody>
-        <tr><td><strong>Copper</strong></td><td>2.5%</td><td>—</td><td class="mono">2.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Aluminium</strong></td><td>7.5%</td><td>—</td><td class="mono">7.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Zinc</strong></td><td>5.0%</td><td>—</td><td class="mono">5.0%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Lead</strong></td><td>5.0%</td><td>—</td><td class="mono">5.0%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Copper (refined)</strong></td><td>5.0%</td><td>0.5%</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Aluminium</strong></td><td>7.5%</td><td>0.75%</td><td class="mono">8.25%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Zinc</strong></td><td>5.0%</td><td>0.5%</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Lead</strong></td><td>5.0%</td><td>0.5%</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
         <tr><td><strong>Nickel</strong></td><td>0.0%</td><td>—</td><td class="mono">0.0%</td><td>₹/kg</td></tr>
       </tbody>
     </table>
@@ -340,9 +341,62 @@
       </div>
       <div class="flow-step">
         <div class="flow-num en">4</div>
-        <div class="flow-body"><h4>Apply Energy Import Duty</h4><p><strong>Crude Oil:</strong> ~5% effective duty (subject to windfall tax adjustments). <strong>Natural Gas:</strong> 2.5% BCD.</p></div>
+        <div class="flow-body"><h4>Apply Energy Import Duty</h4><p><strong>Crude Oil:</strong> BCD Re 1/tonne ≈ 0% effective ad-valorem duty (Budget 2026-27). <strong>Natural Gas:</strong> 2.75% (2.5% BCD + SWS).</p></div>
       </div>
     </div>
+  </div>
+
+  <!-- ══ AGRI COMMODITIES ══ -->
+  <div class="doc-section card" id="meth-agri" style="scroll-margin-top:80px">
+    <h2>
+      <span class="section-badge badge-energy">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg>
+        Agri
+      </span>
+      Wheat, Corn, Soybean, Sugar, Cotton, Coffee & Cocoa
+    </h2>
+    <p>Agri commodities reference <strong>CBOT</strong> (Chicago Board of Trade) grains and <strong>ICE</strong> softs — the global benchmarks for agricultural pricing. Note: CBOT grains and ICE softs are quoted in <strong>US cents</strong> (per bushel / per pound); the engine auto-detects this via Yahoo's currency flag and normalizes to dollars.</p>
+
+    <div class="flow-pipeline">
+      <div class="flow-step">
+        <div class="flow-num en">1</div><div class="flow-line"></div>
+        <div class="flow-body">
+          <h4>Source: CBOT & ICE Futures via Yahoo Finance</h4>
+          <p><strong>Wheat (ZW=F), Corn (ZC=F), Soybean (ZS=F)</strong> in cents/bushel; <strong>Soybean Oil (ZL=F), Sugar #11 (SB=F), Cotton #2 (CT=F), Coffee C (KC=F)</strong> in cents/lb; <strong>Cocoa (CC=F)</strong> in USD/tonne.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num en">2</div><div class="flow-line"></div>
+        <div class="flow-body">
+          <h4>Convert to Indian Market Units</h4>
+          <p>Grains → <strong>₹/quintal</strong> (1 wheat/soybean bushel = 27.2155 kg; 1 corn bushel = 25.4012 kg; 1 quintal = 100 kg). Softs → <strong>₹/kg</strong> (1 lb = 0.453592 kg). Cocoa → ₹/kg (÷ 1,000).</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num en">3</div><div class="flow-line"></div>
+        <div class="flow-body"><h4>USD → INR via Live Forex</h4><p>Same real-time USD/INR conversion as all other commodities.</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num en">4</div>
+        <div class="flow-body"><h4>Apply Agri Import Duty</h4><p>India protects domestic agriculture with steep tariffs — see the matrix below. Cotton duty is date-conditional (exempt Jun 1 – Oct 31, 2026) and the engine resolves it automatically by date.</p></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Duty Rate Matrix — Agri Commodities</div>
+    <table class="duty-table">
+      <thead><tr><th>Commodity</th><th>Benchmark</th><th>Total Duty</th><th>India Unit</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Wheat</strong></td><td>CBOT ZW=F</td><td class="mono">44% (BCD 40% + SWS)</td><td>₹/quintal</td></tr>
+        <tr><td><strong>Corn (Maize)</strong></td><td>CBOT ZC=F</td><td class="mono">50% (TRQ in-quota 15%)</td><td>₹/quintal</td></tr>
+        <tr><td><strong>Soybean</strong></td><td>CBOT ZS=F</td><td class="mono">~30% (indicative)</td><td>₹/quintal</td></tr>
+        <tr><td><strong>Soybean Oil (crude)</strong></td><td>CBOT ZL=F</td><td class="mono">16.5% (BCD 10% + AIDC 5% + SWS)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Sugar</strong></td><td>ICE SB=F</td><td class="mono">100%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Cotton</strong></td><td>ICE CT=F</td><td class="mono">0% till Oct 31, 2026 (then 11%)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Coffee</strong></td><td>ICE KC=F</td><td class="mono">100%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Cocoa</strong></td><td>ICE CC=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Landed-price math is most meaningful for commodities India actually imports (edible oils, cocoa). For heavily protected crops (sugar, coffee, wheat) the landed price illustrates the tariff wall rather than a typical transaction price. Quality/grade differentials (e.g. Indian S-30 sugar vs ICE #11 raws) are not modelled.</p>
   </div>
 
   <!-- ══ DATA SOURCES ══ -->
@@ -356,13 +410,18 @@
     <div class="source-grid">
       <div class="source-card">
         <div class="src-name">Yahoo Finance</div>
-        <div class="src-desc">Precious metals, energy, forex</div>
+        <div class="src-desc">Precious metals, energy, copper, aluminium, agri futures, forex</div>
         <div class="src-badge" style="background:hsl(38 92% 48% / 0.1);color:var(--orange)">Primary</div>
       </div>
       <div class="source-card">
-        <div class="src-name">metals.live</div>
-        <div class="src-desc">LME base metals (Cu, Al, Zn, Ni, Pb)</div>
-        <div class="src-badge" style="background:hsl(152 60% 40% / 0.1);color:var(--teal)">Primary</div>
+        <div class="src-name">gold-api.com</div>
+        <div class="src-desc">Precious metals spot (backup, no key, CORS-friendly)</div>
+        <div class="src-badge" style="background:hsl(152 60% 40% / 0.1);color:var(--teal)">Backup</div>
+      </div>
+      <div class="source-card">
+        <div class="src-name">LME Indicative</div>
+        <div class="src-desc">Zn, Ni, Pb — manually updated levels (no free live feed)</div>
+        <div class="src-badge" style="background:hsl(0 60% 50% / 0.1);color:var(--red)">Static</div>
       </div>
       <div class="source-card">
         <div class="src-name">CORS Proxies</div>
@@ -400,11 +459,15 @@
       </div>
       <div class="gl-card gl-orange">
         <div class="gl-term">Basic Customs Duty (BCD)</div>
-        <div class="gl-def">The primary tariff levied by India's Ministry of Finance on imported goods. Rates vary by commodity — from 0% (Nickel) to 12.5% (Platinum). Updated annually in the Union Budget.</div>
+        <div class="gl-def">The primary tariff levied by India's Ministry of Finance on imported goods. Rates vary by commodity — from 0% (Nickel) to 100% (Sugar, Coffee). Updated in the Union Budget and by mid-year customs notifications.</div>
       </div>
       <div class="gl-card gl-green">
         <div class="gl-term">AIDC</div>
-        <div class="gl-def">Agriculture Infrastructure & Development Cess — a supplementary levy collected alongside BCD, earmarked for rural infrastructure development. Currently 1% on Gold/Silver imports.</div>
+        <div class="gl-def">Agriculture Infrastructure & Development Cess — a supplementary levy collected alongside BCD, earmarked for rural infrastructure development. Currently 5% on Gold/Silver imports (raised from 1% in May 2026).</div>
+      </div>
+      <div class="gl-card gl-green">
+        <div class="gl-term">SWS (Social Welfare Surcharge)</div>
+        <div class="gl-def">A 10% surcharge computed on the BCD amount (not the goods value) — so a 5% BCD carries 0.5% SWS, making the effective duty 5.5%. Some notifications exempt specific goods from SWS.</div>
       </div>
       <div class="gl-card gl-purple">
         <div class="gl-term">COMEX</div>
@@ -417,6 +480,22 @@
       <div class="gl-card gl-blue">
         <div class="gl-term">LME</div>
         <div class="gl-def">London Metal Exchange — the world's oldest and largest marketplace for industrial metals. Sets the global reference price for Copper, Aluminium, Zinc, Nickel, Lead, and Tin.</div>
+      </div>
+      <div class="gl-card gl-purple">
+        <div class="gl-term">CBOT</div>
+        <div class="gl-def">Chicago Board of Trade (part of CME Group) — the global benchmark exchange for grain and oilseed futures: Wheat, Corn, Soybean, Soybean Oil. Quotes are in US cents per bushel or per pound.</div>
+      </div>
+      <div class="gl-card gl-blue">
+        <div class="gl-term">ICE</div>
+        <div class="gl-def">Intercontinental Exchange — hosts the global "softs" benchmarks: Sugar #11, Cotton #2, Coffee C, and Cocoa, plus Brent Crude. Most softs are quoted in US cents per pound.</div>
+      </div>
+      <div class="gl-card gl-green">
+        <div class="gl-term">Bushel</div>
+        <div class="gl-def">The volume-based grain unit used by CBOT. By weight: 1 bushel of wheat or soybeans = 27.2155 kg (60 lb); 1 bushel of corn = 25.4012 kg (56 lb).</div>
+      </div>
+      <div class="gl-card gl-orange">
+        <div class="gl-term">Quintal</div>
+        <div class="gl-def">The standard Indian mandi (wholesale market) unit for grains and sugar. 1 quintal = 100 kg. Indian MSP (Minimum Support Price) announcements are quoted per quintal.</div>
       </div>
       <div class="gl-card gl-orange">
         <div class="gl-term">Troy Ounce (oz t)</div>
@@ -463,6 +542,7 @@
     <a href="/index.html?cat=precious" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg><span class="tab-txt">Precious</span></a>
     <a href="/index.html?cat=industrial" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span class="tab-txt">Industrial</span></a>
     <a href="/index.html?cat=energy" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="tab-txt">Energy</span></a>
+    <a href="/index.html?cat=agri" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg><span class="tab-txt">Agri</span></a>
     <a href="/docs.html" class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="tab-txt">Docs</span></a>
   </nav>
 

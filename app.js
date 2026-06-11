@@ -18,6 +18,15 @@ const SVG_ICONS = {
   nickel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>`,
   lead: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M6 18h12"/><path d="M6 14h12"/><path d="M10 6h4"/></svg>`,
   platinum: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+  palladium: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><rect x="8" y="8" width="8" height="8" rx="1.5"/></svg>`,
+  wheat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M12 8c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 8c3 0 5-2 5-5-3 0-5 2-5 5z"/><path d="M12 15c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M12 15c3 0 5-2 5-5-3 0-5 2-5 5z"/></svg>`,
+  corn: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c3 0 5 4 5 10s-2 10-5 10-5-4-5-10 2-10 5-10z"/><path d="M12 2v20"/><path d="M7.5 8h9"/><path d="M7 12h10"/><path d="M7.5 16h9"/></svg>`,
+  soybean: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="17" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="17" cy="7" r="3"/></svg>`,
+  soyoil: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6.5 7.3 6.5 12a6.5 6.5 0 0 1-13 0c0-4.7 6.5-12 6.5-12z"/></svg>`,
+  sugar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/><rect x="8.5" y="4" width="7" height="7" rx="1"/></svg>`,
+  cotton: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-1.1-8.9 6 6 0 1 0-11.4 2A3.5 3.5 0 0 0 6.5 19h11z"/></svg>`,
+  coffee: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
+  cocoa: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 7 5 12s3 10 7 10 7-5 7-10S16 2 12 2z"/><path d="M12 2v20"/></svg>`,
   chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
   globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
   sparkle: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg>`,
@@ -40,18 +49,19 @@ const COMMODITIES = {
     accentColor: 'hsl(45, 93%, 47%)',
     accentBg: 'hsl(45, 93%, 47%)',
     yahooSymbol: 'GC=F',
+    exchange: 'COMEX',
     intlUnit: 'Troy Oz',
     indiaUnit: 'g',
     conversionDivisor: 31.1035,
-    dutyRate: 0.06,
-    dutyLabel: 'BCD 5% + AIDC 1% = 6%',
+    dutyRate: 0.15,
+    dutyLabel: 'BCD 10% + AIDC 5% = 15%',
     showPurity: true,
     show10g: true,
     showKg: true,
     miniContracts: [
-      { name: 'Gold Mini', lot: '1g', multiplier: 1 },
+      { name: 'Gold Mini', lot: '100g', multiplier: 100 },
       { name: 'Gold Guinea', lot: '8g', multiplier: 8 },
-      { name: 'Gold Petal', lot: '0.5g', multiplier: 0.5 },
+      { name: 'Gold Petal', lot: '1g', multiplier: 1 },
     ],
   },
   silver: {
@@ -63,11 +73,12 @@ const COMMODITIES = {
     accentColor: 'hsl(210, 10%, 62%)',
     accentBg: 'hsl(210, 10%, 62%)',
     yahooSymbol: 'SI=F',
+    exchange: 'COMEX',
     intlUnit: 'Troy Oz',
     indiaUnit: 'g',
     conversionDivisor: 31.1035,
-    dutyRate: 0.06,
-    dutyLabel: 'BCD 5% + AIDC 1% = 6%',
+    dutyRate: 0.15,
+    dutyLabel: 'BCD 10% + AIDC 5% = 15%',
     showPurity: true,
     show10g: true,
     showKg: true,
@@ -77,7 +88,7 @@ const COMMODITIES = {
       { label: '900 Coin', ratio: 0.90 },
     ],
     miniContracts: [
-      { name: 'Silver (1 kg)', lot: '1kg', multiplier: 1000 },
+      { name: 'Silver (30 kg)', lot: '30kg', multiplier: 30000 },
       { name: 'Silver Mini', lot: '5kg', multiplier: 5000 },
       { name: 'Silver Micro', lot: '1kg', multiplier: 1000 },
     ],
@@ -91,11 +102,12 @@ const COMMODITIES = {
     accentColor: 'hsl(20, 80%, 45%)',
     accentBg: 'hsl(20, 80%, 45%)',
     yahooSymbol: 'CL=F',
+    exchange: 'NYMEX',
     intlUnit: 'Barrel',
     indiaUnit: 'barrel',
     conversionDivisor: 1,
-    dutyRate: 0.05,
-    dutyLabel: 'Effective duty ~5%',
+    dutyRate: 0.0,
+    dutyLabel: 'BCD Re 1/tonne ≈ 0%',
     showPurity: false,
     show10g: false,
   },
@@ -108,11 +120,12 @@ const COMMODITIES = {
     accentColor: 'hsl(30, 85%, 42%)',
     accentBg: 'hsl(30, 85%, 42%)',
     yahooSymbol: 'BZ=F',
+    exchange: 'ICE',
     intlUnit: 'Barrel',
     indiaUnit: 'barrel',
     conversionDivisor: 1,
-    dutyRate: 0.05,
-    dutyLabel: 'Effective duty ~5%',
+    dutyRate: 0.0,
+    dutyLabel: 'BCD Re 1/tonne ≈ 0%',
     showPurity: false,
     show10g: false,
   },
@@ -125,11 +138,12 @@ const COMMODITIES = {
     accentColor: 'hsl(200, 70%, 50%)',
     accentBg: 'hsl(200, 70%, 50%)',
     yahooSymbol: 'NG=F',
+    exchange: 'NYMEX',
     intlUnit: 'MMBtu',
     indiaUnit: 'MMBtu',
     conversionDivisor: 1,
-    dutyRate: 0.025,
-    dutyLabel: 'BCD 2.5%',
+    dutyRate: 0.0275,
+    dutyLabel: 'BCD 2.5% + SWS = 2.75%',
     showPurity: false,
     show10g: false,
   },
@@ -142,12 +156,12 @@ const COMMODITIES = {
     accentColor: 'hsl(15, 75%, 50%)',
     accentBg: 'hsl(15, 75%, 50%)',
     yahooSymbol: 'HG=F',
+    exchange: 'COMEX',
     intlUnit: 'Pound',
     indiaUnit: 'kg',
     conversionDivisor: 0.453592,
-    conversionMode: 'lbToKg',
-    dutyRate: 0.025,
-    dutyLabel: 'BCD 2.5%',
+    dutyRate: 0.055,
+    dutyLabel: 'BCD 5% + SWS = 5.5%',
     showPurity: false,
     show10g: false,
   },
@@ -160,11 +174,12 @@ const COMMODITIES = {
     accentColor: 'hsl(200, 15%, 55%)',
     accentBg: 'hsl(200, 15%, 55%)',
     yahooSymbol: 'ALI=F',
+    exchange: 'CME',
     intlUnit: 'Metric Ton',
     indiaUnit: 'kg',
     conversionDivisor: 1000,
-    dutyRate: 0.075,
-    dutyLabel: 'BCD 7.5%',
+    dutyRate: 0.0825,
+    dutyLabel: 'BCD 7.5% + SWS = 8.25%',
     showPurity: false,
     show10g: false,
   },
@@ -181,8 +196,8 @@ const COMMODITIES = {
     intlUnit: 'Metric Ton',
     indiaUnit: 'kg',
     conversionDivisor: 1000,
-    dutyRate: 0.05,
-    dutyLabel: 'BCD 5%',
+    dutyRate: 0.055,
+    dutyLabel: 'BCD 5% + SWS = 5.5%',
     showPurity: false,
     show10g: false,
   },
@@ -217,8 +232,8 @@ const COMMODITIES = {
     intlUnit: 'Metric Ton',
     indiaUnit: 'kg',
     conversionDivisor: 1000,
-    dutyRate: 0.05,
-    dutyLabel: 'BCD 5%',
+    dutyRate: 0.055,
+    dutyLabel: 'BCD 5% + SWS = 5.5%',
     showPurity: false,
     show10g: false,
   },
@@ -231,13 +246,187 @@ const COMMODITIES = {
     accentColor: 'hsl(200, 8%, 65%)',
     accentBg: 'hsl(200, 8%, 65%)',
     yahooSymbol: 'PL=F',
+    exchange: 'NYMEX',
     intlUnit: 'Troy Oz',
     indiaUnit: 'g',
     conversionDivisor: 31.1035,
-    dutyRate: 0.1539,
-    dutyLabel: 'BCD 12.5% + SWS',
+    dutyRate: 0.154,
+    dutyLabel: 'BCD 10% + AIDC 5.4% = 15.4%',
     showPurity: false,
     show10g: true,
+  },
+  palladium: {
+    name: 'Palladium',
+    symbol: 'XPD/USD',
+    icon: SVG_ICONS.palladium,
+    category: 'precious',
+    categoryLabel: 'Precious Metal',
+    accentColor: 'hsl(220, 12%, 60%)',
+    accentBg: 'hsl(220, 12%, 60%)',
+    yahooSymbol: 'PA=F',
+    exchange: 'NYMEX',
+    intlUnit: 'Troy Oz',
+    indiaUnit: 'g',
+    conversionDivisor: 31.1035,
+    dutyRate: 0.154,
+    dutyLabel: 'HS 7110 ~15.4%',
+    showPurity: false,
+    show10g: true,
+  },
+  wheat: {
+    name: 'Wheat',
+    symbol: 'ZW',
+    icon: SVG_ICONS.wheat,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(42, 75%, 45%)',
+    accentBg: 'hsl(42, 75%, 45%)',
+    yahooSymbol: 'ZW=F',
+    exchange: 'CBOT',
+    intlUnit: 'Bushel',
+    indiaUnit: 'quintal',
+    conversionDivisor: 0.272155, // 1 bushel (60 lb) = 0.272155 quintal
+    dutyRate: 0.44,
+    dutyLabel: 'BCD 40% + SWS = 44%',
+    secondaryUnit: { label: 'kg', multiplier: 0.01 },
+    showPurity: false,
+    show10g: false,
+  },
+  corn: {
+    name: 'Corn (Maize)',
+    symbol: 'ZC',
+    icon: SVG_ICONS.corn,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(50, 85%, 45%)',
+    accentBg: 'hsl(50, 85%, 45%)',
+    yahooSymbol: 'ZC=F',
+    exchange: 'CBOT',
+    intlUnit: 'Bushel',
+    indiaUnit: 'quintal',
+    conversionDivisor: 0.254012, // 1 bushel (56 lb) = 0.254012 quintal
+    dutyRate: 0.50,
+    dutyLabel: 'BCD 50% (TRQ 15%)',
+    secondaryUnit: { label: 'kg', multiplier: 0.01 },
+    showPurity: false,
+    show10g: false,
+  },
+  soybean: {
+    name: 'Soybean',
+    symbol: 'ZS',
+    icon: SVG_ICONS.soybean,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(80, 45%, 42%)',
+    accentBg: 'hsl(80, 45%, 42%)',
+    yahooSymbol: 'ZS=F',
+    exchange: 'CBOT',
+    intlUnit: 'Bushel',
+    indiaUnit: 'quintal',
+    conversionDivisor: 0.272155, // 1 bushel (60 lb) = 0.272155 quintal
+    dutyRate: 0.30,
+    dutyLabel: 'BCD ~30% (indicative)',
+    secondaryUnit: { label: 'kg', multiplier: 0.01 },
+    showPurity: false,
+    show10g: false,
+  },
+  soybeanoil: {
+    name: 'Soybean Oil',
+    symbol: 'ZL',
+    icon: SVG_ICONS.soyoil,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(60, 60%, 40%)',
+    accentBg: 'hsl(60, 60%, 40%)',
+    yahooSymbol: 'ZL=F',
+    exchange: 'CBOT',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    dutyRate: 0.165,
+    dutyLabel: 'BCD 10% + AIDC 5% + SWS = 16.5%',
+    secondaryUnit: { label: '10 kg', multiplier: 10 },
+    showPurity: false,
+    show10g: false,
+  },
+  sugar: {
+    name: 'Sugar',
+    symbol: 'SB',
+    icon: SVG_ICONS.sugar,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(330, 35%, 60%)',
+    accentBg: 'hsl(330, 35%, 60%)',
+    yahooSymbol: 'SB=F',
+    exchange: 'ICE',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    dutyRate: 1.00,
+    dutyLabel: 'BCD 100%',
+    secondaryUnit: { label: 'quintal', multiplier: 100 },
+    showPurity: false,
+    show10g: false,
+  },
+  cotton: {
+    name: 'Cotton',
+    symbol: 'CT',
+    icon: SVG_ICONS.cotton,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(200, 20%, 70%)',
+    accentBg: 'hsl(200, 20%, 70%)',
+    yahooSymbol: 'CT=F',
+    exchange: 'ICE',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    // Cotton import duty is exempted Jun 1 – Oct 31, 2026, then reverts to 11%
+    dutySchedule: [
+      { until: '2026-10-31', rate: 0.0, label: 'Duty-free till Oct 31, 2026' },
+      { until: null, rate: 0.11, label: 'BCD 5% + AIDC 5% + SWS = 11%' },
+    ],
+    dutyRate: 0.0,
+    dutyLabel: 'Duty-free till Oct 31, 2026',
+    secondaryUnit: { label: 'candy (356 kg)', multiplier: 356 },
+    showPurity: false,
+    show10g: false,
+  },
+  coffee: {
+    name: 'Coffee',
+    symbol: 'KC',
+    icon: SVG_ICONS.coffee,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(25, 50%, 35%)',
+    accentBg: 'hsl(25, 50%, 35%)',
+    yahooSymbol: 'KC=F',
+    exchange: 'ICE',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    dutyRate: 1.00,
+    dutyLabel: 'BCD 100%',
+    showPurity: false,
+    show10g: false,
+  },
+  cocoa: {
+    name: 'Cocoa',
+    symbol: 'CC',
+    icon: SVG_ICONS.cocoa,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(18, 45%, 38%)',
+    accentBg: 'hsl(18, 45%, 38%)',
+    yahooSymbol: 'CC=F',
+    exchange: 'ICE',
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'kg',
+    conversionDivisor: 1000,
+    dutyRate: 0.33,
+    dutyLabel: 'BCD 30% + SWS = 33%',
+    showPurity: false,
+    show10g: false,
   },
 };
 
@@ -284,8 +473,13 @@ async function fetchYahooQuote(symbol) {
     const result = data?.chart?.result?.[0];
     if (!result) throw new Error('No data in response');
     const meta = result.meta;
-    const price = meta.regularMarketPrice;
-    const prevClose = meta.chartPreviousClose || meta.previousClose;
+    // CBOT grains & ICE softs (ZW=F, ZC=F, ZS=F, ZL=F, SB=F, CT=F, KC=F)
+    // quote in US cents — Yahoo flags these with currency "USX"
+    const centsQuoted = (meta.currency || '').toUpperCase() === 'USX';
+    const divisor = centsQuoted ? 100 : 1;
+    const price = meta.regularMarketPrice / divisor;
+    const prevCloseRaw = meta.chartPreviousClose || meta.previousClose;
+    const prevClose = prevCloseRaw ? prevCloseRaw / divisor : null;
     const change = prevClose ? price - prevClose : 0;
     const changePct = prevClose ? (change / prevClose) * 100 : 0;
     return { price, change, changePct };
@@ -329,43 +523,48 @@ async function fetchUsdInr() {
   return null;
 }
 
-// ── METALS-API FALLBACK (for LME metals not on Yahoo) ──
-// Fetches from a free metals price API for Zinc, Nickel, Lead
-const LME_METAL_SYMBOLS = {
-  zinc: 'ZNC',
-  nickel: 'NKL',
-  lead: 'LED',
+// ── SPOT BACKUP: gold-api.com (free, no key, CORS-enabled — no proxy needed) ──
+// Used when Yahoo fails for precious metals. Returns spot only (no change data).
+const GOLD_API_SYMBOLS = {
+  gold: 'XAU',
+  silver: 'XAG',
+  platinum: 'XPT',
+  palladium: 'XPD',
 };
 
-async function fetchLMEPrices() {
-  // Try fetching from metals.live API (free, no key)
+async function fetchGoldApiSpot(commodityKey) {
+  const sym = GOLD_API_SYMBOLS[commodityKey];
+  if (!sym) return null;
   try {
-    const url = 'https://metals.live/api/v1/spot';
-    const data = await fetchWithProxy(url, 6000);
-    if (data && Array.isArray(data)) {
-      const result = {};
-      for (const item of data) {
-        const name = (item.name || '').toLowerCase();
-        if (name.includes('zinc')) {
-          result.zinc = { price: item.price, change: 0, changePct: 0, isLME: true };
-        } else if (name.includes('nickel')) {
-          result.nickel = { price: item.price, change: 0, changePct: 0, isLME: true };
-        } else if (name.includes('lead')) {
-          result.lead = { price: item.price, change: 0, changePct: 0, isLME: true };
-        }
-      }
-      if (Object.keys(result).length > 0) return result;
-    }
+    const resp = await fetch(`https://api.gold-api.com/price/${sym}`, { signal: AbortSignal.timeout(6000) });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    if (data?.price) return { price: data.price, change: 0, changePct: 0, isSpotBackup: true };
   } catch (e) {
-    console.warn('Metals.live API failed:', e.message);
+    console.warn(`gold-api.com failed for ${sym}:`, e.message);
   }
+  return null;
+}
 
-  // Fallback: use approximate market prices (updated periodically)
-  return {
-    zinc: { price: 2780, change: 0, changePct: 0, isApprox: true },
-    nickel: { price: 15400, change: 0, changePct: 0, isApprox: true },
-    lead: { price: 1960, change: 0, changePct: 0, isApprox: true },
-  };
+// ── LME INDICATIVE PRICES (Zinc, Nickel, Lead) ──
+// metals.live shut down and no free, key-less, CORS-friendly LME feed exists.
+// Yahoo has no live Zn/Ni/Pb futures either (ZN=F is the 10-yr T-Note!).
+// These USD/tonne values are indicative LME 3M levels, updated manually.
+const LME_INDICATIVE = {
+  asOf: '2026-06-10',
+  prices: {
+    zinc: 3500,
+    nickel: 17900,
+    lead: 1975,
+  },
+};
+
+function getLMEIndicativePrices() {
+  const result = {};
+  for (const [key, price] of Object.entries(LME_INDICATIVE.prices)) {
+    result[key] = { price, change: 0, changePct: 0, isApprox: true };
+  }
+  return result;
 }
 
 // ── FETCH ALL COMMODITY PRICES ──
@@ -380,10 +579,12 @@ async function fetchAllPrices() {
     fetchUsdInr(),
     ...yahooKeys.map(async (key) => {
       const config = COMMODITIES[key];
-      const data = await fetchWithFallbacks(config.yahooSymbol, config.yahooFallbacks || []);
+      let data = await fetchWithFallbacks(config.yahooSymbol, config.yahooFallbacks || []);
+      // Last resort for precious metals: gold-api.com spot (CORS-friendly, no proxy)
+      if (!data) data = await fetchGoldApiSpot(key);
       return [key, data];
     }),
-    lmeKeys.length > 0 ? fetchLMEPrices() : Promise.resolve({}),
+    lmeKeys.length > 0 ? Promise.resolve(getLMEIndicativePrices()) : Promise.resolve({}),
   ];
 
   const results = await Promise.allSettled(promises);
@@ -428,6 +629,19 @@ async function fetchAllPrices() {
   state.isLoading = false;
 }
 
+// ── DUTY RESOLVER (supports date-conditional duty schedules, e.g. cotton) ──
+function getDuty(config) {
+  if (config.dutySchedule) {
+    const today = new Date().toISOString().slice(0, 10);
+    for (const entry of config.dutySchedule) {
+      if (!entry.until || today <= entry.until) {
+        return { rate: entry.rate, label: entry.label };
+      }
+    }
+  }
+  return { rate: config.dutyRate, label: config.dutyLabel };
+}
+
 // ── CALCULATION ENGINE ──
 function calcIndiaLanded(commodityKey) {
   const config = COMMODITIES[commodityKey];
@@ -436,13 +650,9 @@ function calcIndiaLanded(commodityKey) {
 
   const intlPrice = priceData.price;
   const usdInr = state.usdInr;
-  let pricePerIndiaUnit;
-
-  if (config.conversionMode === 'lbToKg') {
-    pricePerIndiaUnit = (intlPrice / config.conversionDivisor) * usdInr * (1 + config.dutyRate);
-  } else {
-    pricePerIndiaUnit = (intlPrice / config.conversionDivisor) * usdInr * (1 + config.dutyRate);
-  }
+  // conversionDivisor = number of intl units per India unit
+  // (oz→g: 31.1035, lb→kg: 0.453592, MT→kg: 1000, bushel→quintal: 0.2722, …)
+  const pricePerIndiaUnit = (intlPrice / config.conversionDivisor) * usdInr * (1 + getDuty(config).rate);
 
   const result = { perUnit: pricePerIndiaUnit };
 
@@ -519,20 +729,115 @@ function fmtTime(date) {
 }
 
 // ── CATEGORY BADGE STYLE ──
-function getCategoryStyle(category, label) {
+function getCategoryStyle(category) {
   switch (category) {
     case 'precious':
       return 'background:hsl(45 93% 47% / 0.1);color:hsl(45,80%,40%);border:1px solid hsl(45 93% 47% / 0.2)';
     case 'industrial':
       return 'background:hsl(200 50% 50% / 0.1);color:hsl(200,50%,40%);border:1px solid hsl(200 50% 50% / 0.2)';
     case 'energy':
-      if (label === 'Agri Commodity') {
-        return 'background:hsl(100 50% 40% / 0.1);color:hsl(100,50%,35%);border:1px solid hsl(100 50% 40% / 0.2)';
-      }
       return 'background:hsl(0 60% 50% / 0.1);color:hsl(0,60%,45%);border:1px solid hsl(0 60% 50% / 0.2)';
+    case 'agri':
+      return 'background:hsl(100 50% 40% / 0.1);color:hsl(100,50%,35%);border:1px solid hsl(100 50% 40% / 0.2)';
     default:
       return 'background:var(--l3);color:var(--t3);border:1px solid var(--sep2)';
   }
+}
+
+// ── SHARED: INDIA LANDED PRICE ROWS HTML ──
+function buildLandedRowsHtml(config, landed) {
+  let html = '';
+  if (config.showPurity) {
+    if (config.purityLabels && landed.purities) {
+      for (const p of landed.purities) {
+        html += `
+          <div class="price-row">
+            <span class="price-label">${p.label} per gram</span>
+            <span class="price-value ${p.ratio === 1 ? 'highlight' : ''}">${fmtINR(p.perGram)}/g</span>
+          </div>`;
+      }
+      if (config.showKg) {
+        html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">`;
+        for (const p of landed.purities) {
+          html += `
+            <div class="price-row ${p.ratio === 1 ? 'ten-gram-row' : ''}" style="${p.ratio !== 1 ? 'padding-left:10px' : ''}">
+              <span class="price-label" style="${p.ratio === 1 ? 'font-weight:700' : ''}">Per kg · ${p.label}</span>
+              <span class="price-value" style="${p.ratio === 1 ? 'font-weight:800' : ''}">${fmtINR(p.perKg, 0)}/kg</span>
+            </div>`;
+        }
+        html += `</div>`;
+      }
+    } else {
+      html += `
+        <div class="price-row">
+          <span class="price-label">24K per gram</span>
+          <span class="price-value highlight">${fmtINR(landed.k24)}/g</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">22K per gram</span>
+          <span class="price-value">${fmtINR(landed.k22)}/g</span>
+        </div>
+        <div class="price-row">
+          <span class="price-label">18K per gram</span>
+          <span class="price-value">${fmtINR(landed.k18)}/g</span>
+        </div>`;
+      if (config.show10g) {
+        html += `
+          <div class="price-row ten-gram-row">
+            <span class="price-label">10g · 24K</span>
+            <span class="price-value">${fmtINR(landed.per10g, 0)}</span>
+          </div>
+          <div class="price-row ten-gram-row" style="margin-top:4px;background:linear-gradient(135deg, hsl(210 10% 62% / 0.06), hsl(215 18% 52% / 0.06));border-color:hsl(210 10% 62% / 0.12)">
+            <span class="price-label" style="color:var(--t3)">10g · 22K</span>
+            <span class="price-value" style="color:var(--t2);font-size:14px">${fmtINR(landed.per10g_22k, 0)}</span>
+          </div>`;
+      }
+      // Per-KG pricing
+      if (config.showKg && landed.perKg) {
+        html += `
+          <div class="price-row" style="margin-top:6px;padding-top:8px;border-top:1px dashed var(--sep2)">
+            <span class="price-label" style="font-weight:700">Per kg · 24K</span>
+            <span class="price-value" style="font-weight:800">${fmtINR(landed.perKg, 0)}/kg</span>
+          </div>`;
+        if (landed.perKg_22k) {
+          html += `
+            <div class="price-row">
+              <span class="price-label">Per kg · 22K</span>
+              <span class="price-value">${fmtINR(landed.perKg_22k, 0)}/kg</span>
+            </div>`;
+        }
+      }
+    }
+  } else {
+    html += `
+      <div class="price-row">
+        <span class="price-label">Per ${config.indiaUnit}</span>
+        <span class="price-value highlight">${fmtINR(landed.perUnit)}/${config.indiaUnit}</span>
+      </div>`;
+    if (config.secondaryUnit) {
+      // e.g. grains shown per quintal also get a per-kg reference row
+      html += `
+        <div class="price-row">
+          <span class="price-label">Per ${config.secondaryUnit.label}</span>
+          <span class="price-value">${fmtINR(landed.perUnit * config.secondaryUnit.multiplier)}/${config.secondaryUnit.label}</span>
+        </div>`;
+    }
+  }
+  // Standard Indian Contract Equivalents
+  if (landed.minis && landed.minis.length > 0) {
+    html += `
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">
+        <div style="font-family:var(--font-body);font-size:9px;font-weight:700;color:var(--t4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Retail Contract Equivalents</div>`;
+    for (const mc of landed.minis) {
+      html += `
+        <div class="price-row" style="padding:3px 0">
+          <span class="price-label" style="font-size:11px">${mc.name} <span style="color:var(--t4);font-size:9px">(${mc.lot})</span></span>
+          <span class="price-value" style="font-size:13px;color:var(--primary)">${fmtINR(mc.price, 0)}</span>
+        </div>`;
+    }
+    html += `</div>`;
+  }
+  return html;
 }
 
 // ── BUILD COMMODITY CARD HTML ──
@@ -542,102 +847,19 @@ function buildCommodityCard(key) {
   const landed = calcIndiaLanded(key);
   const hasData = priceData && state.usdInr;
   const isApprox = priceData?.isApprox || false;
-  const isLME = priceData?.isLME || false;
   const change = hasData ? fmtChange(priceData.change, priceData.changePct) : fmtChange(null);
 
   // International price display
   const intlPriceStr = hasData ? fmtUSD(priceData.price) : '—';
   const intlUnit = `/ ${config.intlUnit.toLowerCase()}`;
-  const approxBadge = isApprox ? ' <span style="font-size:9px;color:var(--orange);font-family:var(--font-body);font-weight:600;vertical-align:super">~APPROX</span>' : (isLME ? ' <span style="font-size:9px;color:var(--teal);font-family:var(--font-body);font-weight:600;vertical-align:super">LME</span>' : '');
+  const approxBadge = isApprox
+    ? ' <span style="font-size:9px;color:var(--orange);font-family:var(--font-body);font-weight:600;vertical-align:super">~INDICATIVE</span>'
+    : (priceData?.isSpotBackup ? ' <span style="font-size:9px;color:var(--teal);font-family:var(--font-body);font-weight:600;vertical-align:super">SPOT</span>' : '');
 
   // India landed price rows
   let landedRows = '';
   if (hasData && landed) {
-    if (config.showPurity) {
-      if (config.purityLabels && landed.purities) {
-        for (const p of landed.purities) {
-          landedRows += `
-            <div class="price-row">
-              <span class="price-label">${p.label} per gram</span>
-              <span class="price-value ${p.ratio === 1 ? 'highlight' : ''}">${fmtINR(p.perGram)}/g</span>
-            </div>`;
-        }
-        if (config.showKg) {
-          landedRows += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">`;
-          for (const p of landed.purities) {
-            landedRows += `
-              <div class="price-row ${p.ratio === 1 ? 'ten-gram-row' : ''}" style="${p.ratio !== 1 ? 'padding-left:10px' : ''}">
-                <span class="price-label" style="${p.ratio === 1 ? 'font-weight:700' : ''}">Per kg · ${p.label}</span>
-                <span class="price-value" style="${p.ratio === 1 ? 'font-weight:800' : ''}">${fmtINR(p.perKg, 0)}/kg</span>
-              </div>`;
-          }
-          landedRows += `</div>`;
-        }
-      } else {
-        landedRows += `
-          <div class="price-row">
-            <span class="price-label">24K per gram</span>
-            <span class="price-value highlight">${fmtINR(landed.k24)}/g</span>
-          </div>
-          <div class="price-row">
-            <span class="price-label">22K per gram</span>
-            <span class="price-value">${fmtINR(landed.k22)}/g</span>
-          </div>
-          <div class="price-row">
-            <span class="price-label">18K per gram</span>
-            <span class="price-value">${fmtINR(landed.k18)}/g</span>
-          </div>`;
-
-        if (config.show10g) {
-          landedRows += `
-            <div class="price-row ten-gram-row">
-              <span class="price-label">10g · 24K</span>
-              <span class="price-value">${fmtINR(landed.per10g, 0)}</span>
-            </div>
-            <div class="price-row ten-gram-row" style="margin-top:4px;background:linear-gradient(135deg, hsl(210 10% 62% / 0.06), hsl(215 18% 52% / 0.06));border-color:hsl(210 10% 62% / 0.12)">
-              <span class="price-label" style="color:var(--t3)">10g · 22K</span>
-              <span class="price-value" style="color:var(--t2);font-size:14px">${fmtINR(landed.per10g_22k, 0)}</span>
-            </div>`;
-        }
-
-        // Per-KG pricing (standard Indian market)
-        if (config.showKg && landed.perKg) {
-          landedRows += `
-            <div class="price-row" style="margin-top:6px;padding-top:8px;border-top:1px dashed var(--sep2)">
-              <span class="price-label" style="font-weight:700">Per kg · 24K</span>
-              <span class="price-value" style="font-weight:800">${fmtINR(landed.perKg, 0)}/kg</span>
-            </div>`;
-          if (landed.perKg_22k) {
-            landedRows += `
-              <div class="price-row">
-                <span class="price-label">Per kg · 22K</span>
-                <span class="price-value">${fmtINR(landed.perKg_22k, 0)}/kg</span>
-              </div>`;
-          }
-        }
-      }
-    } else {
-      landedRows += `
-        <div class="price-row">
-          <span class="price-label">Per ${config.indiaUnit}</span>
-          <span class="price-value highlight">${fmtINR(landed.perUnit)}/${config.indiaUnit}</span>
-        </div>`;
-    }
-
-    // Standard Indian Contract Equivalents
-    if (landed.minis && landed.minis.length > 0) {
-      landedRows += `
-        <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">
-          <div style="font-family:var(--font-body);font-size:9px;font-weight:700;color:var(--t4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Retail Contract Equivalents</div>`;
-      for (const mc of landed.minis) {
-        landedRows += `
-          <div class="price-row" style="padding:3px 0">
-            <span class="price-label" style="font-size:11px">${mc.name} <span style="color:var(--t4);font-size:9px">(${mc.lot})</span></span>
-            <span class="price-value" style="font-size:13px;color:var(--primary)">${fmtINR(mc.price, 0)}</span>
-          </div>`;
-      }
-      landedRows += `</div>`;
-    }
+    landedRows = buildLandedRowsHtml(config, landed);
   } else {
     landedRows = `
       <div class="price-row">
@@ -657,7 +879,7 @@ function buildCommodityCard(key) {
               <div class="commodity-symbol">${config.symbol}</div>
             </div>
           </div>
-          <span class="commodity-category-badge" style="${getCategoryStyle(config.category, config.categoryLabel)}">${config.categoryLabel}</span>
+          <span class="commodity-category-badge" style="${getCategoryStyle(config.category)}">${config.categoryLabel}</span>
         </div>
 
         <!-- International Price -->
@@ -679,7 +901,7 @@ function buildCommodityCard(key) {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> Engine Method
               </a>
             </span>
-            <span class="india-duty-badge">${config.dutyLabel}</span>
+            <span class="india-duty-badge">${getDuty(config).label}</span>
           </div>
           <div id="landed-${key}">
             ${landedRows}
@@ -688,8 +910,8 @@ function buildCommodityCard(key) {
       </div>
 
       <div class="data-source">
-        <span>Source: ${isLME ? 'Metals.live (LME)' : isApprox ? 'LME Approx' : 'Yahoo Finance (' + (config.yahooSymbol || 'N/A') + ')'}</span>
-        ${(config.yahooSymbol || config.lmeOnly) ? `<button class="chart-btn" onclick="event.stopPropagation();openChart('${key}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Chart</button>` : ''}
+        <span>Source: ${isApprox ? `LME Indicative (as of ${LME_INDICATIVE.asOf})` : priceData?.isSpotBackup ? 'gold-api.com (spot)' : 'Yahoo Finance (' + (config.yahooSymbol || 'N/A') + ')'}</span>
+        ${config.yahooSymbol ? `<button class="chart-btn" onclick="event.stopPropagation();openChart('${key}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Chart</button>` : ''}
         <span id="tick-${key}">${state.lastUpdate ? fmtTime(state.lastUpdate) : '—'}</span>
       </div>
     </div>`;
@@ -742,90 +964,7 @@ function updateCards() {
     // India landed prices
     const landedEl = document.getElementById(`landed-${key}`);
     if (landedEl && landed && priceData) {
-      let html = '';
-      if (config.showPurity) {
-        if (config.purityLabels && landed.purities) {
-          for (const p of landed.purities) {
-            html += `
-              <div class="price-row">
-                <span class="price-label">${p.label} per gram</span>
-                <span class="price-value ${p.ratio === 1 ? 'highlight' : ''}">${fmtINR(p.perGram)}/g</span>
-              </div>`;
-          }
-          if (config.showKg) {
-            html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">`;
-            for (const p of landed.purities) {
-              html += `
-                <div class="price-row ${p.ratio === 1 ? 'ten-gram-row' : ''}" style="${p.ratio !== 1 ? 'padding-left:10px' : ''}">
-                  <span class="price-label" style="${p.ratio === 1 ? 'font-weight:700' : ''}">Per kg · ${p.label}</span>
-                  <span class="price-value" style="${p.ratio === 1 ? 'font-weight:800' : ''}">${fmtINR(p.perKg, 0)}/kg</span>
-                </div>`;
-            }
-            html += `</div>`;
-          }
-        } else {
-          html += `
-            <div class="price-row">
-              <span class="price-label">24K per gram</span>
-              <span class="price-value highlight">${fmtINR(landed.k24)}/g</span>
-            </div>
-            <div class="price-row">
-              <span class="price-label">22K per gram</span>
-              <span class="price-value">${fmtINR(landed.k22)}/g</span>
-            </div>
-            <div class="price-row">
-              <span class="price-label">18K per gram</span>
-              <span class="price-value">${fmtINR(landed.k18)}/g</span>
-            </div>`;
-          if (config.show10g) {
-            html += `
-              <div class="price-row ten-gram-row">
-                <span class="price-label">10g · 24K</span>
-                <span class="price-value">${fmtINR(landed.per10g, 0)}</span>
-              </div>
-              <div class="price-row ten-gram-row" style="margin-top:4px;background:linear-gradient(135deg, hsl(210 10% 62% / 0.06), hsl(215 18% 52% / 0.06));border-color:hsl(210 10% 62% / 0.12)">
-                <span class="price-label" style="color:var(--t3)">10g · 22K</span>
-                <span class="price-value" style="color:var(--t2);font-size:14px">${fmtINR(landed.per10g_22k, 0)}</span>
-              </div>`;
-          }
-          // Per-KG pricing
-          if (config.showKg && landed.perKg) {
-            html += `
-              <div class="price-row" style="margin-top:6px;padding-top:8px;border-top:1px dashed var(--sep2)">
-                <span class="price-label" style="font-weight:700">Per kg · 24K</span>
-                <span class="price-value" style="font-weight:800">${fmtINR(landed.perKg, 0)}/kg</span>
-              </div>`;
-            if (landed.perKg_22k) {
-              html += `
-                <div class="price-row">
-                  <span class="price-label">Per kg · 22K</span>
-                  <span class="price-value">${fmtINR(landed.perKg_22k, 0)}/kg</span>
-                </div>`;
-            }
-          }
-        }
-      } else {
-        html += `
-          <div class="price-row">
-            <span class="price-label">Per ${config.indiaUnit}</span>
-            <span class="price-value highlight">${fmtINR(landed.perUnit)}/${config.indiaUnit}</span>
-          </div>`;
-      }
-      // Standard Indian Contract Equivalents
-      if (landed.minis && landed.minis.length > 0) {
-        html += `
-          <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">
-            <div style="font-family:var(--font-body);font-size:9px;font-weight:700;color:var(--t4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Retail Contract Equivalents</div>`;
-        for (const mc of landed.minis) {
-          html += `
-            <div class="price-row" style="padding:3px 0">
-              <span class="price-label" style="font-size:11px">${mc.name} <span style="color:var(--t4);font-size:9px">(${mc.lot})</span></span>
-              <span class="price-value" style="font-size:13px;color:var(--primary)">${fmtINR(mc.price, 0)}</span>
-            </div>`;
-        }
-        html += `</div>`;
-      }
-      landedEl.innerHTML = html;
+      landedEl.innerHTML = buildLandedRowsHtml(config, landed);
     }
 
     // Tick time
@@ -925,7 +1064,7 @@ async function init() {
   // Parse URL for categories (Deep Linking from Docs)
   const params = new URLSearchParams(window.location.search);
   const cat = params.get('cat');
-  if (cat && ['precious', 'industrial', 'energy', 'all'].includes(cat)) {
+  if (cat && ['precious', 'industrial', 'energy', 'agri', 'all'].includes(cat)) {
     filterCategory(cat);
   } else {
     // Initial render with loading state
@@ -937,11 +1076,12 @@ async function init() {
   renderAllCards();
   updateCards();
 
-  // Auto-poll every 5 seconds
+  // Auto-poll every 30 seconds (Yahoo rate-limits aggressive polling,
+  // and each cycle now fetches ~16 symbols through shared CORS proxies)
   setInterval(async () => {
     await fetchAllPrices();
     updateCards();
-  }, 5000);
+  }, 30000);
 }
 
 // Start!
@@ -957,11 +1097,9 @@ let currentChartKey = null;
 let currentRange = '1y';
 
 function getChartSymbol(key) {
-  const config = COMMODITIES[key];
-  if (config?.yahooSymbol) return config.yahooSymbol;
-  // LME-only metals fallback — use closest Yahoo equivalent
-  const lmeFallback = { zinc: 'ZN=F', nickel: 'NI=F', lead: 'PB=F' };
-  return lmeFallback[key] || null;
+  // LME-only metals (zinc/nickel/lead) have no valid Yahoo futures symbol —
+  // ZN=F is the 10-yr T-Note, NOT zinc — so no chart fallback for them.
+  return COMMODITIES[key]?.yahooSymbol || null;
 }
 
 async function fetchHistoricalData(symbol, range) {
@@ -1032,8 +1170,9 @@ async function openChart(key) {
   const config = COMMODITIES[key];
 
   // Update modal title
-  document.getElementById('chart-title').textContent = `${config.name} — COMEX Historical`;
-  document.getElementById('chart-sub').textContent = `${config.yahooSymbol || key.toUpperCase()} · COMEX Futures`;
+  const exchange = config.exchange || 'Futures';
+  document.getElementById('chart-title').textContent = `${config.name} — ${exchange} Historical`;
+  document.getElementById('chart-sub').textContent = `${config.yahooSymbol || key.toUpperCase()} · ${exchange} Futures`;
 
   // Reset timeframe buttons
   document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));

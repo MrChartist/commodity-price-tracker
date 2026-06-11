@@ -4,7 +4,7 @@
   <img src="docs/screenshots/01_hero_dashboard.png" alt="India Commodity Price Tracker — Live Dashboard" width="100%">
 </p>
 
-> **Live Dashboard** that computes real-time India Import Landed Prices for Gold, Silver, Platinum, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel & Lead -- purely from international benchmarks + live forex + customs duty math.
+> **Live Dashboard** that computes real-time India Import Landed Prices for Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead + Agri commodities (Wheat, Corn, Soybean, Soybean Oil, Sugar, Cotton, Coffee, Cocoa) -- purely from international benchmarks + live forex + customs duty math.
 >
 > Built by [**Mr. Chartist**](https://github.com/MrChartist) | Part of the [Mr. Chartist Ecosystem](https://mrchartist.com)
 
@@ -22,14 +22,16 @@
 
 | Feature | Description |
 |---------|-------------|
-| **10+ Commodities** | Gold, Silver, Platinum, Crude Oil (WTI + Brent), Natural Gas, Copper, Aluminium, Zinc, Nickel & Lead |
-| **Live Auto-Refresh** | Pulls fresh data every ~5 seconds from COMEX, NYMEX, LME & Yahoo Finance |
-| **India Import Landed ₹** | Applies BCD + AIDC customs duties with live USD/INR forex conversion |
+| **19 Commodities** | Gold, Silver, Platinum, Palladium, Crude Oil (WTI + Brent), Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead + Agri: Wheat, Corn, Soybean, Soybean Oil, Sugar, Cotton, Coffee, Cocoa |
+| **Live Auto-Refresh** | Pulls fresh data every ~30 seconds from COMEX, NYMEX, CBOT, ICE & Yahoo Finance |
+| **India Import Landed ₹** | Applies BCD + AIDC + SWS customs duties (verified June 2026 rates, incl. the May 2026 bullion duty hike to 15%) with live USD/INR forex conversion |
+| **Date-Aware Duty Engine** | Handles time-bound duty notifications automatically (e.g. cotton duty-free Jun–Oct 2026, reverts to 11% after) |
 | **Purity Variants** | 24K / 22K / 18K Gold, 999 / 925 / 900 Silver — auto-calculated |
-| **Retail Contract Equivalents** | MCX-style lot values: Gold Mini (100g), Gold Guinea (8g), Gold Petal (0.5g), Silver (1kg/5kg/Micro) |
-| **Interactive COMEX Charts** | TradingView Lightweight Charts with 1M to Max timeframe toggles |
-| **Category Filtering** | One-click filter: Precious Metals · Industrial Metals · Energy |
-| **Documentation Hub** | Full methodology engine docs, duty rate matrix & 15-term financial glossary |
+| **Retail Contract Equivalents** | MCX-style lot values: Gold Mini (100g), Gold Guinea (8g), Gold Petal (1g), Silver (30kg/5kg/1kg) |
+| **Indian Market Units** | Grains in ₹/quintal, softs in ₹/kg, gold in ₹/10g — with CBOT cents-per-bushel auto-normalization |
+| **Interactive Futures Charts** | TradingView Lightweight Charts with 1M to Max timeframe toggles |
+| **Category Filtering** | One-click filter: Precious Metals · Industrial Metals · Energy · Agri |
+| **Documentation Hub** | Full methodology engine docs, duty rate matrices & 20-term financial glossary |
 | **Dark / Light Mode** | Premium glassmorphic UI with OLED-optimized dark theme |
 | **Zero Backend** | 100% client-side — no server, no database, no login required |
 | **SEO Optimized** | JSON-LD structured data, Open Graph meta, AI discoverability tags |
@@ -57,8 +59,9 @@ The default landing view showing **real-time COMEX/NYMEX prices** with:
 Scrolling reveals the full commodity spectrum:
 
 - **Brent Crude & Natural Gas** — NYMEX/ICE futures with effective duty overlay
-- **LME Base Metals** — Copper, Aluminium, Zinc, Nickel, Lead in ₹/kg
-- **Source Attribution** — Each card shows its data origin (Yahoo Finance / LME Approx)
+- **Base Metals** — Copper, Aluminium, Zinc, Nickel, Lead in ₹/kg
+- **Agri Commodities** — Wheat, Corn, Soybean (₹/quintal), Soybean Oil, Sugar, Cotton, Coffee, Cocoa (₹/kg)
+- **Source Attribution** — Each card shows its data origin (Yahoo Finance / gold-api.com / LME Indicative)
 
 ![Energy & Industrial](docs/screenshots/02_energy_industrial.png)
 
@@ -103,11 +106,11 @@ A dedicated `/docs.html` page with comprehensive technical documentation:
 
 ### 6. Financial Glossary
 
-A 15-term glossary covering essential commodity trading terminology:
+A 20-term glossary covering essential commodity trading terminology:
 
-- **Landed Price, BCD, AIDC** — Import cost concepts
-- **COMEX, NYMEX, LME** — Exchange definitions
-- **Troy Ounce, Karat, Fineness** — Measurement units
+- **Landed Price, BCD, AIDC, SWS** — Import cost concepts
+- **COMEX, NYMEX, LME, CBOT, ICE** — Exchange definitions
+- **Troy Ounce, Karat, Fineness, Bushel, Quintal** — Measurement units
 - **CAD, Windfall Tax, MMBtu** — Macro concepts
 
 ![Financial Glossary](docs/screenshots/06_glossary.png)
@@ -120,10 +123,11 @@ A 15-term glossary covering essential commodity trading terminology:
 |-----------|-------|
 | **HTML5** | Single-file dashboard with semantic structure |
 | **CSS3** | Custom properties, OLED dark mode, glassmorphism, ambient orbs |
-| **Vanilla JavaScript** | Core pricing engine — `app.js` (45KB, zero dependencies) |
+| **Vanilla JavaScript** | Core pricing engine — `app.js` (zero dependencies) |
 | **Lightweight Charts** | TradingView's open-source charting library v4.1.3 |
-| **Yahoo Finance** | Precious metals, energy futures, forex (USDINR=X) |
-| **Metals.live** | LME spot data for Copper, Aluminium, Zinc, Nickel, Lead |
+| **Yahoo Finance** | Precious metals, energy, copper/aluminium, agri futures, forex (USDINR=X) |
+| **gold-api.com** | Free no-key CORS-friendly spot backup for Gold, Silver, Platinum, Palladium |
+| **LME Indicative** | Manually updated Zinc/Nickel/Lead levels (metals.live shut down; no free LME feed exists) |
 | **CORS Proxies** | allorigins.win + corsproxy.io for client-side API access |
 
 ## 📂 Project Structure
@@ -166,24 +170,25 @@ That's it. No `npm install`, no build tools, no environment variables. The entir
 
 ```
 Yahoo Finance CDN ──→ CORS Proxy ──→ app.js (browser)
-  · GC=F (Gold)                        │
-  · SI=F (Silver)                      ├── Parse JSON
-  · CL=F (WTI Crude)                   ├── Convert Units (oz→g, MT→kg)
-  · BZ=F (Brent)                       ├── Apply USD/INR Forex
-  · NG=F (Natural Gas)                 ├── Layer Import Duties
-  · HG=F (Copper)                      └── Render Cards + Charts
-  · USDINR=X (Forex)
+  · GC=F SI=F PL=F PA=F (Precious)     │
+  · CL=F BZ=F NG=F (Energy)            ├── Parse JSON (+ USX cents → USD)
+  · HG=F ALI=F (Cu, Al)                ├── Convert Units (oz→g, lb→kg,
+  · ZW=F ZC=F ZS=F ZL=F (CBOT grains)  │     MT→kg, bushel→quintal)
+  · SB=F CT=F KC=F CC=F (ICE softs)    ├── Apply USD/INR Forex
+  · USDINR=X (Forex)                   ├── Layer Import Duties (date-aware)
+                                       └── Render Cards + Charts
+gold-api.com (no proxy needed) ──→ app.js
+  · XAU XAG XPT XPD spot (backup when Yahoo fails)
 
-Metals.live API ──→ CORS Proxy ──→ app.js
-  · Copper, Aluminium, Zinc
-  · Nickel, Lead (LME spot)
+LME Indicative (in-code, manually updated) ──→ app.js
+  · Zinc, Nickel, Lead (no free live LME feed exists)
 ```
 
 ## 🔐 Compliance Notice
 
 > **SEBI Research Analyst Notice:** This application does **NOT** display live data sourced from the National Stock Exchange (NSE) or Multi Commodity Exchange (MCX).
 >
-> All Indian commodity quotes — including "Retail Contract Equivalents" — are strict **mathematical approximations** derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates with published customs duty overlays.
+> All Indian commodity quotes — including "Retail Contract Equivalents" — are strict **mathematical approximations** derived from international COMEX/NYMEX/CBOT/ICE/LME benchmarks converted to INR via live forex rates with published customs duty overlays.
 >
 > *Prices are for illustrative and educational purposes only and do not constitute financial advice.*
 
