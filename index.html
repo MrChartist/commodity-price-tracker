@@ -9,11 +9,24 @@
 <meta name="keywords" content="Gold Price India, Silver Price Today, Crude Oil Price, Natural Gas Price, Copper Price, Aluminium Price, Zinc Price, Nickel Price, Tin Price, Steel Price India, Iron Ore Price, Lithium Price, Cobalt Price, Wheat Price India, Rice Price, Sugar Price, Cotton Price, Coffee Price, Palm Oil Price, Agri Commodity Prices, Commodity Price Tracker, MCX Prices, India Import Landed Price, Live Commodity Rates">
 <meta name="author" content="Mr. Chartist">
 <meta name="robots" content="index, follow">
+<link rel="canonical" href="https://commodity.mrchartist.com/">
+<meta name="theme-color" content="#08090f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="India Commodity Price Tracker | Live Prices with Import Duty">
 <meta property="og:description" content="Live commodity prices with India import landed calculations. Gold, Silver, Crude Oil, Natural Gas & Base Metals.">
+<meta property="og:url" content="https://commodity.mrchartist.com/">
+<meta property="og:image" content="https://commodity.mrchartist.com/docs/screenshots/01_hero_dashboard.png">
+<meta property="og:site_name" content="Mr. Chartist">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@mr_chartist">
+<meta name="twitter:title" content="India Commodity Price Tracker | Live Prices with Import Duty">
+<meta name="twitter:description" content="Live commodity prices with India import landed calculations for 30+ metals, energy & agri commodities.">
+<meta name="twitter:image" content="https://commodity.mrchartist.com/docs/screenshots/01_hero_dashboard.png">
 
 <!-- LLM / AI Discoverability -->
 <meta name="ai:description" content="Real-time commodity price tracker for India. Calculates import landed prices for 30+ commodities across precious metals (Gold, Silver, Platinum, Palladium), industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt), energy (Crude Oil, Natural Gas), and agri (Wheat, Corn, Soybean, Rice, Soybean Meal, Soybean Oil, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs) with customs duty breakdowns including BCD, AIDC and SWS. Live cattle/beef import is prohibited in India and is shown without a landed price.">
@@ -71,10 +84,10 @@
           <div class="status-dot"></div>
           <span id="status-text">CONNECTING</span>
         </div>
-        <button class="hdr-btn" id="theme-toggle" onclick="toggleTheme()">
+        <button class="hdr-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark and light theme">
           <span id="theme-icon" style="display:inline-flex;width:14px;height:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span> <span id="theme-label">Light</span>
         </button>
-        <button class="hdr-btn" id="refresh-btn" onclick="forceRefresh()">
+        <button class="hdr-btn" id="refresh-btn" onclick="forceRefresh()" aria-label="Refresh prices now">
           <span style="display:inline-flex;width:14px;height:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span> Refresh
         </button>
       </div>
@@ -89,6 +102,34 @@
     <button class="cat-tab" data-cat="industrial" onclick="filterCategory('industrial')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Industrial Metals</button>
     <button class="cat-tab" data-cat="energy" onclick="filterCategory('energy')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Energy</button>
     <button class="cat-tab" data-cat="agri" onclick="filterCategory('agri')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg> Agri</button>
+  </div>
+
+  <!-- ── LIVE FX TICKER (the conversion rates the engine is applying) ── -->
+  <div class="currency-ticker" id="currency-ticker">
+    <div class="currency-ticker-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Live FX
+    </div>
+    <div class="currency-rates" id="currency-rates">
+      <div class="currency-item"><span class="fx-pair">USD / INR</span><span class="fx-rate">—</span></div>
+    </div>
+  </div>
+
+  <!-- ── TOOLBAR: SEARCH + SORT ── -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="commodity-search" type="search" placeholder="Search 30+ commodities — e.g. gold, copper, palm oil…" oninput="filterSearch(this.value)" aria-label="Search commodities">
+    </div>
+    <div class="sort-box">
+      <label class="sort-label" for="sort-select">Sort</label>
+      <select id="sort-select" onchange="setSortBy(this.value)" aria-label="Sort commodities">
+        <option value="default">Default</option>
+        <option value="az">A–Z</option>
+        <option value="gainers">Top gainers</option>
+        <option value="losers">Top losers</option>
+      </select>
+    </div>
   </div>
 
   <!-- ── COMMODITY CARDS GRID ── -->
@@ -164,7 +205,7 @@
           </div>
         </div>
         <div class="methodology-footer">
-          <p>Data sources: Yahoo Finance (international futures & forex), gold-api.com (precious metals spot backup), and manually updated indicative levels for commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil). Chart history is cached in your browser. Prices are calculated mathematically and are for illustrative purposes only.</p>
+          <p>Data sources: Yahoo Finance (international futures & forex), gold-api.com (precious metals spot backup), and manually updated indicative levels for commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil). The live USD/INR (and the full FX map used for non-USD contracts) is shown in the FX strip so the conversion is transparent. Chart history and the latest prices are cached in your browser — the dashboard paints instantly on reload and keeps showing the last known values (flagged CACHED/STALE) if a refresh fails. Prices are calculated mathematically and are for illustrative purposes only.</p>
           <p style="margin-top:6px;color:var(--t2);font-weight:600">IMPORTANT: This application does NOT display live data from NSE or MCX. All Indian quotes (including Standard Contract Equivalents) are mathematical approximations derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates.</p>
         </div>
       </div>
