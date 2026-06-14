@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <!-- SEO Meta Tags -->
-<title>India Commodity Price Tracker | Live Gold, Silver, Crude Oil, Agri & More - Mr Chartist</title>
-<meta name="description" content="Track real-time commodity prices in India with import landed calculations. Live Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead, Wheat, Corn, Soybean, Sugar, Cotton, Coffee & Cocoa prices with customs duty breakdowns.">
-<meta name="keywords" content="Gold Price India, Silver Price Today, Crude Oil Price, Natural Gas Price, Copper Price, Aluminium Price, Zinc Price, Nickel Price, Wheat Price India, Sugar Price, Cotton Price, Coffee Price, Agri Commodity Prices, Commodity Price Tracker, MCX Prices, India Import Landed Price, Live Commodity Rates">
+<title>India Commodity Price Tracker | Live Metals, Energy & Agri Prices - Mr Chartist</title>
+<meta name="description" content="Track real-time commodity prices in India with import landed calculations. 30+ commodities: Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt, Wheat, Corn, Soybean, Rice, Sugar, Cotton, Coffee, Cocoa, Palm Oil & more with customs duty breakdowns.">
+<meta name="keywords" content="Gold Price India, Silver Price Today, Crude Oil Price, Natural Gas Price, Copper Price, Aluminium Price, Zinc Price, Nickel Price, Tin Price, Steel Price India, Iron Ore Price, Lithium Price, Cobalt Price, Wheat Price India, Rice Price, Sugar Price, Cotton Price, Coffee Price, Palm Oil Price, Agri Commodity Prices, Commodity Price Tracker, MCX Prices, India Import Landed Price, Live Commodity Rates">
 <meta name="author" content="Mr. Chartist">
 <meta name="robots" content="index, follow">
 
@@ -16,7 +16,7 @@
 <meta property="og:description" content="Live commodity prices with India import landed calculations. Gold, Silver, Crude Oil, Natural Gas & Base Metals.">
 
 <!-- LLM / AI Discoverability -->
-<meta name="ai:description" content="Real-time commodity price tracker for India. Calculates import landed prices for Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead, and agri commodities (Wheat, Corn, Soybean, Soybean Oil, Sugar, Cotton, Coffee, Cocoa) with customs duty breakdowns including BCD, AIDC and SWS.">
+<meta name="ai:description" content="Real-time commodity price tracker for India. Calculates import landed prices for 30+ commodities across precious metals (Gold, Silver, Platinum, Palladium), industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt), energy (Crude Oil, Natural Gas), and agri (Wheat, Corn, Soybean, Rice, Soybean Meal, Soybean Oil, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs) with customs duty breakdowns including BCD, AIDC and SWS. Live cattle/beef import is prohibited in India and is shown without a landed price.">
 
 <!-- Performance: Preconnect -->
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -33,7 +33,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "India Commodity Price Tracker",
-  "description": "Real-time commodity price tracker for India with import landed calculations for Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead and agri commodities including Wheat, Corn, Soybean, Sugar, Cotton, Coffee and Cocoa.",
+  "description": "Real-time commodity price tracker for India with import landed calculations for 30+ commodities: precious metals (Gold, Silver, Platinum, Palladium), industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt), energy (Crude Oil, Natural Gas) and agri commodities (Wheat, Corn, Soybean, Rice, Soybean Meal, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs).",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "All",
   "author": {
@@ -147,8 +147,8 @@
             <p class="methodology-text" style="margin-top:6px"><strong>10g Price:</strong> Per gram × 10</p>
           </div>
           <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Base Metals</h3>
-            <p class="methodology-text">Copper via COMEX (HG=F, USD/lb), Aluminium via CME (ALI=F, USD/MT); Zinc, Nickel & Lead use manually updated LME indicative levels (no free live feed exists) → Convert to ₹/kg → Apply duty incl. SWS. Copper: 5.5%, Aluminium: 8.25%, Zinc: 5.5%, Lead: 5.5%, Nickel: 0%.</p>
+            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Industrial & Battery Metals</h3>
+            <p class="methodology-text">Copper (HG=F, USD/lb), Aluminium (ALI=F) & Steel HRC (HRC=F) stream live; Zinc, Nickel, Lead, Tin, Iron Ore, Lithium & Cobalt use manually updated indicative levels (no free live feed) → Convert to ₹/kg or ₹/tonne → Apply duty incl. SWS. Copper 5.5%, Aluminium 8.25%, Zinc/Lead 5.5%, Nickel 0%, Steel ≈19.75% (incl. safeguard), Iron Ore 2.75%. Tin, Lithium & Cobalt are <strong>duty-free critical minerals (0%)</strong>.</p>
           </div>
           <div class="inner-panel">
             <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Energy</h3>
@@ -160,11 +160,11 @@
           </div>
           <div class="inner-panel">
             <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Agri Commodities</h3>
-            <p class="methodology-text">CBOT grains (Wheat, Corn, Soybean — US cents/bushel → ₹/quintal) and ICE softs (Sugar, Cotton, Coffee — US cents/lb → ₹/kg; Cocoa USD/MT → ₹/kg) → Multiply by USD/INR → Apply commodity-specific duty: Wheat 44%, Corn 50%, Sugar & Coffee 100%, Soybean Oil 16.5%, Cocoa 33%, Cotton duty-free till Oct 31, 2026.</p>
+            <p class="methodology-text">CBOT grains (Wheat, Corn, Soybean, Rice, Soybean Meal) and ICE/CME softs & livestock (Sugar, Cotton, Coffee, Orange Juice, Lumber, Lean Hogs) → normalize US-cents quotes to USD → convert to ₹/quintal, ₹/kg or ₹/cu ft → apply duty: Rice 70%, Sugar & Coffee 100%, Corn 50%, Wheat 44%, OJ/Pork 33%, Soybean Meal & Palm 16.5%, Canola 27.5%, Lumber 11%, Cotton duty-free till Oct 31 2026. Canola & Palm oil use indicative levels (no free feed). <strong>Beef / live cattle import is prohibited in India</strong> — shown without a landed price.</p>
           </div>
         </div>
         <div class="methodology-footer">
-          <p>Data sources: Yahoo Finance (international futures & forex), gold-api.com (precious metals spot backup), manually updated LME indicative levels (Zn/Ni/Pb). Prices are calculated mathematically and are for illustrative purposes only.</p>
+          <p>Data sources: Yahoo Finance (international futures & forex), gold-api.com (precious metals spot backup), and manually updated indicative levels for commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil). Chart history is cached in your browser. Prices are calculated mathematically and are for illustrative purposes only.</p>
           <p style="margin-top:6px;color:var(--t2);font-weight:600">IMPORTANT: This application does NOT display live data from NSE or MCX. All Indian quotes (including Standard Contract Equivalents) are mathematical approximations derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates.</p>
         </div>
       </div>
@@ -202,7 +202,7 @@
   <!-- ── FOOTER ── -->
   <footer class="app-footer">
     <p>Built by <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Mr. Chartist</a> · Data for illustrative purposes only</p>
-    <p style="margin-top:4px;font-size:10px;color:var(--t4)">Prices auto-refresh every ~30 seconds · Not financial advice</p>
+    <p style="margin-top:4px;font-size:10px;color:var(--t4)">Prices auto-refresh every ~60 seconds · Not financial advice</p>
   </footer>
 </div>
 
