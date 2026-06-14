@@ -703,11 +703,22 @@ let state = {
   usdInrChangePct: null,
   fxRates: null,    // { INR: 88.1, CAD: 1.36, ... } per 1 USD — for non-USD quotes (e.g. canola in CAD)
   prices: {},       // { gold: { price, change, changePct }, ... }
-  lastUpdate: null,
+  lastUpdate: null, // Date of the data currently shown (may be from cache)
+  lastSuccess: null,// epoch ms of the last successful live fetch
+  fromCache: false, // true while showing persisted prices before the first live refresh
   isLoading: true,
   errors: {},
   activeCategory: 'all',
+  searchQuery: '',
+  sortBy: 'default',
 };
+
+// Escape user-supplied text before it touches innerHTML (search query echo)
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
 
 // Convert a foreign-currency amount to USD using the live FX rate map
 // (rates are quoted per 1 USD, e.g. fxRates.CAD = CAD per USD).
@@ -718,6 +729,44 @@ function toUsd(amount, currency) {
   if (cur === 'GBX' || cur === 'GBP_PENCE') return amount / 100;     // pence (then GBP below if needed)
   const rate = state.fxRates && state.fxRates[cur];
   return rate ? amount / rate : amount; // no rate → assume already USD-ish
+}
+
+// ── PRICE PERSISTENCE CACHE (localStorage) ──
+// Mirrors the chart cache: persist the last good prices + FX so a reload paints
+// instantly, and a total network outage still shows the last known values
+// (clearly flagged) instead of an empty "Loading…" grid.
+const PRICE_CACHE_KEY = 'cpt_prices_v1';
+const PRICE_STALE_MS = 10 * 60 * 1000; // data older than 10 min is flagged stale
+
+function savePriceCache() {
+  try {
+    localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify({
+      ts: Date.now(),
+      prices: state.prices,
+      usdInr: state.usdInr,
+      usdInrChange: state.usdInrChange,
+      usdInrChangePct: state.usdInrChangePct,
+      fxRates: state.fxRates,
+    }));
+  } catch (e) { /* quota / private mode — ignore */ }
+}
+
+function hydrateFromCache() {
+  try {
+    const raw = localStorage.getItem(PRICE_CACHE_KEY);
+    if (!raw) return false;
+    const c = JSON.parse(raw);
+    if (!c || !c.prices || !Object.keys(c.prices).length) return false;
+    state.prices = c.prices;
+    state.usdInr = c.usdInr ?? null;
+    state.usdInrChange = c.usdInrChange ?? null;
+    state.usdInrChangePct = c.usdInrChangePct ?? null;
+    state.fxRates = c.fxRates ?? null;
+    state.lastUpdate = c.ts ? new Date(c.ts) : null;
+    state.fromCache = true;
+    state.isLoading = false;
+    return true;
+  } catch (e) { return false; }
 }
 
 // ── YAHOO FINANCE PROXY (multiple CORS proxies for reliability) ──
@@ -899,7 +948,16 @@ async function fetchAllPrices() {
     }
   }
 
-  state.lastUpdate = new Date();
+  // Only treat this cycle as "fresh" if we actually got the forex rate and at
+  // least one price. A fully failed cycle keeps the previous (cached) data and
+  // its timestamp so the UI can flag it as stale rather than pretend it's live.
+  const gotData = state.usdInr != null && Object.keys(state.prices).length > 0;
+  if (gotData) {
+    state.fromCache = false;
+    state.lastSuccess = Date.now();
+    state.lastUpdate = new Date();
+    savePriceCache();
+  }
   state.isLoading = false;
 }
 
@@ -1205,16 +1263,107 @@ function buildCommodityCard(key) {
     </div>`;
 }
 
+// ── LIVE FX TICKER ──
+// The engine converts every quote to ₹ via USD/INR (and a full FX map for the
+// handful of non-USD contracts). Surface those rates so the conversion the user
+// is looking at is transparent rather than a hidden constant.
+const FX_TICKER_PAIRS = ['EUR', 'GBP', 'JPY', 'CNY', 'AED'];
+
+function renderFxTicker() {
+  const el = document.getElementById('currency-rates');
+  if (!el) return;
+  if (!state.usdInr) {
+    el.innerHTML = '<div class="currency-item"><span class="fx-pair">USD / INR</span><span class="fx-rate">—</span></div>';
+    return;
+  }
+  const pct = state.usdInrChangePct;
+  const cls = pct == null ? '' : (pct > 0 ? 'up' : pct < 0 ? 'down' : '');
+  const changeStr = pct == null ? '' :
+    `<span class="fx-change ${cls}">${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%</span>`;
+  let html = `
+    <div class="currency-item" style="border-color:hsl(24 90% 52% / 0.25)">
+      <span class="fx-pair">USD / INR</span>
+      <span class="fx-rate" style="color:var(--primary)">₹${state.usdInr.toFixed(2)}</span>
+      ${changeStr}
+    </div>`;
+  if (state.fxRates) {
+    for (const cur of FX_TICKER_PAIRS) {
+      const r = state.fxRates[cur];
+      if (r == null) continue;
+      const val = cur === 'JPY' ? r.toFixed(2) : r.toFixed(3);
+      html += `
+        <div class="currency-item">
+          <span class="fx-pair">USD / ${cur}</span>
+          <span class="fx-rate">${val}</span>
+        </div>`;
+    }
+  }
+  el.innerHTML = html;
+}
+
+// ── VISIBLE KEYS (category filter + text search + sort) ──
+function getVisibleKeys() {
+  const q = (state.searchQuery || '').trim().toLowerCase();
+  const keys = Object.keys(COMMODITIES).filter(key => {
+    const c = COMMODITIES[key];
+    if (state.activeCategory !== 'all' && c.category !== state.activeCategory) return false;
+    if (q) {
+      const hay = `${c.name} ${c.symbol} ${c.categoryLabel} ${key}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  const pctOf = k => {
+    const p = state.prices[k];
+    return p && typeof p.changePct === 'number' ? p.changePct : 0;
+  };
+  if (state.sortBy === 'az') keys.sort((a, b) => COMMODITIES[a].name.localeCompare(COMMODITIES[b].name));
+  else if (state.sortBy === 'gainers') keys.sort((a, b) => pctOf(b) - pctOf(a));
+  else if (state.sortBy === 'losers') keys.sort((a, b) => pctOf(a) - pctOf(b));
+  return keys;
+}
+
 // ── RENDER ALL CARDS ──
+let cardsAnimatedOnce = false;
 function renderAllCards() {
   const grid = document.getElementById('commodity-grid');
-  const keys = Object.keys(COMMODITIES).filter(key => {
-    if (state.activeCategory === 'all') return true;
-    return COMMODITIES[key].category === state.activeCategory;
-  });
+  if (!grid) return;
+  const keys = getVisibleKeys();
+
+  if (!keys.length) {
+    grid.classList.add('ready');
+    grid.innerHTML = `<div class="empty-state">No commodities match “<strong>${escapeHtml(state.searchQuery)}</strong>”. <button class="link-btn" onclick="clearSearch()">Clear search</button></div>`;
+    return;
+  }
 
   grid.innerHTML = keys.map(key => buildCommodityCard(key)).join('');
+
+  // Play the staggered entry animation only on the first paint; later re-renders
+  // (search keystrokes, category/sort changes) snap in to avoid flicker.
+  if (cardsAnimatedOnce) grid.classList.add('ready');
+  else cardsAnimatedOnce = true;
 }
+
+// ── SEARCH / SORT CONTROLS ──
+function filterSearch(value) {
+  state.searchQuery = value || '';
+  renderAllCards();
+}
+window.filterSearch = filterSearch;
+
+function clearSearch() {
+  state.searchQuery = '';
+  const input = document.getElementById('commodity-search');
+  if (input) input.value = '';
+  renderAllCards();
+}
+window.clearSearch = clearSearch;
+
+function setSortBy(value) {
+  state.sortBy = value || 'default';
+  renderAllCards();
+}
+window.setSortBy = setSortBy;
 
 // ── UPDATE EXISTING CARDS (efficient partial update) ──
 function updateCards() {
@@ -1262,7 +1411,8 @@ function updateCards() {
     }
   });
 
-  // Status pill
+  // Live FX ticker + status pill
+  renderFxTicker();
   updateStatus();
 }
 
@@ -1274,19 +1424,26 @@ function updateStatus() {
 
   const hasAnyData = Object.keys(state.prices).length > 0;
   const errCount = Object.keys(state.errors).length;
+  const age = state.lastSuccess ? Date.now() - state.lastSuccess : Infinity;
 
-  if (hasAnyData && errCount === 0) {
-    pill.className = 'status-pill';
-    text.textContent = 'LIVE';
-  } else if (hasAnyData) {
-    pill.className = 'status-pill err';
-    text.textContent = `PARTIAL (${errCount} ERR)`;
-  } else if (state.isLoading) {
+  if (state.isLoading && !hasAnyData) {
     pill.className = 'status-pill err';
     text.textContent = 'LOADING';
-  } else {
+  } else if (!hasAnyData) {
     pill.className = 'status-pill err';
     text.textContent = 'OFFLINE';
+  } else if (state.fromCache) {
+    pill.className = 'status-pill err';
+    text.textContent = 'CACHED';
+  } else if (age > PRICE_STALE_MS) {
+    pill.className = 'status-pill err';
+    text.textContent = 'STALE';
+  } else if (errCount > 0) {
+    pill.className = 'status-pill err';
+    text.textContent = `PARTIAL (${errCount} ERR)`;
+  } else {
+    pill.className = 'status-pill';
+    text.textContent = 'LIVE';
   }
 }
 
@@ -1342,6 +1499,35 @@ async function forceRefresh() {
 
 window.forceRefresh = forceRefresh;
 
+// ── AUTO-POLL (visibility-aware) ──
+// Yahoo rate-limits aggressive polling and each cycle fetches ~21 live symbols
+// through shared CORS proxies, so we poll every 60s — and only while the tab is
+// visible. Hidden tabs pause; returning to the tab refreshes immediately.
+const POLL_INTERVAL_MS = 60000;
+let pollTimer = null;
+
+function startPolling() {
+  if (pollTimer) return;
+  pollTimer = setInterval(async () => {
+    await fetchAllPrices();
+    updateCards();
+  }, POLL_INTERVAL_MS);
+}
+
+function stopPolling() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+
+document.addEventListener('visibilitychange', async () => {
+  if (document.hidden) {
+    stopPolling();
+  } else {
+    await fetchAllPrices();
+    updateCards();
+    startPolling();
+  }
+});
+
 // ── INITIALIZE ──
 async function init() {
   // Load theme preference
@@ -1349,28 +1535,29 @@ async function init() {
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeButton(savedTheme);
 
-  // Parse URL for categories (Deep Linking from Docs)
+  // Parse URL for categories (deep linking from docs)
   const params = new URLSearchParams(window.location.search);
   const cat = params.get('cat');
   if (cat && ['precious', 'industrial', 'energy', 'agri', 'all'].includes(cat)) {
-    filterCategory(cat);
-  } else {
-    // Initial render with loading state
-    renderAllCards();
+    state.activeCategory = cat;
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.cat === cat);
+    });
   }
 
-  // Fetch data
+  // Paint last-known prices from cache immediately (instant load, no "Loading…"
+  // flash, and a working view even if the network is down), then refresh live.
+  hydrateFromCache();
+  renderAllCards();
+  renderFxTicker();
+
   await fetchAllPrices();
   renderAllCards();
   updateCards();
 
-  // Auto-poll every 60 seconds. Yahoo rate-limits aggressive polling and each
-  // cycle now fetches ~21 live symbols through shared CORS proxies (the dozen
-  // indicative commodities resolve instantly from config).
-  setInterval(async () => {
-    await fetchAllPrices();
-    updateCards();
-  }, 60000);
+  // Don't spin the poll loop in a background tab; the visibility handler starts
+  // it (and refreshes) the moment the user actually looks at the page.
+  if (!document.hidden) startPolling();
 }
 
 // Start!
@@ -1382,6 +1569,7 @@ document.addEventListener('DOMContentLoaded', init);
 
 let chartInstance = null;
 let chartSeries = null;
+let chartResizeObserver = null;
 let currentChartKey = null;
 let currentRange = '1y';
 
@@ -1509,7 +1697,12 @@ async function renderChart(key, range) {
   const container = document.getElementById('chart-container');
   container.innerHTML = '<div class="chart-loading">Loading chart data...</div>';
 
-  // Destroy previous chart
+  // Destroy previous chart + its resize observer (otherwise observers stack up
+  // on the reused container every time the range changes — a slow leak).
+  if (chartResizeObserver) {
+    chartResizeObserver.disconnect();
+    chartResizeObserver = null;
+  }
   if (chartInstance) {
     chartInstance.remove();
     chartInstance = null;
@@ -1517,7 +1710,7 @@ async function renderChart(key, range) {
 
   const symbol = getChartSymbol(key);
   if (!symbol) {
-    container.innerHTML = '<div class="chart-loading">Chart not available for LME-only metals</div>';
+    container.innerHTML = '<div class="chart-loading">Live chart is unavailable for indicative-priced commodities</div>';
     return;
   }
 
@@ -1578,13 +1771,14 @@ async function renderChart(key, range) {
   const rangeLabel = document.getElementById('chart-data-range');
   if (rangeLabel) rangeLabel.textContent = `${first} — ${last} · ${data.length} candles`;
 
-  // Resize handler
-  const resizeObserver = new ResizeObserver(entries => {
+  // Resize handler (tracked at module scope so it can be disconnected on the
+  // next render / close instead of leaking a new observer each time).
+  chartResizeObserver = new ResizeObserver(() => {
     if (chartInstance) {
       chartInstance.applyOptions({ width: container.clientWidth, height: container.clientHeight });
     }
   });
-  resizeObserver.observe(container);
+  chartResizeObserver.observe(container);
 }
 
 async function changeRange(range) {
@@ -1598,6 +1792,10 @@ window.changeRange = changeRange;
 function closeChart() {
   document.getElementById('chart-modal').style.display = 'none';
   document.body.style.overflow = '';
+  if (chartResizeObserver) {
+    chartResizeObserver.disconnect();
+    chartResizeObserver = null;
+  }
   if (chartInstance) {
     chartInstance.remove();
     chartInstance = null;

@@ -26,6 +26,10 @@
 | **Live Auto-Refresh** | Pulls fresh data every ~60 seconds from COMEX, NYMEX, CBOT, ICE, CME & Yahoo Finance |
 | **India Import Landed ₹** | Applies BCD + AIDC + SWS customs duties (verified June 2026 rates, incl. the May 2026 bullion duty hike to 15% and the critical-minerals 0% exemption) with live USD/INR forex conversion |
 | **Multi-Currency Normalization** | Auto-converts US-cents (USX) and foreign-currency (e.g. CAD) quotes to USD via live FX rates before the INR conversion |
+| **Live FX Ticker** | Surfaces the USD/INR rate (with daily change) plus the EUR/GBP/JPY/CNY/AED reference rates the engine actually applies — the conversion is transparent, not a hidden constant |
+| **Instant Search & Sort** | Filter 30+ commodities by name or symbol and sort by Top Gainers / Top Losers / A–Z, layered on top of the category tabs |
+| **Offline-Resilient Cache** | Last-known prices + FX persist to localStorage, so the dashboard paints instantly on reload and keeps working (flagged CACHED / STALE) through a network outage |
+| **Battery-Friendly Polling** | Auto-refresh pauses when the browser tab is hidden and refreshes immediately on return, sparing Yahoo's rate limits |
 | **Date-Aware Duty Engine** | Handles time-bound duty notifications automatically (e.g. cotton duty-free Jun–Oct 2026, reverts to 11% after) |
 | **Compliance-Aware** | Beef / live cattle (prohibited import in India) is shown with the international price only — no fabricated landed price |
 | **Purity Variants** | 24K / 22K / 18K Gold, 999 / 925 / 900 Silver — auto-calculated |
