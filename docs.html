@@ -126,7 +126,7 @@
   <!-- ══ HERO ══ -->
   <div class="doc-hero doc-section">
     <h2 style="margin-bottom:8px">How Every Price Is Born</h2>
-    <p>This tracker computes India Import Landed Prices for 19 commodities in real-time — precious metals, energy, industrial metals and agri commodities. No NSE/MCX data is used — every number is a pure mathematical derivation from international benchmarks, live forex, and published Indian customs duty rates.</p>
+    <p>This tracker computes India Import Landed Prices for 30+ commodities in real-time — precious metals, energy, industrial & battery metals, and agri commodities. No NSE/MCX data is used — every number is a pure mathematical derivation from international benchmarks, live forex, and published Indian customs duty rates.</p>
     <img src="docs/screenshots/hero.png" alt="Commodity Price Tracker Engine" style="width:100%;border-radius:12px;margin-top:20px;border:1px solid var(--sep2);box-shadow:0 8px 24px rgba(0,0,0,0.15)">
   </div>
 
@@ -269,16 +269,16 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         Industrial
       </span>
-      Copper, Aluminium, Zinc, Nickel & Lead
+      Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium & Cobalt
     </h2>
-    <p>Base metals reference the <strong>London Metal Exchange (LME)</strong> and <strong>CME Group</strong>, the global benchmarks for industrial metals pricing.</p>
+    <p>Base, industrial and battery metals reference the <strong>London Metal Exchange (LME)</strong> and <strong>CME Group</strong>, the global benchmarks for metals pricing. Lithium and cobalt are battery metals India treats as <strong>duty-free critical minerals</strong>.</p>
 
     <div class="flow-pipeline">
       <div class="flow-step">
         <div class="flow-num im">1</div><div class="flow-line"></div>
         <div class="flow-body">
-          <h4>Source: COMEX/CME Futures + LME Indicative Levels</h4>
-          <p><strong>Copper</strong> (HG=F, USD/lb) and <strong>Aluminium</strong> (ALI=F, USD/MT) stream live via Yahoo Finance. <strong>Zinc, Nickel & Lead</strong> have no free live feed (the old metals.live API shut down), so the tracker uses manually updated LME indicative levels, clearly badged "~INDICATIVE" on the cards.</p>
+          <h4>Source: COMEX/CME Futures + Indicative Levels</h4>
+          <p><strong>Copper</strong> (HG=F, USD/lb), <strong>Aluminium</strong> (ALI=F, USD/MT) and <strong>Steel HRC</strong> (HRC=F, USD/short ton) stream live via Yahoo Finance. <strong>Zinc, Nickel, Lead, Tin, Iron Ore, Lithium & Cobalt</strong> have no free live feed (the old metals.live API shut down; LME has no public JSON), so the tracker uses manually updated indicative levels, clearly badged "~INDICATIVE" on the cards. <em>Note: HRC=F is US Midwest domestic coil and trades above global/India ex-mill levels.</em></p>
         </div>
       </div>
       <div class="flow-step">
@@ -300,16 +300,21 @@
 
     <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Duty Rate Matrix — Industrial Metals</div>
     <table class="duty-table">
-      <thead><tr><th>Metal</th><th>BCD</th><th>SWS</th><th>Total Duty</th><th>India Unit</th></tr></thead>
+      <thead><tr><th>Metal</th><th>Source</th><th>Total Duty</th><th>India Unit</th></tr></thead>
       <tbody>
-        <tr><td><strong>Copper (refined)</strong></td><td>5.0%</td><td>0.5%</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Aluminium</strong></td><td>7.5%</td><td>0.75%</td><td class="mono">8.25%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Zinc</strong></td><td>5.0%</td><td>0.5%</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Lead</strong></td><td>5.0%</td><td>0.5%</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Nickel</strong></td><td>0.0%</td><td>—</td><td class="mono">0.0%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Copper (refined)</strong></td><td>HG=F live</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Aluminium</strong></td><td>ALI=F live</td><td class="mono">8.25%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Steel (HRC)</strong></td><td>HRC=F live</td><td class="mono">≈19.75% (incl. safeguard)</td><td>₹/tonne</td></tr>
+        <tr><td><strong>Zinc</strong></td><td>indicative</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Lead</strong></td><td>indicative</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Nickel</strong></td><td>indicative</td><td class="mono">0.0%</td><td>₹/kg</td></tr>
+        <tr><td><strong>Tin</strong></td><td>indicative</td><td class="mono">0% (critical mineral)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Iron Ore (62% Fe)</strong></td><td>indicative</td><td class="mono">2.75%</td><td>₹/tonne</td></tr>
+        <tr><td><strong>Lithium (carbonate)</strong></td><td>indicative</td><td class="mono">0% (critical mineral)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Cobalt</strong></td><td>indicative</td><td class="mono">0% (critical mineral)</td><td>₹/kg</td></tr>
       </tbody>
     </table>
-    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Physical Indian markets may carry an additional local premium above the computed landed price.</p>
+    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Tin, lithium and cobalt are BCD-free under India's critical-minerals exemption (Notification 36/2024-Customs + Budget 2025-26). Steel's safeguard duty (~11.5–12% on flat products) is conditional on the import CIF price; the headline assumes it applies. Physical Indian markets may carry an additional local premium.</p>
   </div>
 
   <!-- ══ ENERGY ══ -->
@@ -353,23 +358,23 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg>
         Agri
       </span>
-      Wheat, Corn, Soybean, Sugar, Cotton, Coffee & Cocoa
+      Grains, Softs, Oils & Livestock
     </h2>
-    <p>Agri commodities reference <strong>CBOT</strong> (Chicago Board of Trade) grains and <strong>ICE</strong> softs — the global benchmarks for agricultural pricing. Note: CBOT grains and ICE softs are quoted in <strong>US cents</strong> (per bushel / per pound); the engine auto-detects this via Yahoo's currency flag and normalizes to dollars.</p>
+    <p>Agri commodities reference <strong>CBOT</strong> (Chicago Board of Trade) grains, <strong>ICE</strong> softs and <strong>CME</strong> livestock — the global benchmarks for agricultural pricing. Many of these quote in <strong>US cents</strong> (per bushel / per pound / per cwt); the engine auto-detects this via Yahoo's currency flag and normalizes to dollars. Canola and palm oil have no usable free feed, so they use indicative levels.</p>
 
     <div class="flow-pipeline">
       <div class="flow-step">
         <div class="flow-num en">1</div><div class="flow-line"></div>
         <div class="flow-body">
-          <h4>Source: CBOT & ICE Futures via Yahoo Finance</h4>
-          <p><strong>Wheat (ZW=F), Corn (ZC=F), Soybean (ZS=F)</strong> in cents/bushel; <strong>Soybean Oil (ZL=F), Sugar #11 (SB=F), Cotton #2 (CT=F), Coffee C (KC=F)</strong> in cents/lb; <strong>Cocoa (CC=F)</strong> in USD/tonne.</p>
+          <h4>Source: CBOT, ICE & CME Futures via Yahoo Finance</h4>
+          <p><strong>Wheat (ZW=F), Corn (ZC=F), Soybean (ZS=F)</strong> in cents/bushel; <strong>Rice (ZR=F)</strong> in USD/cwt; <strong>Soybean Meal (ZM=F)</strong> in USD/short ton; <strong>Soybean Oil (ZL=F), Sugar (SB=F), Cotton (CT=F), Coffee (KC=F), Orange Juice (OJ=F), Lean Hogs (HE=F), Live Cattle (LE=F)</strong> in cents/lb; <strong>Cocoa (CC=F)</strong> USD/tonne; <strong>Lumber (LBR=F)</strong> USD/1,000 board ft. Canola & Palm oil use indicative USD/tonne levels.</p>
         </div>
       </div>
       <div class="flow-step">
         <div class="flow-num en">2</div><div class="flow-line"></div>
         <div class="flow-body">
           <h4>Convert to Indian Market Units</h4>
-          <p>Grains → <strong>₹/quintal</strong> (1 wheat/soybean bushel = 27.2155 kg; 1 corn bushel = 25.4012 kg; 1 quintal = 100 kg). Softs → <strong>₹/kg</strong> (1 lb = 0.453592 kg). Cocoa → ₹/kg (÷ 1,000).</p>
+          <p>Grains/rice/meal → <strong>₹/quintal</strong> (bushel→kg by crop; 1 cwt = 45.36 kg; 1 short ton = 907.185 kg; 1 quintal = 100 kg). Softs, oils, livestock → <strong>₹/kg</strong> (1 lb = 0.453592 kg). Lumber → <strong>₹/cu ft</strong> (1,000 bd ft = 83.33 cu ft).</p>
         </div>
       </div>
       <div class="flow-step">
@@ -394,9 +399,17 @@
         <tr><td><strong>Cotton</strong></td><td>ICE CT=F</td><td class="mono">0% till Oct 31, 2026 (then 11%)</td><td>₹/kg</td></tr>
         <tr><td><strong>Coffee</strong></td><td>ICE KC=F</td><td class="mono">100%</td><td>₹/kg</td></tr>
         <tr><td><strong>Cocoa</strong></td><td>ICE CC=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Rice (non-basmati)</strong></td><td>CBOT ZR=F</td><td class="mono">70%</td><td>₹/quintal</td></tr>
+        <tr><td><strong>Soybean Meal</strong></td><td>CBOT ZM=F</td><td class="mono">16.5% (BCD 15% + SWS)</td><td>₹/quintal</td></tr>
+        <tr><td><strong>Orange Juice</strong></td><td>ICE OJ=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Lumber</strong></td><td>CME LBR=F</td><td class="mono">11% (BCD 10% + SWS)</td><td>₹/cu ft</td></tr>
+        <tr><td><strong>Canola Oil</strong></td><td>indicative</td><td class="mono">27.5% (BCD 20% + AIDC + SWS)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Palm Oil (CPO)</strong></td><td>indicative</td><td class="mono">16.5% (BCD 10% + AIDC 5% + SWS)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Lean Hogs (Pork)</strong></td><td>CME HE=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
+        <tr><td><strong>Live Cattle / Beef</strong></td><td>CME LE=F</td><td class="mono" style="color:var(--red)">Import prohibited</td><td>—</td></tr>
       </tbody>
     </table>
-    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Landed-price math is most meaningful for commodities India actually imports (edible oils, cocoa). For heavily protected crops (sugar, coffee, wheat) the landed price illustrates the tariff wall rather than a typical transaction price. Quality/grade differentials (e.g. Indian S-30 sugar vs ICE #11 raws) are not modelled.</p>
+    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Landed-price math is most meaningful for commodities India actually imports (edible oils, cocoa, pulses). For heavily protected crops (rice, sugar, coffee, wheat) the landed price illustrates the tariff wall rather than a typical transaction price. <strong>Beef / live cattle import is prohibited under India's DGFT policy</strong> — that card shows the international futures price only, with no landed price computed. Lean-hog and live-cattle futures track live-weight animals, not retail cuts. Quality/grade differentials are not modelled.</p>
   </div>
 
   <!-- ══ DATA SOURCES ══ -->
@@ -410,7 +423,7 @@
     <div class="source-grid">
       <div class="source-card">
         <div class="src-name">Yahoo Finance</div>
-        <div class="src-desc">Precious metals, energy, copper, aluminium, agri futures, forex</div>
+        <div class="src-desc">Precious metals, energy, copper, aluminium, steel (HRC=F), agri & livestock futures, forex</div>
         <div class="src-badge" style="background:hsl(38 92% 48% / 0.1);color:var(--orange)">Primary</div>
       </div>
       <div class="source-card">
@@ -419,9 +432,14 @@
         <div class="src-badge" style="background:hsl(152 60% 40% / 0.1);color:var(--teal)">Backup</div>
       </div>
       <div class="source-card">
-        <div class="src-name">LME Indicative</div>
-        <div class="src-desc">Zn, Ni, Pb — manually updated levels (no free live feed)</div>
+        <div class="src-name">Indicative Levels</div>
+        <div class="src-desc">Zn, Ni, Pb, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil — manually updated (no free live feed)</div>
         <div class="src-badge" style="background:hsl(0 60% 50% / 0.1);color:var(--red)">Static</div>
+      </div>
+      <div class="source-card">
+        <div class="src-name">Browser Cache</div>
+        <div class="src-desc">Chart history cached in localStorage (6h) for instant, resilient charts</div>
+        <div class="src-badge" style="background:hsl(252 36% 54% / 0.1);color:var(--purple)">Local</div>
       </div>
       <div class="source-card">
         <div class="src-name">CORS Proxies</div>
@@ -496,6 +514,18 @@
       <div class="gl-card gl-orange">
         <div class="gl-term">Quintal</div>
         <div class="gl-def">The standard Indian mandi (wholesale market) unit for grains and sugar. 1 quintal = 100 kg. Indian MSP (Minimum Support Price) announcements are quoted per quintal.</div>
+      </div>
+      <div class="gl-card gl-blue">
+        <div class="gl-term">Critical Minerals Exemption</div>
+        <div class="gl-def">Notification 36/2024-Customs (and Budget 2025-26) made 25+ strategic minerals — including lithium, cobalt and tin — fully BCD-free (and SWS-free) to secure supply for EVs, batteries and electronics manufacturing.</div>
+      </div>
+      <div class="gl-card gl-orange">
+        <div class="gl-term">Safeguard Duty</div>
+        <div class="gl-def">A temporary extra duty to shield domestic industry from an import surge. India levies ~11.5–12% on certain flat steel products (2025–2028), applied only when the import CIF price falls below set thresholds.</div>
+      </div>
+      <div class="gl-card gl-green">
+        <div class="gl-term">Hundredweight (cwt)</div>
+        <div class="gl-def">A US weight unit used to quote CBOT rough rice. 1 cwt = 100 lb = 45.3592 kg. The engine converts USD/cwt to ₹/quintal for the Indian market.</div>
       </div>
       <div class="gl-card gl-orange">
         <div class="gl-term">Troy Ounce (oz t)</div>

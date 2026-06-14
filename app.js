@@ -27,6 +27,16 @@ const SVG_ICONS = {
   cotton: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-1.1-8.9 6 6 0 1 0-11.4 2A3.5 3.5 0 0 0 6.5 19h11z"/></svg>`,
   coffee: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`,
   cocoa: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 7 5 12s3 10 7 10 7-5 7-10S16 2 12 2z"/><path d="M12 2v20"/></svg>`,
+  tin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-1 4H8z"/><path d="M6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 12h6"/></svg>`,
+  steel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l4-3h12l4 3"/><path d="M2 7v4h20V7"/><path d="M2 11l4 9h12l4-9"/><path d="M9 11v9M15 11v9"/></svg>`,
+  ironore: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 5-2.5 9h-9L5 8z"/><circle cx="12" cy="12" r="2.5"/></svg>`,
+  lithium: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="14" height="10" rx="2"/><path d="M18 10h2v4h-2"/><path d="M8 10v4M11 12h-2M14 10v4"/></svg>`,
+  cobalt: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>`,
+  rice: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-2 3-2 6 0 9 2-3 2-6 0-9z"/><path d="M7 7c-1 3 0 6 3 8-1-3-1-6-3-8z"/><path d="M17 7c1 3 0 6-3 8 1-3 1-6 3-8z"/><path d="M5 21h14"/></svg>`,
+  lumber: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="20" height="6" rx="1"/><circle cx="6" cy="12" r="1.5"/><path d="M3 9l3-4h14l-3 4"/></svg>`,
+  citrus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>`,
+  droplet: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7s6.5 7.3 6.5 12a6.5 6.5 0 0 1-13 0c0-4.7 6.5-12 6.5-12z"/></svg>`,
+  livestock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8c0-1 1-2 2-2s2 1 2 3M20 8c0-1-1-2-2-2s-2 1-2 3"/><path d="M5 9c-1 0-2 1-2 3M19 9c1 0 2 1 2 3"/><path d="M7 9h10v4a5 5 0 0 1-10 0z"/><path d="M10 17v3M14 17v3"/></svg>`,
   chart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
   globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
   sparkle: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg>`,
@@ -192,7 +202,8 @@ const COMMODITIES = {
     accentColor: 'hsl(180, 25%, 50%)',
     accentBg: 'hsl(180, 25%, 50%)',
     yahooSymbol: null,
-    lmeOnly: true,
+    indicative: true,
+    indicativePrice: 3500, // USD/tonne — LME 3M, manually updated
     intlUnit: 'Metric Ton',
     indiaUnit: 'kg',
     conversionDivisor: 1000,
@@ -210,7 +221,8 @@ const COMMODITIES = {
     accentColor: 'hsl(150, 20%, 50%)',
     accentBg: 'hsl(150, 20%, 50%)',
     yahooSymbol: null,
-    lmeOnly: true,
+    indicative: true,
+    indicativePrice: 17900, // USD/tonne — LME 3M, manually updated
     intlUnit: 'Metric Ton',
     indiaUnit: 'kg',
     conversionDivisor: 1000,
@@ -228,12 +240,111 @@ const COMMODITIES = {
     accentColor: 'hsl(220, 15%, 45%)',
     accentBg: 'hsl(220, 15%, 45%)',
     yahooSymbol: null,
-    lmeOnly: true,
+    indicative: true,
+    indicativePrice: 1975, // USD/tonne — LME 3M, manually updated
     intlUnit: 'Metric Ton',
     indiaUnit: 'kg',
     conversionDivisor: 1000,
     dutyRate: 0.055,
     dutyLabel: 'BCD 5% + SWS = 5.5%',
+    showPurity: false,
+    show10g: false,
+  },
+  tin: {
+    name: 'Tin',
+    symbol: 'SN',
+    icon: SVG_ICONS.tin,
+    category: 'industrial',
+    categoryLabel: 'Industrial Metal',
+    accentColor: 'hsl(210, 12%, 58%)',
+    accentBg: 'hsl(210, 12%, 58%)',
+    yahooSymbol: null,
+    indicative: true,
+    indicativePrice: 45000, // USD/tonne — LME 3M (volatile/elevated in 2026)
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'kg',
+    conversionDivisor: 1000,
+    dutyRate: 0.0,
+    dutyLabel: 'BCD Free (critical mineral) = 0%',
+    showPurity: false,
+    show10g: false,
+  },
+  steel: {
+    name: 'Steel (HRC)',
+    symbol: 'HRC',
+    icon: SVG_ICONS.steel,
+    category: 'industrial',
+    categoryLabel: 'Industrial Metal',
+    accentColor: 'hsl(215, 14%, 48%)',
+    accentBg: 'hsl(215, 14%, 48%)',
+    yahooSymbol: 'HRC=F',
+    exchange: 'CME',
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'tonne',
+    // HRC=F quotes USD per US short ton (907.185 kg); 1 short ton = 0.907185 t
+    conversionDivisor: 0.907185,
+    dutyRate: 0.1975,
+    dutyLabel: 'BCD 7.5% + SWS + safeguard ≈ 19.75%',
+    note: 'HRC=F is US Midwest domestic hot-rolled coil — trades well above global/India ex-mill levels.',
+    secondaryUnit: { label: 'kg', multiplier: 0.001 },
+    showPurity: false,
+    show10g: false,
+  },
+  ironore: {
+    name: 'Iron Ore',
+    symbol: 'IORE',
+    icon: SVG_ICONS.ironore,
+    category: 'industrial',
+    categoryLabel: 'Industrial Metal',
+    accentColor: 'hsl(18, 55%, 42%)',
+    accentBg: 'hsl(18, 55%, 42%)',
+    yahooSymbol: null,
+    indicative: true,
+    indicativePrice: 100, // USD/dry metric tonne — 62% Fe CFR China
+    intlUnit: 'Dry Metric Ton',
+    indiaUnit: 'tonne',
+    conversionDivisor: 1,
+    dutyRate: 0.0275,
+    dutyLabel: 'BCD 2.5% + SWS = 2.75%',
+    secondaryUnit: { label: 'kg', multiplier: 0.001 },
+    showPurity: false,
+    show10g: false,
+  },
+  lithium: {
+    name: 'Lithium (Carbonate)',
+    symbol: 'Li2CO3',
+    icon: SVG_ICONS.lithium,
+    category: 'industrial',
+    categoryLabel: 'Battery Metal',
+    accentColor: 'hsl(150, 45%, 45%)',
+    accentBg: 'hsl(150, 45%, 45%)',
+    yahooSymbol: null,
+    indicative: true,
+    indicativePrice: 20000, // USD/tonne — battery-grade Li2CO3 (rebounded in 2026)
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'kg',
+    conversionDivisor: 1000,
+    dutyRate: 0.0,
+    dutyLabel: 'BCD Free (critical mineral) = 0%',
+    showPurity: false,
+    show10g: false,
+  },
+  cobalt: {
+    name: 'Cobalt',
+    symbol: 'CO',
+    icon: SVG_ICONS.cobalt,
+    category: 'industrial',
+    categoryLabel: 'Battery Metal',
+    accentColor: 'hsl(220, 55%, 55%)',
+    accentBg: 'hsl(220, 55%, 55%)',
+    yahooSymbol: null,
+    indicative: true,
+    indicativePrice: 55000, // USD/tonne — standard-grade (≈ $25/lb)
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'kg',
+    conversionDivisor: 1000,
+    dutyRate: 0.0,
+    dutyLabel: 'BCD Free (critical mineral) = 0%',
     showPurity: false,
     show10g: false,
   },
@@ -428,6 +539,161 @@ const COMMODITIES = {
     showPurity: false,
     show10g: false,
   },
+  rice: {
+    name: 'Rice (Rough)',
+    symbol: 'ZR',
+    icon: SVG_ICONS.rice,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(45, 30%, 70%)',
+    accentBg: 'hsl(45, 30%, 70%)',
+    yahooSymbol: 'ZR=F',
+    exchange: 'CBOT',
+    intlUnit: 'Cwt',
+    indiaUnit: 'quintal',
+    // ZR=F quotes USD per cwt (100 lb = 45.3592 kg); 1 quintal (100 kg) = 2.2046 cwt
+    conversionDivisor: 0.453592,
+    dutyRate: 0.70,
+    dutyLabel: 'BCD 70% (non-basmati)',
+    secondaryUnit: { label: 'kg', multiplier: 0.01 },
+    showPurity: false,
+    show10g: false,
+  },
+  soybeanmeal: {
+    name: 'Soybean Meal',
+    symbol: 'ZM',
+    icon: SVG_ICONS.soybean,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(35, 40%, 45%)',
+    accentBg: 'hsl(35, 40%, 45%)',
+    yahooSymbol: 'ZM=F',
+    exchange: 'CBOT',
+    intlUnit: 'Short Ton',
+    indiaUnit: 'quintal',
+    // ZM=F quotes USD per US short ton (907.185 kg); 1 quintal = 0.0907185 short ton
+    conversionDivisor: 9.07185,
+    dutyRate: 0.165,
+    dutyLabel: 'BCD 15% + SWS = 16.5%',
+    secondaryUnit: { label: 'kg', multiplier: 0.01 },
+    showPurity: false,
+    show10g: false,
+  },
+  orangejuice: {
+    name: 'Orange Juice',
+    symbol: 'OJ',
+    icon: SVG_ICONS.citrus,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(28, 90%, 52%)',
+    accentBg: 'hsl(28, 90%, 52%)',
+    yahooSymbol: 'OJ=F',
+    exchange: 'ICE',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    dutyRate: 0.33,
+    dutyLabel: 'BCD 30% + SWS = 33%',
+    showPurity: false,
+    show10g: false,
+  },
+  lumber: {
+    name: 'Lumber',
+    symbol: 'LBR',
+    icon: SVG_ICONS.lumber,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(28, 45%, 42%)',
+    accentBg: 'hsl(28, 45%, 42%)',
+    yahooSymbol: 'LBR=F',
+    exchange: 'CME',
+    intlUnit: '1000 bd ft',
+    indiaUnit: 'cu ft',
+    // LBR=F quotes USD per 1,000 board feet; 1,000 bd ft = 1000/12 = 83.333 cu ft
+    conversionDivisor: 83.3333,
+    dutyRate: 0.11,
+    dutyLabel: 'BCD 10% + SWS = 11% (sawn wood)',
+    showPurity: false,
+    show10g: false,
+  },
+  canola: {
+    name: 'Canola Oil',
+    symbol: 'RS',
+    icon: SVG_ICONS.droplet,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(48, 80%, 48%)',
+    accentBg: 'hsl(48, 80%, 48%)',
+    yahooSymbol: null,
+    indicative: true,
+    indicativePrice: 1150, // USD/tonne — crude canola/rapeseed oil (RS=F seed feed unusable via Yahoo)
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'kg',
+    conversionDivisor: 1000,
+    dutyRate: 0.275,
+    dutyLabel: 'BCD 20% + AIDC + SWS = 27.5%',
+    secondaryUnit: { label: '10 kg', multiplier: 10 },
+    showPurity: false,
+    show10g: false,
+  },
+  palm: {
+    name: 'Palm Oil (CPO)',
+    symbol: 'CPO',
+    icon: SVG_ICONS.droplet,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(15, 70%, 48%)',
+    accentBg: 'hsl(15, 70%, 48%)',
+    yahooSymbol: null,
+    indicative: true,
+    indicativePrice: 1000, // USD/tonne — crude palm oil (Bursa FCPO not on Yahoo)
+    intlUnit: 'Metric Ton',
+    indiaUnit: 'kg',
+    conversionDivisor: 1000,
+    dutyRate: 0.165,
+    dutyLabel: 'BCD 10% + AIDC 5% + SWS = 16.5%',
+    secondaryUnit: { label: '10 kg', multiplier: 10 },
+    showPurity: false,
+    show10g: false,
+  },
+  leanhogs: {
+    name: 'Lean Hogs (Pork)',
+    symbol: 'HE',
+    icon: SVG_ICONS.livestock,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(345, 50%, 60%)',
+    accentBg: 'hsl(345, 50%, 60%)',
+    yahooSymbol: 'HE=F',
+    exchange: 'CME',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    dutyRate: 0.33,
+    dutyLabel: 'BCD 30% + SWS = 33%',
+    note: 'CME lean-hog futures track live-weight hogs, not retail pork cuts.',
+    showPurity: false,
+    show10g: false,
+  },
+  livecattle: {
+    name: 'Live Cattle',
+    symbol: 'LE',
+    icon: SVG_ICONS.livestock,
+    category: 'agri',
+    categoryLabel: 'Agri Commodity',
+    accentColor: 'hsl(0, 0%, 45%)',
+    accentBg: 'hsl(0, 0%, 45%)',
+    yahooSymbol: 'LE=F',
+    exchange: 'CME',
+    intlUnit: 'Pound',
+    indiaUnit: 'kg',
+    conversionDivisor: 0.453592,
+    importProhibited: true,
+    dutyLabel: 'Import prohibited (DGFT)',
+    note: 'Beef/live cattle import is prohibited in India (DGFT) — no landed price is computed.',
+    showPurity: false,
+    show10g: false,
+  },
 };
 
 // ── STATE ──
@@ -435,12 +701,24 @@ let state = {
   usdInr: null,
   usdInrChange: null,
   usdInrChangePct: null,
+  fxRates: null,    // { INR: 88.1, CAD: 1.36, ... } per 1 USD — for non-USD quotes (e.g. canola in CAD)
   prices: {},       // { gold: { price, change, changePct }, ... }
   lastUpdate: null,
   isLoading: true,
   errors: {},
   activeCategory: 'all',
 };
+
+// Convert a foreign-currency amount to USD using the live FX rate map
+// (rates are quoted per 1 USD, e.g. fxRates.CAD = CAD per USD).
+function toUsd(amount, currency) {
+  const cur = (currency || 'USD').toUpperCase();
+  if (cur === 'USD') return amount;
+  if (cur === 'USX' || cur === 'USDX') return amount / 100;          // US cents
+  if (cur === 'GBX' || cur === 'GBP_PENCE') return amount / 100;     // pence (then GBP below if needed)
+  const rate = state.fxRates && state.fxRates[cur];
+  return rate ? amount / rate : amount; // no rate → assume already USD-ish
+}
 
 // ── YAHOO FINANCE PROXY (multiple CORS proxies for reliability) ──
 const CORS_PROXIES = [
@@ -473,13 +751,12 @@ async function fetchYahooQuote(symbol) {
     const result = data?.chart?.result?.[0];
     if (!result) throw new Error('No data in response');
     const meta = result.meta;
-    // CBOT grains & ICE softs (ZW=F, ZC=F, ZS=F, ZL=F, SB=F, CT=F, KC=F)
-    // quote in US cents — Yahoo flags these with currency "USX"
-    const centsQuoted = (meta.currency || '').toUpperCase() === 'USX';
-    const divisor = centsQuoted ? 100 : 1;
-    const price = meta.regularMarketPrice / divisor;
+    // Normalize every quote to USD. Yahoo flags US-cents contracts (CBOT grains,
+    // ICE softs, livestock) as currency "USX"; canola (RS=F) is quoted in CAD.
+    const currency = meta.currency;
+    const price = toUsd(meta.regularMarketPrice, currency);
     const prevCloseRaw = meta.chartPreviousClose || meta.previousClose;
-    const prevClose = prevCloseRaw ? prevCloseRaw / divisor : null;
+    const prevClose = prevCloseRaw ? toUsd(prevCloseRaw, currency) : null;
     const change = prevClose ? price - prevClose : 0;
     const changePct = prevClose ? (change / prevClose) * 100 : 0;
     return { price, change, changePct };
@@ -507,7 +784,7 @@ async function fetchUsdInr() {
     if (resp.ok) {
       const data = await resp.json();
       if (data?.rates?.INR) {
-        return { rate: data.rates.INR, source: 'ExchangeRate API' };
+        return { rate: data.rates.INR, rates: data.rates, source: 'ExchangeRate API' };
       }
     }
   } catch (e) {
@@ -546,35 +823,31 @@ async function fetchGoldApiSpot(commodityKey) {
   return null;
 }
 
-// ── LME INDICATIVE PRICES (Zinc, Nickel, Lead) ──
-// metals.live shut down and no free, key-less, CORS-friendly LME feed exists.
-// Yahoo has no live Zn/Ni/Pb futures either (ZN=F is the 10-yr T-Note!).
-// These USD/tonne values are indicative LME 3M levels, updated manually.
-const LME_INDICATIVE = {
-  asOf: '2026-06-10',
-  prices: {
-    zinc: 3500,
-    nickel: 17900,
-    lead: 1975,
-  },
-};
+// ── INDICATIVE PRICES (no free live feed exists) ──
+// metals.live shut down; Yahoo has no usable futures for LME base metals
+// (ZN=F is the 10-yr T-Note), tin, iron ore, lithium or cobalt; canola (RS=F)
+// and palm oil return empty arrays via the chart API. For these, each config
+// carries an `indicative: true` flag and an `indicativePrice` in USD (per the
+// commodity's intl unit), updated manually. Values are clearly badged in the UI.
+const INDICATIVE_AS_OF = '2026-06-12';
 
-function getLMEIndicativePrices() {
+function getIndicativePrices(keys) {
   const result = {};
-  for (const [key, price] of Object.entries(LME_INDICATIVE.prices)) {
-    result[key] = { price, change: 0, changePct: 0, isApprox: true };
+  for (const key of keys) {
+    const p = COMMODITIES[key].indicativePrice;
+    if (p != null) result[key] = { price: p, change: 0, changePct: 0, isApprox: true };
   }
   return result;
 }
 
 // ── FETCH ALL COMMODITY PRICES ──
 async function fetchAllPrices() {
-  // Separate LME-only and Yahoo-fetchable commodities
+  // Separate indicative-only and live (Yahoo-fetchable) commodities
   const commodityKeys = Object.keys(COMMODITIES);
-  const yahooKeys = commodityKeys.filter(k => !COMMODITIES[k].lmeOnly);
-  const lmeKeys = commodityKeys.filter(k => COMMODITIES[k].lmeOnly);
+  const yahooKeys = commodityKeys.filter(k => !COMMODITIES[k].indicative);
+  const indicativeKeys = commodityKeys.filter(k => COMMODITIES[k].indicative);
 
-  // Fetch USD/INR, Yahoo commodities, and LME metals concurrently
+  // Fetch USD/INR, Yahoo commodities, and indicative prices concurrently
   const promises = [
     fetchUsdInr(),
     ...yahooKeys.map(async (key) => {
@@ -584,17 +857,18 @@ async function fetchAllPrices() {
       if (!data) data = await fetchGoldApiSpot(key);
       return [key, data];
     }),
-    lmeKeys.length > 0 ? Promise.resolve(getLMEIndicativePrices()) : Promise.resolve({}),
+    indicativeKeys.length > 0 ? Promise.resolve(getIndicativePrices(indicativeKeys)) : Promise.resolve({}),
   ];
 
   const results = await Promise.allSettled(promises);
 
-  // USD/INR
+  // USD/INR (+ full FX rate map for non-USD quotes like canola in CAD)
   const usdInrResult = results[0];
   if (usdInrResult.status === 'fulfilled' && usdInrResult.value) {
     state.usdInr = usdInrResult.value.rate;
     state.usdInrChange = usdInrResult.value.change || null;
     state.usdInrChangePct = usdInrResult.value.changePct || null;
+    if (usdInrResult.value.rates) state.fxRates = usdInrResult.value.rates;
   }
 
   // Yahoo commodities
@@ -611,16 +885,16 @@ async function fetchAllPrices() {
     }
   }
 
-  // LME metals
-  const lmeResult = results[1 + yahooKeys.length];
-  if (lmeResult && lmeResult.status === 'fulfilled' && lmeResult.value) {
-    const lmeData = lmeResult.value;
-    for (const key of lmeKeys) {
-      if (lmeData[key]) {
-        state.prices[key] = lmeData[key];
+  // Indicative-only commodities
+  const indicativeResult = results[1 + yahooKeys.length];
+  if (indicativeResult && indicativeResult.status === 'fulfilled' && indicativeResult.value) {
+    const indData = indicativeResult.value;
+    for (const key of indicativeKeys) {
+      if (indData[key]) {
+        state.prices[key] = indData[key];
         delete state.errors[key];
       } else if (!state.prices[key]) {
-        state.errors[key] = 'LME unavailable';
+        state.errors[key] = 'Unavailable';
       }
     }
   }
@@ -647,6 +921,8 @@ function calcIndiaLanded(commodityKey) {
   const config = COMMODITIES[commodityKey];
   const priceData = state.prices[commodityKey];
   if (!priceData || !state.usdInr) return null;
+  // No landed price for goods India prohibits importing (e.g. beef/live cattle)
+  if (config.importProhibited) return null;
 
   const intlPrice = priceData.price;
   const usdInr = state.usdInr;
@@ -858,7 +1134,13 @@ function buildCommodityCard(key) {
 
   // India landed price rows
   let landedRows = '';
-  if (hasData && landed) {
+  if (config.importProhibited) {
+    landedRows = `
+      <div class="price-row">
+        <span class="price-label" style="color:var(--red);font-weight:700">Import prohibited in India</span>
+        <span class="price-value" style="color:var(--red);font-size:12px">DGFT</span>
+      </div>`;
+  } else if (hasData && landed) {
     landedRows = buildLandedRowsHtml(config, landed);
   } else {
     landedRows = `
@@ -867,6 +1149,11 @@ function buildCommodityCard(key) {
         <span class="price-value"><div class="skeleton skeleton-text"></div></span>
       </div>`;
   }
+
+  // Optional caveat note (e.g. US-benchmark premium, live-weight livestock)
+  const noteHtml = config.note
+    ? `<div style="font-size:9.5px;color:var(--t4);font-style:italic;line-height:1.4;margin-top:8px;padding-top:6px;border-top:1px dashed var(--sep2)">${config.note}</div>`
+    : '';
 
   return `
     <div class="commodity-card" data-commodity="${key}" data-category="${config.category}" style="--commodity-accent:${config.accentColor}">
@@ -906,11 +1193,12 @@ function buildCommodityCard(key) {
           <div id="landed-${key}">
             ${landedRows}
           </div>
+          ${noteHtml}
         </div>
       </div>
 
       <div class="data-source">
-        <span>Source: ${isApprox ? `LME Indicative (as of ${LME_INDICATIVE.asOf})` : priceData?.isSpotBackup ? 'gold-api.com (spot)' : 'Yahoo Finance (' + (config.yahooSymbol || 'N/A') + ')'}</span>
+        <span>Source: ${isApprox ? `Indicative (as of ${INDICATIVE_AS_OF})` : priceData?.isSpotBackup ? 'gold-api.com (spot)' : 'Yahoo Finance (' + (config.yahooSymbol || 'N/A') + ')'}</span>
         ${config.yahooSymbol ? `<button class="chart-btn" onclick="event.stopPropagation();openChart('${key}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Chart</button>` : ''}
         <span id="tick-${key}">${state.lastUpdate ? fmtTime(state.lastUpdate) : '—'}</span>
       </div>
@@ -1076,12 +1364,13 @@ async function init() {
   renderAllCards();
   updateCards();
 
-  // Auto-poll every 30 seconds (Yahoo rate-limits aggressive polling,
-  // and each cycle now fetches ~16 symbols through shared CORS proxies)
+  // Auto-poll every 60 seconds. Yahoo rate-limits aggressive polling and each
+  // cycle now fetches ~21 live symbols through shared CORS proxies (the dozen
+  // indicative commodities resolve instantly from config).
   setInterval(async () => {
     await fetchAllPrices();
     updateCards();
-  }, 30000);
+  }, 60000);
 }
 
 // Start!
@@ -1102,7 +1391,33 @@ function getChartSymbol(key) {
   return COMMODITIES[key]?.yahooSymbol || null;
 }
 
+// ── CHART DATA CACHE (localStorage) ──
+// Yahoo's chart endpoint is flaky through CORS proxies and rate-limits hard.
+// Cache each symbol+range series so charts open instantly and survive a failed
+// refetch by falling back to the last good (stale) copy.
+const CHART_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+
+function readChartCache(symbol, range) {
+  try {
+    const raw = localStorage.getItem(`cpt_chart_${symbol}_${range}`);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.data) || !parsed.data.length) return null;
+    return { data: parsed.data, fresh: (Date.now() - parsed.ts) < CHART_CACHE_TTL_MS };
+  } catch (e) { return null; }
+}
+
+function writeChartCache(symbol, range, data) {
+  try {
+    localStorage.setItem(`cpt_chart_${symbol}_${range}`, JSON.stringify({ ts: Date.now(), data }));
+  } catch (e) { /* quota / private mode — ignore */ }
+}
+
 async function fetchHistoricalData(symbol, range) {
+  // Serve a fresh cached series immediately if we have one
+  const cached = readChartCache(symbol, range);
+  if (cached && cached.fresh) return cached.data;
+
   const interval = ['1mo', '3mo', '6mo'].includes(range) ? '1d' : (['1y', '2y'].includes(range) ? '1d' : '1wk');
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=${range}&interval=${interval}`;
 
@@ -1133,10 +1448,14 @@ async function fetchHistoricalData(symbol, range) {
         });
       }
 
-      return ohlcData;
+      if (ohlcData.length) {
+        writeChartCache(symbol, range, ohlcData);
+        return ohlcData;
+      }
     } catch (e) { /* try next proxy */ }
   }
-  return null;
+  // All proxies failed — fall back to stale cache if we have any
+  return cached ? cached.data : null;
 }
 
 function getChartThemeColors() {
