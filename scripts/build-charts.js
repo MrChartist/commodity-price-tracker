@@ -1,12 +1,12 @@
-// Builds one chart file: { symbol, currency, updated, daily: 2y, weekly: 10y, monthly: max }, rows are [t,o,h,l,c]
+// Builds one chart file: { symbol, currency, updated, daily: 2y, weekly: 10y, monthly: max }, rows are [t,o,h,l,c,volume]
 const { yahooChart } = require('./yahoo');
 
 const rows = r => {
   const ts = r.timestamp || [], q = r.indicators?.quote?.[0] || {};
   const out = [];
   for (let i = 0; i < ts.length; i++) {
-    const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i];
-    if ([o, h, l, c].every(v => typeof v === 'number')) out.push([ts[i], +o.toFixed(4), +h.toFixed(4), +l.toFixed(4), +c.toFixed(4)]);
+    const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i], v = q.volume?.[i];
+    if ([o, h, l, c].every(x => typeof x === 'number')) out.push([ts[i], +o.toFixed(4), +h.toFixed(4), +l.toFixed(4), +c.toFixed(4), typeof v === 'number' ? v : 0]);
   }
   return out;
 };

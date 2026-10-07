@@ -18,14 +18,18 @@ async function quote(sym) {
     const ts = r.timestamp || [];
     const closes = r.indicators?.quote?.[0]?.close || [];
     const day = t => Math.floor((t + (m.gmtoffset || 0)) / 86400);
+    const vols = r.indicators?.quote?.[0]?.volume || [];
     let prev = m.chartPreviousClose ?? m.previousClose ?? null;
+    let prevVolume = null;
     for (let i = ts.length - 1; i >= 0; i--) {
       if (typeof closes[i] !== 'number') continue;
       if (m.regularMarketTime && day(ts[i]) === day(m.regularMarketTime)) continue;
       prev = closes[i];
+      prevVolume = typeof vols[i] === 'number' && vols[i] > 0 ? vols[i] : null;
       break;
     }
-    return [sym, { price: m.regularMarketPrice, prev, currency: m.currency || 'USD', marketTime: m.regularMarketTime || null }];
+    const v = m.regularMarketVolume;
+    return [sym, { price: m.regularMarketPrice, prev, currency: m.currency || 'USD', marketTime: m.regularMarketTime || null, volume: typeof v === 'number' && v > 0 ? v : null, prevVolume }];
   } catch (e) { return [sym, null]; }
 }
 

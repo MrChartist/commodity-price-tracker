@@ -45,6 +45,7 @@ Each card shows one headline rupee price. Open **Details** for the full breakdow
 | **33 commodities** | Precious metals, industrial and battery metals, energy, and agri: gold, silver, platinum, palladium, copper, aluminium, steel, crude oil, natural gas, wheat, cotton, coffee, palm oil and more |
 | **Indian units** | Gold in ₹/g and ₹/10g (24K, 22K, 18K), grains in ₹/quintal, oils and softs in ₹/kg, lumber in ₹/cu ft |
 | **Duty aware** | BCD, AIDC and SWS per commodity, including date-based changes (for example cotton) |
+| **Volume and open interest** | Latest and previous session volume, weekly open interest with week-on-week change, and managed-money net positioning (CFTC), with a volume histogram on every chart |
 | **Honest status** | Every price is labelled Live, Cached, Stale or Indicative, with its real age |
 | **Charts** | Candlestick history from 1 month to the full available range |
 | **Watchlist and share** | Star your commodities, copy or share a price, link straight to a category or chart |
@@ -68,7 +69,8 @@ flowchart LR
 |---|---|---|
 | Gold, silver, platinum, palladium | gold-api.com spot, read by the browser | About every minute |
 | Futures, USD/INR, FX strip | Yahoo Finance via the `data` branch | Up to about 5 minutes |
-| Chart history | Yahoo Finance via the `data` branch | Refreshed every 6 hours |
+| Chart history and volume bars | Yahoo Finance via the `data` branch | Refreshed every 6 hours |
+| Open interest, managed-money net | CFTC Commitments of Traders via the `data` branch | Weekly (as of Tuesday, published Friday) |
 | Nine commodities with no free live feed | Typed-in indicative levels in `app.js` | As of 2026-06-12. **Needs verification** |
 
 The nine indicative commodities (zinc, nickel, lead, tin, iron ore, lithium, cobalt, canola oil, palm oil) are always badged **Indicative**. Their feeds are not freely available, and a stale feed shown as live would be worse than an honest label.
@@ -131,7 +133,7 @@ Good first contributions: a corrected duty rate with its source, a free live fee
 
 ## Credits
 
-Data: [Yahoo Finance](https://finance.yahoo.com), [gold-api.com](https://gold-api.com), [ExchangeRate-API](https://www.exchangerate-api.com). Charts: [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts) (Apache-2.0).
+Data: [CFTC](https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm), [Yahoo Finance](https://finance.yahoo.com), [gold-api.com](https://gold-api.com), [ExchangeRate-API](https://www.exchangerate-api.com). Charts: [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts) (Apache-2.0).
 
 Built by [**@MrChartist**](https://mrchartist.com) · [Twitter](https://twitter.com/mr_chartist) · [GitHub](https://github.com/MrChartist) · [Buy me a coffee](https://buymeacoffee.com/mrchartist)
 

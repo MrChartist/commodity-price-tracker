@@ -3,6 +3,7 @@
 const http = require('http'), fs = require('fs'), path = require('path'), url = require('url');
 const { buildPrices } = require('./build-prices');
 const { buildChart } = require('./build-charts');
+const { buildOi } = require('./build-oi');
 const { SYMBOL_RE } = require('./yahoo');
 
 const root = path.resolve(__dirname, '..');
@@ -11,6 +12,7 @@ const isFile = f => fs.existsSync(f) && fs.statSync(f).isFile();
 const json = (res, code, body) => { res.statusCode = code; res.setHeader('content-type', 'application/json'); res.setHeader('cache-control', 'no-store'); res.end(JSON.stringify(body)); };
 
 let pricesCache = { at: 0, body: null };
+let oiCache = { at: 0, body: null };
 const chartCache = new Map();
 
 http.createServer(async (req, res) => {
@@ -19,6 +21,10 @@ http.createServer(async (req, res) => {
     if (u.pathname === '/data/prices.json') {
       if (Date.now() - pricesCache.at > 20000) pricesCache = { at: Date.now(), body: (await buildPrices()).snapshot };
       return json(res, 200, pricesCache.body);
+    }
+    if (u.pathname === '/data/oi.json') {
+      if (Date.now() - oiCache.at > 3600000) oiCache = { at: Date.now(), body: await buildOi() };
+      return json(res, 200, oiCache.body);
     }
     const m = u.pathname.match(/^\/data\/charts\/([^/]+)\.json$/);
     if (m) {

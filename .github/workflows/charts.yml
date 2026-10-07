@@ -1,4 +1,4 @@
-name: Update chart history
+name: Update chart history and open interest
 
 on:
   schedule:
@@ -23,5 +23,7 @@ jobs:
           node-version: 22
       - name: Fetch chart history
         run: node scripts/fetch-charts.js out
+      - name: Fetch open interest (CFTC)
+        run: node scripts/fetch-oi.js out
       - name: Publish to data branch
         run: scripts/publish-data.sh out

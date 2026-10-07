@@ -4,6 +4,10 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## Unreleased
 
+### Added
+- Volume (latest and previous session) in each card's Details, and a volume histogram under every chart.
+- Weekly open interest with week-on-week change and managed-money net positioning from the CFTC Commitments of Traders report, for the 23 commodities whose CFTC contract matches the instrument priced. Always dated and labelled weekly. Refreshed by the chart workflow.
+
 ### Changed
 - Moved hosting from Vercel to GitHub Pages. The site is now fully static and the project is open source for anyone to fork.
 - New data pipeline: a GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX on the runner, and force-pushes `prices.json` to an orphan `data` branch. A daily workflow publishes chart history under `charts/` on the same branch. The browser reads `raw.githubusercontent.com` (location set in `config.js`) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. The `/api` endpoints are removed.

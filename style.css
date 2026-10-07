@@ -452,3 +452,13 @@ details[open] .chev { transform: rotate(90deg); }
 .more[open] > summary::after { transform: rotate(-135deg) translateY(-2px); }
 .more .source-text { font-size: 11px; color: var(--t4); padding: 8px 0 4px; }
 @media (prefers-reduced-motion: reduce) { .more > summary::after { transition: none; } }
+
+/* ── Volume and open interest ── */
+.stats { margin-top: 4px; padding-top: 6px; border-top: 0.5px solid var(--sep); }
+.stat-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; font-size: 13px; }
+.stat-label { color: var(--t3); }
+.stat-value { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--t1); }
+.stat-value small { font-weight: 500; color: var(--t4); margin-left: 4px; }
+.stat-value small.up { color: var(--green-t); }
+.stat-value small.down { color: var(--red-t); }
+.stat-note { font-size: 11px; color: var(--t4); padding: 2px 0 6px; }

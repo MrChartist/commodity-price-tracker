@@ -727,6 +727,7 @@ let state = {
   searchQuery: '',
   sortBy: 'default',
   watchlist: [],
+  oi: null,           // { reportDate, items: { 'GC=F': { oi, prevOi, mmNet, date } } } from CFTC (weekly)
 };
 
 const $ = id => document.getElementById(id);
@@ -813,6 +814,8 @@ function hydrateFromCache() {
         isApprox: !!p.isApprox,
         isSpotBackup: !!p.isSpotBackup,
         isSpot: !!p.isSpot,
+        volume: isNum(p.volume) ? p.volume : null,
+        prevVolume: isNum(p.prevVolume) ? p.prevVolume : null,
       };
     }
     if (!Object.keys(clean).length || !isNum(c.usdInr)) return false;
@@ -861,7 +864,7 @@ async function fetchYahooQuote(symbol) {
     const prevUsd = isNum(q.prev) && q.prev > 0 ? toUsd(q.prev, q.currency) : null;
     const hasPrev = isNum(prevUsd) && prevUsd > 0;
     const change = hasPrev ? price - prevUsd : 0;
-    return { price, change, changePct: hasPrev ? (change / prevUsd) * 100 : 0 };
+    return { price, change, changePct: hasPrev ? (change / prevUsd) * 100 : 0, volume: isNum(q.volume) ? q.volume : null, prevVolume: isNum(q.prevVolume) ? q.prevVolume : null };
   }
   return null; // no snapshot available: quote stays on its cached value
 }
@@ -951,7 +954,7 @@ async function fetchAllPrices() {
         const spot = live || (bs && isNum(bs.price) ? { price: bs.price } : null);
         if (spot && data) {
           const pct = data.changePct;
-          data = { price: spot.price, change: spot.price - spot.price / (1 + pct / 100), changePct: pct, isSpot: true };
+          data = { price: spot.price, change: spot.price - spot.price / (1 + pct / 100), changePct: pct, isSpot: true, volume: data.volume, prevVolume: data.prevVolume };
         } else if (spot) {
           data = { price: spot.price, change: 0, changePct: 0, isSpotBackup: true };
         }
@@ -1110,6 +1113,45 @@ function tickInfo(p) {
   return { text: t, flag: false };
 }
 
+
+// ── VOLUME + OPEN INTEREST ──
+async function fetchOi() {
+  if (!/^https?:$/.test(location.protocol)) return;
+  for (const base of dataSources()) {
+    try {
+      const resp = await fetch(`${base}/oi.json?t=${Math.floor(Date.now() / 3600000)}`, { signal: AbortSignal.timeout(10000) });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      if (data && data.items) { state.oi = data; return; }
+    } catch (e) { /* try next source */ }
+  }
+}
+
+const fmtInt = n => isNum(n) ? Math.round(n).toLocaleString('en-IN') : '—';
+
+function statsHtml(config, p) {
+  const sym = config.yahooSymbol;
+  const o = state.oi && sym ? state.oi.items[sym] : null;
+  const rows = [];
+  if (p && !p.isApprox && isNum(p.volume)) {
+    const prev = isNum(p.prevVolume) ? ` <small>previous ${fmtInt(p.prevVolume)}</small>` : '';
+    rows.push(`<div class="stat-row"><span class="stat-label">Volume · latest session</span><span class="stat-value">${fmtInt(p.volume)}${prev}</span></div>`);
+  }
+  if (o) {
+    let chg = '';
+    if (isNum(o.prevOi) && o.prevOi > 0) {
+      const pct = ((o.oi - o.prevOi) / o.prevOi) * 100;
+      const flat = Math.abs(pct) < 0.05;
+      chg = ` <small class="${flat ? '' : pct > 0 ? 'up' : 'down'}">${flat ? '0.0' : (pct > 0 ? '+' : '') + pct.toFixed(1)}% w/w</small>`;
+    }
+    rows.push(`<div class="stat-row"><span class="stat-label">Open interest · weekly</span><span class="stat-value">${fmtInt(o.oi)}${chg}</span></div>`);
+    if (isNum(o.mmNet)) rows.push(`<div class="stat-row"><span class="stat-label">Managed money net · weekly</span><span class="stat-value">${o.mmNet > 0 ? '+' : ''}${fmtInt(o.mmNet)} <small>${o.mmNet >= 0 ? 'net long' : 'net short'}</small></span></div>`);
+    const d = new Date(`${o.date}T00:00:00Z`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    rows.push(`<div class="stat-note">Open interest and positions: CFTC, as of ${d}. Weekly, not live.</div>`);
+  }
+  return rows.length ? `<div class="stats">${rows.join('')}</div>` : '';
+}
+
 // ── CARD HTML ──
 const ICON_STAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
 const ICON_SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
@@ -1249,6 +1291,7 @@ function buildCommodityCard(key, index) {
           <details class="more">
             <summary>Details</summary>
             <div id="landed-${key}">${landedBlock(key, config, landed, priceData)}</div>
+            <div id="stats-${key}">${statsHtml(config, priceData)}</div>
             ${config.note ? `<div class="card-note">${escapeHtml(config.note)}</div>` : ''}
             <div class="source-text" id="source-${key}">${escapeHtml(sourceShort(priceData, config))}</div>
           </details>
@@ -1416,6 +1459,8 @@ function updateCards() {
       if (landedEl && landed) landedEl.innerHTML = buildLandedRowsHtml(config, landed);
       const hl = $(`headline-${key}`);
       if (hl && landed) hl.innerHTML = headlineHtml(key, config, landed, p);
+      const statsEl = $(`stats-${key}`);
+      if (statsEl) statsEl.innerHTML = statsHtml(config, p);
       const srcEl = $(`source-${key}`);
       if (srcEl) srcEl.textContent = sourceShort(p, config);
     }
@@ -1721,7 +1766,11 @@ function refreshPrices() {
   state.refreshing = true; state.nextPollAt = null;
   setRefreshUi(true); updateStatusLine();
   inflight = (async () => {
-    try { await fetchAllPrices(); }
+    try {
+      // Open interest is weekly: load once, then at most hourly. Never blocks prices.
+      const oiStale = !state.oi || Date.now() - (state.oiAt || 0) > 3600000;
+      await Promise.all([fetchAllPrices(), oiStale ? fetchOi().then(() => { state.oiAt = Date.now(); }) : null]);
+    }
     catch (e) { console.warn('Refresh failed:', e && e.message); state.failedCycles++; state.isLoading = false; }
     finally {
       state.refreshing = false; inflight = null;
@@ -1751,17 +1800,17 @@ const CHART_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
 function readChartCache(symbol, range) {
   try {
-    const parsed = JSON.parse(store.get(`cpt_chart_${symbol}_${range}`) || 'null');
+    const parsed = JSON.parse(store.get(`cpt_chart2_${symbol}_${range}`) || 'null');
     if (!parsed || !Array.isArray(parsed.data) || !parsed.data.length) return null;
     return { data: parsed.data, fresh: (Date.now() - parsed.ts) < CHART_CACHE_TTL_MS };
   } catch (e) { return null; }
 }
-function writeChartCache(symbol, range, data) { store.set(`cpt_chart_${symbol}_${range}`, JSON.stringify({ ts: Date.now(), data })); }
+function writeChartCache(symbol, range, data) { store.set(`cpt_chart2_${symbol}_${range}`, JSON.stringify({ ts: Date.now(), data })); }
 
 async function fetchHistoricalData(symbol, range) {
   const cached = readChartCache(symbol, range);
   if (cached && cached.fresh) return { data: cached.data, stale: false };
-  const slice = (rows, cutoff) => rows.filter(r => r[0] >= cutoff).map(r => ({ time: r[0], open: +r[1].toFixed(2), high: +r[2].toFixed(2), low: +r[3].toFixed(2), close: +r[4].toFixed(2) }));
+  const slice = (rows, cutoff) => rows.filter(r => r[0] >= cutoff).map(r => ({ time: r[0], open: +r[1].toFixed(2), high: +r[2].toFixed(2), low: +r[3].toFixed(2), close: +r[4].toFixed(2), volume: isNum(r[5]) ? r[5] : 0 }));
   const DAYS = { '1mo': 31, '3mo': 92, '6mo': 183, '1y': 366, '2y': 731, '5y': 1827, '10y': 3653, max: 36500 };
   if (/^https?:$/.test(location.protocol)) {
     for (const base of dataSources()) {
@@ -1882,6 +1931,12 @@ async function renderChart(key, range) {
     upColor: c.up, downColor: c.down, borderUpColor: c.up, borderDownColor: c.down, wickUpColor: c.up, wickDownColor: c.down,
   });
   chartSeries.setData(data);
+  if (data.some(d => d.volume > 0)) {
+    const tint = hex => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},0.35)`; };
+    const vol = chartInstance.addHistogramSeries({ priceFormat: { type: 'volume' }, priceScaleId: '', lastValueVisible: false, priceLineVisible: false });
+    vol.priceScale().applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
+    vol.setData(data.map(d => ({ time: d.time, value: d.volume, color: tint(d.close >= d.open ? c.up : c.down) })));
+  }
   chartInstance.timeScale().fitContent();
 
   const fmt = t => new Date(t * 1000).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
