@@ -3,591 +3,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documentation & Glossary | Commodity Price Tracker - Mr Chartist</title>
-<meta name="description" content="Complete technical documentation, pricing methodology, and financial glossary for the India Commodity Price Tracker by Mr. Chartist.">
+<title>Docs &amp; Glossary | Commodity Price Tracker by @MrChartist</title>
+<meta name="description" content="Pricing methodology, import duty rates, data sources and glossary for the India Commodity Price Tracker by Mr. Chartist.">
 <meta name="author" content="Mr. Chartist">
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://commodity.mrchartist.com/docs">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Commodity Price Tracker by @MrChartist">
+<meta property="og:locale" content="en_IN">
+<meta property="og:title" content="Docs &amp; Glossary | Commodity Price Tracker by @MrChartist">
+<meta property="og:description" content="Pricing methodology, import duty rates, data sources and glossary for the India Commodity Price Tracker by Mr. Chartist.">
+<meta property="og:url" content="https://commodity.mrchartist.com/docs">
+<meta property="og:image" content="https://commodity.mrchartist.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Commodity Price Tracker by @MrChartist: Mr. Chartist symbol with title and India import landed prices">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@mr_chartist">
+<meta name="twitter:creator" content="@mr_chartist">
+<meta name="twitter:title" content="Docs &amp; Glossary | Commodity Price Tracker by @MrChartist">
+<meta name="twitter:description" content="Pricing methodology, import duty rates, data sources and glossary for the India Commodity Price Tracker by Mr. Chartist.">
+<meta name="twitter:image" content="https://commodity.mrchartist.com/og-image.png">
+<meta name="twitter:image:alt" content="Commodity Price Tracker by @MrChartist">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.allorigins.win" crossorigin>
+<link rel="preconnect" href="https://open.er-api.com" crossorigin>
+<link rel="dns-prefetch" href="https://api.gold-api.com">
+<link rel="dns-prefetch" href="https://corsproxy.io">
+<link rel="dns-prefetch" href="https://api.codetabs.com">
+<link rel="icon" href="/favicon.ico" sizes="16x16 24x24">
+<link rel="icon" href="/favicon.svg?v=brand-v2" type="image/svg+xml">
+<link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="application-name" content="Commodity Price Tracker">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Commodities">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="style.css">
-<style>
-/* ── DOCS-SPECIFIC PREMIUM STYLES ── */
-.doc-section { margin-bottom: 32px; }
-.doc-section h2 { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--t1); letter-spacing: -0.03em; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-.doc-section p { font-size: 14px; line-height: 1.7; color: var(--t2); margin-bottom: 12px; }
-.doc-section strong { color: var(--t1); }
-
-/* Hero Banner */
-.doc-hero { background: linear-gradient(135deg, hsl(24 90% 52% / 0.08), hsl(252 36% 54% / 0.06)); border: 1px solid hsl(24 90% 52% / 0.15); border-radius: 20px; padding: 32px; position: relative; overflow: hidden; }
-.doc-hero::before { content:''; position:absolute; top:-50%; right:-20%; width:300px; height:300px; background:radial-gradient(circle, hsl(24 90% 52% / 0.1), transparent 70%); pointer-events:none; }
-.doc-hero h2 { font-size: 28px; margin-bottom: 8px; }
-.doc-hero p { font-size: 15px; color: var(--t3); max-width: 700px; }
-
-/* Section Badge */
-.section-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
-.badge-precious { background: hsl(38 92% 48% / 0.1); color: var(--orange); border: 1px solid hsl(38 92% 48% / 0.2); }
-.badge-industrial { background: hsl(24 90% 52% / 0.1); color: var(--primary); border: 1px solid hsl(24 90% 52% / 0.2); }
-.badge-energy { background: hsl(152 60% 40% / 0.1); color: var(--teal); border: 1px solid hsl(152 60% 40% / 0.2); }
-
-/* Visual Flow Pipeline */
-.flow-pipeline { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
-.flow-step { display: flex; gap: 16px; align-items: flex-start; position: relative; }
-.flow-step:last-child .flow-line { display: none; }
-.flow-num { width: 36px; height: 36px; min-width: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 14px; font-weight: 800; color: #fff; position: relative; z-index: 2; }
-.flow-num.pm { background: linear-gradient(135deg, hsl(38 92% 48%), hsl(24 90% 52%)); box-shadow: 0 4px 12px hsl(38 92% 48% / 0.3); }
-.flow-num.im { background: linear-gradient(135deg, hsl(24 90% 52%), hsl(16 85% 48%)); box-shadow: 0 4px 12px hsl(24 90% 52% / 0.3); }
-.flow-num.en { background: linear-gradient(135deg, hsl(152 60% 40%), hsl(152 62% 38%)); box-shadow: 0 4px 12px hsl(152 60% 40% / 0.3); }
-.flow-body { flex: 1; padding-bottom: 24px; }
-.flow-body h4 { font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
-.flow-body p { font-size: 13px; color: var(--t3); margin-bottom: 0; line-height: 1.6; }
-.flow-line { position: absolute; left: 17px; top: 36px; bottom: -24px; width: 2px; background: var(--sep); z-index: 1; }
-.flow-step:last-child .flow-body { padding-bottom: 0; }
-
-/* Formula Block */
-.formula-block { background: var(--l2); border: 1px solid var(--sep2); border-radius: 12px; padding: 16px 20px; margin: 16px 0; position: relative; overflow: hidden; }
-.formula-block::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; border-radius: 4px 0 0 4px; }
-.formula-block.accent-orange::before { background: var(--primary); }
-.formula-block.accent-green::before { background: var(--green); }
-.formula-block.accent-purple::before { background: var(--purple); }
-.formula-label { font-family: var(--font-body); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t4); margin-bottom: 6px; }
-.formula-code { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--t1); background: var(--l1); padding: 10px 14px; border-radius: 8px; display: block; border: 1px solid var(--sep2); }
-
-/* Duty Table */
-.duty-table { width: 100%; border-collapse: collapse; margin: 16px 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--sep2); }
-.duty-table th { background: var(--l2); padding: 10px 14px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--t4); text-align: left; border-bottom: 1px solid var(--sep2); }
-.duty-table td { padding: 10px 14px; font-size: 13px; color: var(--t2); border-bottom: 1px solid var(--sep2); }
-.duty-table tr:last-child td { border-bottom: none; }
-.duty-table tr:hover td { background: var(--l3); }
-.duty-table .mono { font-family: var(--font-mono); font-weight: 600; color: var(--primary); }
-
-/* Glossary Cards */
-.glossary-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-@media (min-width: 768px) { .glossary-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .glossary-grid { grid-template-columns: repeat(3, 1fr); } }
-.gl-card { background: var(--l1); border: 1px solid var(--sep2); border-radius: 12px; padding: 16px; transition: all 0.2s; position: relative; overflow: hidden; }
-.gl-card:hover { border-color: var(--sep); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-[data-theme="dark"] .gl-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-.gl-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-.gl-card.gl-orange::before { background: linear-gradient(90deg, var(--primary), var(--orange)); }
-.gl-card.gl-green::before { background: linear-gradient(90deg, var(--green), var(--teal)); }
-.gl-card.gl-purple::before { background: linear-gradient(90deg, var(--purple), hsl(252 50% 65%)); }
-.gl-card.gl-blue::before { background: linear-gradient(90deg, hsl(210 70% 50%), hsl(200 70% 50%)); }
-.gl-term { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--t1); margin-bottom: 6px; }
-.gl-def { font-size: 12px; color: var(--t3); line-height: 1.55; }
-
-/* Compliance Banner */
-.compliance-banner { background: hsl(0 72% 52% / 0.06); border: 1px solid hsl(0 72% 52% / 0.15); border-radius: 12px; padding: 16px 20px; display: flex; gap: 12px; align-items: flex-start; }
-.compliance-banner svg { min-width: 20px; color: var(--red); margin-top: 2px; }
-.compliance-banner p { font-size: 13px; color: var(--t2); margin: 0; line-height: 1.6; }
-
-/* Data Source Cards */
-.source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
-.source-card { background: var(--l1); border: 1px solid var(--sep2); border-radius: 10px; padding: 14px; text-align: center; }
-.source-card .src-name { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 2px; }
-.source-card .src-desc { font-size: 11px; color: var(--t4); }
-.source-card .src-badge { display: inline-block; margin-top: 8px; padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-
-/* Quick Nav */
-.quick-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
-.qn-link { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; background: var(--l1); border: 1px solid var(--sep2); border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--t3); text-decoration: none; transition: all 0.15s; }
-.qn-link:hover { background: var(--l3); color: var(--t1); border-color: var(--sep); }
-
-@media (max-width: 768px) {
-  .doc-hero { padding: 20px; }
-  .doc-hero h2 { font-size: 20px; }
-  .doc-section h2 { font-size: 18px; }
-  .source-grid { grid-template-columns: 1fr; }
+<script src="/pwa-register.js" defer></script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Documentation & Glossary",
+ "name": "Docs & Glossary | Commodity Price Tracker by @MrChartist",
+ "url": "https://commodity.mrchartist.com/docs",
+ "description": "Pricing methodology, import duty rates, data sources and glossary for the India Commodity Price Tracker by Mr. Chartist.",
+ "inLanguage": "en-IN",
+ "image": "https://commodity.mrchartist.com/og-image.png",
+ "author": {
+  "@type": "Person",
+  "@id": "https://mrchartist.com/#person",
+  "name": "Mr. Chartist",
+  "url": "https://mrchartist.com",
+  "sameAs": [
+   "https://mrchartist.com",
+   "https://twitter.com/mr_chartist"
+  ]
+ },
+ "publisher": {
+  "@type": "Organization",
+  "@id": "https://mrchartist.com/#org",
+  "name": "Mr. Chartist",
+  "url": "https://mrchartist.com",
+  "logo": "https://commodity.mrchartist.com/icons/icon-512.png",
+  "founder": {
+   "@id": "https://mrchartist.com/#person"
+  },
+  "sameAs": [
+   "https://mrchartist.com",
+   "https://twitter.com/mr_chartist"
+  ]
+ },
+ "isPartOf": {
+  "@id": "https://commodity.mrchartist.com/#website"
+ }
 }
+</script>
+<style>
+/* ── DOCS PAGE STYLES (self-contained, uses theme tokens from style.css) ── */
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{overflow-x:hidden}
+.dx-top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--sep)}
+.dx-top-in{max-width:1180px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:12px}
+.dx-brand{font-family:var(--font-display);font-weight:800;font-size:16px;color:var(--t1);text-decoration:none;letter-spacing:-0.02em;white-space:nowrap}
+.dx-brand span{color:var(--primary)}
+.dx-nav{display:flex;gap:4px;margin-left:auto;align-items:center}
+.dx-nav a,.dx-nav button{font:600 12px var(--font-body);color:var(--t3);text-decoration:none;padding:7px 10px;border-radius:8px;border:1px solid transparent;background:none;cursor:pointer;white-space:nowrap;min-height:34px}
+.dx-nav a:hover,.dx-nav button:hover{color:var(--t1);background:var(--l2)}
+.dx-nav a.on{color:var(--primary)}
+.dx-nav .dx-ext::after{content:" \2197";font-size:10px}
+@media(max-width:560px){.dx-brand small{display:none}.dx-nav a.hide-s{display:none}}
+.dx-wrap{max-width:1180px;margin:0 auto;padding:24px 16px 72px;display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+@media(min-width:1024px){.dx-wrap{grid-template-columns:220px minmax(0,1fr);gap:40px;padding-top:36px}}
+.dx-toc{font-size:13px}
+.dx-toc-box{border:1px solid var(--sep);background:var(--l1);border-radius:12px;padding:12px 14px}
+.dx-toc summary{font:700 11px var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--t4);cursor:pointer;list-style:none;min-height:28px;display:flex;align-items:center}
+.dx-toc summary::-webkit-details-marker{display:none}
+.dx-toc nav{display:flex;flex-direction:column;margin-top:8px}
+.dx-toc a{color:var(--t3);text-decoration:none;padding:7px 10px;border-left:2px solid var(--sep);font-weight:500}
+.dx-toc a:hover{color:var(--t1)}
+.dx-toc a.active{color:var(--primary);border-left-color:var(--primary);font-weight:700}
+@media(min-width:1024px){.dx-toc{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 96px);overflow:auto}.dx-toc-box{border:0;background:none;padding:0}.dx-toc summary{pointer-events:none;margin-bottom:4px}}
+.dx-main{min-width:0}
+.dx-hero{border:1px solid hsl(24 90% 52% / .18);border-radius:18px;padding:28px 24px;background:linear-gradient(135deg,hsl(24 90% 52% / .08),hsl(252 36% 54% / .06));margin-bottom:28px}
+.dx-hero h1{font:800 clamp(26px,5vw,38px)/1.15 var(--font-display);letter-spacing:-0.03em;color:var(--t1);margin-bottom:10px}
+.dx-hero p{font-size:15px;line-height:1.7;color:var(--t3);max-width:720px}
+.dx-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.dx-chip{font:600 11px var(--font-body);padding:5px 12px;border-radius:99px;background:var(--l1);border:1px solid var(--sep);color:var(--t2)}
+.dx-sec{margin-bottom:40px}
+.dx-sec h2{font:800 24px var(--font-display);letter-spacing:-0.03em;color:var(--t1);margin-bottom:14px}
+.dx-h3{font:700 15px var(--font-display);color:var(--t1);margin:22px 0 4px}
+.dx-sec p,.dx-sec li{font-size:14px;line-height:1.75;color:var(--t2)}
+.dx-sec p{margin-bottom:12px}
+.dx-sec ul,.dx-sec ol{margin:0 0 12px 20px}
+.dx-sec li{margin-bottom:6px}
+.dx-sec a{color:var(--primary)}
+code{font-family:var(--font-mono);font-size:.9em;background:var(--l2);border:1px solid var(--sep2);border-radius:5px;padding:1px 5px;color:var(--t1);word-break:break-word}
+.formula{border:1px solid var(--sep);border-left:4px solid var(--primary);background:var(--l1);border-radius:10px;padding:14px 16px;margin:14px 0}
+.formula b{display:block;font:700 10px var(--font-body);letter-spacing:.08em;text-transform:uppercase;color:var(--t4);margin-bottom:6px}
+.formula code{display:block;background:var(--l2);padding:10px 12px;font-size:13px;font-weight:600;line-height:1.6;white-space:normal}
+.steps{counter-reset:s;list-style:none;margin:16px 0!important;padding:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 18px 48px;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,hsl(38 92% 48%),hsl(24 90% 52%));color:#fff;font:800 14px/34px var(--font-display);text-align:center}
+.steps li::after{content:'';position:absolute;left:16px;top:38px;bottom:4px;width:2px;background:var(--sep)}
+.steps li:last-child::after{display:none}
+.steps strong{color:var(--t1);display:block;margin-bottom:2px}
+.tbl-wrap{border:1px solid var(--sep);border-radius:12px;overflow:hidden;margin:12px 0;background:var(--l1)}
+.dx-table{width:100%;border-collapse:collapse;font-size:13px}
+.dx-table th{background:var(--l2);text-align:left;padding:10px 12px;font:700 10px var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:var(--t4);border-bottom:1px solid var(--sep)}
+.dx-table td{padding:10px 12px;color:var(--t2);border-bottom:1px solid var(--sep2);vertical-align:top;line-height:1.5}
+.dx-table tr:last-child td{border-bottom:0}
+.dx-table tbody tr:hover td{background:var(--l3)}
+.dx-table .mono{font-family:var(--font-mono);font-weight:700;color:var(--primary)}
+@media(max-width:700px){
+ .dx-table,.dx-table tbody,.dx-table tr,.dx-table td{display:block;width:100%}
+ .dx-table thead{display:none}
+ .dx-table tr{padding:10px 12px;border-bottom:1px solid var(--sep)}
+ .dx-table tr:last-child{border-bottom:0}
+ .dx-table td{border:0;padding:3px 0;display:flex;gap:12px;justify-content:space-between;text-align:right}
+ .dx-table td::before{content:attr(data-label);font:700 10px var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:var(--t4);text-align:left;flex:0 0 38%;padding-top:2px}
+ .dx-table td>*{min-width:0}
+}
+.note{border:1px solid var(--sep);background:var(--l2);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.65;color:var(--t2);margin:14px 0}
+.note.warn{border-color:hsl(0 72% 52% / .3);background:hsl(0 72% 52% / .06)}
+.note.tbv{border-color:hsl(38 92% 48% / .35);background:hsl(38 92% 48% / .07)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.card2{border:1px solid var(--sep);background:var(--l1);border-radius:12px;padding:14px}
+.card2 h4{font:700 14px var(--font-body);color:var(--t1);margin-bottom:4px}
+.card2 p{font-size:12.5px;line-height:1.6;color:var(--t3);margin:0}
+.tag{display:inline-block;font:700 9px var(--font-body);letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:99px;border:1px solid var(--sep);color:var(--t4);margin-bottom:6px}
+.gl-search{position:relative;margin:8px 0 14px}
+.gl-search input{width:100%;font:500 14px var(--font-body);padding:12px 14px;border-radius:10px;border:1px solid var(--sep);background:var(--l1);color:var(--t1);min-height:44px}
+.gl-search input:focus{outline:2px solid var(--primary);outline-offset:1px}
+.gl-count{font-size:12px;color:var(--t4);margin-bottom:10px}
+.gl-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:760px){.gl-grid{grid-template-columns:repeat(2,1fr)}}
+.gl-card{border:1px solid var(--sep);background:var(--l1);border-radius:12px;padding:14px 16px;border-top:3px solid var(--primary)}
+.gl-card[hidden]{display:none}
+.gl-term{font:700 15px var(--font-display);color:var(--t1);margin-bottom:4px}
+.gl-def{font-size:13px;color:var(--t3);line-height:1.65}
+.gl-empty{padding:20px;text-align:center;color:var(--t4);font-size:13px}
+.dx-foot{border-top:1px solid var(--sep);background:var(--l1)}
+.dx-foot-in{max-width:1180px;margin:0 auto;padding:28px 16px;display:flex;flex-direction:column;gap:14px;font-size:12.5px;color:var(--t3)}
+.dx-foot-links{display:flex;flex-wrap:wrap;gap:6px 16px}
+.dx-foot a{color:var(--t2);text-decoration:none;font-weight:600}
+.dx-foot a:hover{color:var(--primary)}
+.dx-foot .brand{font:800 15px var(--font-display);color:var(--t1)}
+.dx-foot .brand span{color:var(--primary)}
+#to-top{position:fixed;right:16px;bottom:16px;width:44px;height:44px;border-radius:50%;border:1px solid var(--sep);background:var(--l1);color:var(--t1);cursor:pointer;box-shadow:var(--card-shadow);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+#to-top.show{opacity:1;pointer-events:auto}
+#to-top svg{width:18px;height:18px}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-
-<div class="ambient-orb ambient-orb-1"></div>
-<div class="ambient-orb ambient-orb-2"></div>
-
-<div class="wrap">
-  <header>
-    <div class="header-left">
-      <div class="header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-      <div>
-        <h1 class="h-title">Documentation Hub</h1>
-        <p class="h-sub">Pricing Engine · Methodology · Financial Glossary</p>
-      </div>
-      <div class="logo-glow"></div>
-    </div>
-    <div class="h-right">
-      <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap">
-        <button class="hdr-btn" id="theme-toggle" onclick="toggleTheme()">
-          <span id="theme-icon" style="display:inline-flex;width:14px;height:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span> <span id="theme-label">Light</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- ══ HERO ══ -->
-  <div class="doc-hero doc-section">
-    <h2 style="margin-bottom:8px">How Every Price Is Born</h2>
-    <p>This tracker computes India Import Landed Prices for 30+ commodities in real-time — precious metals, energy, industrial & battery metals, and agri commodities. No NSE/MCX data is used — every number is a pure mathematical derivation from international benchmarks, live forex, and published Indian customs duty rates.</p>
-    <img src="docs/screenshots/hero.png" alt="Commodity Price Tracker Engine" style="width:100%;border-radius:12px;margin-top:20px;border:1px solid var(--sep2);box-shadow:0 8px 24px rgba(0,0,0,0.15)">
+<a href="#main" style="position:absolute;left:-999px" onfocus="this.style.left='8px'" onblur="this.style.left='-999px'">Skip to content</a>
+<header class="dx-top">
+  <div class="dx-top-in">
+    <a class="dx-brand" href="/">Commodity<span>Tracker</span> <small style="font-weight:600;color:var(--t4);font-size:12px">Docs</small></a>
+    <nav class="dx-nav" aria-label="Main">
+      <a href="/">Dashboard</a>
+      <a href="docs.html" class="on" aria-current="page">Docs</a>
+      <a href="about.html">About</a>
+      <a href="https://mrchartist.com" class="dx-ext hide-s" target="_blank" rel="noopener">mrchartist.com</a>
+      <button type="button" id="theme-toggle" aria-label="Switch theme">Theme</button>
+    </nav>
   </div>
+</header>
 
-  <!-- Quick Nav -->
-  <div class="quick-nav">
-    <a href="#core-engine" class="qn-link">Core Engine</a>
-    <a href="#meth-precious" class="qn-link">Precious Metals</a>
-    <a href="#meth-industrial" class="qn-link">Industrial Metals</a>
-    <a href="#meth-energy" class="qn-link">Energy</a>
-    <a href="#meth-agri" class="qn-link">Agri Commodities</a>
-    <a href="#data-sources" class="qn-link">Data Sources</a>
-    <a href="#compliance" class="qn-link">Compliance</a>
-    <a href="#glossary" class="qn-link">Glossary</a>
-  </div>
+<div class="dx-wrap">
+  <aside class="dx-toc" aria-label="Table of contents">
+    <details class="dx-toc-box" id="toc-box">
+      <summary>On this page</summary>
+      <nav><a href="#overview" data-spy="overview">Overview</a><a href="#engine" data-spy="engine">Pricing formula</a><a href="#units" data-spy="units">Unit conversions</a><a href="#duties" data-spy="duties">Duty rate matrix</a><a href="#purity" data-spy="purity">Purity and contracts</a><a href="#sources" data-spy="sources">Data sources</a><a href="#freshness" data-spy="freshness">Data freshness and limitations</a><a href="#disclaimer" data-spy="disclaimer">Disclaimer</a><a href="#glossary" data-spy="glossary">Glossary</a></nav>
+    </details>
+  </aside>
 
-  <!-- ══ CORE ENGINE ══ -->
-  <div class="doc-section card" id="core-engine" style="scroll-margin-top:80px">
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      The Core Pricing Engine
-    </h2>
-    <p>Every commodity on this tracker follows the same 4-step pipeline. The engine runs every ~5 seconds, fetching fresh data and recalculating all values in real-time.</p>
+  <main class="dx-main" id="main">
+    <section class="dx-hero">
+      <h1>Documentation</h1>
+      <p>How the India Commodity Price Tracker calculates import landed prices for 33 commodities, which data it uses, and where its limits are. Every duty rate, unit and source on this page matches the configuration in <code>app.js</code>.</p>
+      <div class="dx-chips"><span class="dx-chip">33 commodities</span><span class="dx-chip">24 live futures feeds</span><span class="dx-chip">9 indicative levels</span><span class="dx-chip">Indicative levels as of 2026-06-12</span></div>
+    </section>
 
-    <div class="formula-block accent-orange">
-      <div class="formula-label">Master Formula</div>
-      <code class="formula-code">India Landed ₹ = (Intl. Price ÷ Unit Conversion) × USD/INR × (1 + Total Duty %)</code>
-    </div>
-    <div class="formula-block accent-green" style="margin-top:8px">
-      <div class="formula-label">Duty Breakdown</div>
-      <code class="formula-code">Total Duty % = Basic Customs Duty (BCD) + Agriculture Infrastructure & Development Cess (AIDC)</code>
-    </div>
+    <section class="dx-sec" id="overview">
+      <h2>Overview</h2>
+      <p>The tracker is a free, client-side web page. It takes international futures prices, converts them to Indian units, multiplies by the USD/INR rate and adds the customs duty. The result is an estimate of the import landed price in rupees.</p>
+      <div class="grid2">
+        <div class="card2"><span class="tag">Precious</span><h4>4 commodities</h4><p>Gold, Silver, Platinum, Palladium.</p></div>
+        <div class="card2"><span class="tag">Industrial</span><h4>10 commodities</h4><p>Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel (HRC), Iron Ore, Lithium, Cobalt.</p></div>
+        <div class="card2"><span class="tag">Energy</span><h4>3 commodities</h4><p>Crude Oil (WTI), Brent Crude, Natural Gas.</p></div>
+        <div class="card2"><span class="tag">Agri</span><h4>16 commodities</h4><p>Wheat, Corn, Soybean, Soybean Oil, Soybean Meal, Sugar, Cotton, Coffee, Cocoa, Rice, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs, Live Cattle.</p></div>
+      </div>
+      <div class="note warn"><strong>Important.</strong> This tool does not use NSE or MCX data. All Indian prices are calculated estimates. See <a href="#disclaimer">Disclaimer</a>.</div>
+    </section>
 
-    <!-- Visual Pipeline -->
-    <div style="margin-top:24px">
-      <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px">Universal 4-Step Pipeline</div>
-      <div class="flow-pipeline">
-        <div class="flow-step">
-          <div class="flow-num pm">1</div>
-          <div class="flow-line"></div>
-          <div class="flow-body">
-            <h4>Fetch International Benchmark</h4>
-            <p>Pull the live spot/futures price from COMEX (Gold, Silver, Crude) or LME (Copper, Zinc, Aluminium, Nickel, Lead) via Yahoo Finance API or metals.live aggregator.</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-num pm">2</div>
-          <div class="flow-line"></div>
-          <div class="flow-body">
-            <h4>Convert to Local Unit</h4>
-            <p>Translate from the international measurement standard to the Indian retail unit. Troy Ounces → Grams for precious metals. Metric Tonnes → Kilograms for base metals. Barrels stay as barrels for energy.</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-num pm">3</div>
-          <div class="flow-line"></div>
-          <div class="flow-body">
-            <h4>Multiply by Live USD/INR</h4>
-            <p>Apply the real-time USD/INR exchange rate (fetched from Yahoo Finance USDINR=X) to convert the dollar-denominated per-unit price into Indian Rupees.</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-num pm">4</div>
-          <div class="flow-body">
-            <h4>Apply Indian Customs Duty</h4>
-            <p>Layer the commodity-specific import duty (BCD + AIDC) on top. This produces the final "India Import Landed Price" — the theoretical cost to bring that commodity onto Indian soil.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <section class="dx-sec" id="engine">
+      <h2>Pricing formula</h2>
+      <p>Every commodity follows the same four steps.</p>
+      <div class="formula"><b>Master formula</b><code>India landed ₹ per unit = (International price ÷ conversion divisor) × USD/INR × (1 + duty rate)</code></div>
+      <div class="formula"><b>Duty rate</b><code>Duty rate = the total shown in the duty matrix (BCD + AIDC + SWS, as applicable)</code></div>
+      <ol class="steps">
+        <li><strong>Get the international price</strong>Yahoo Finance futures price in USD for 24 commodities, or a manually updated indicative level for 9 commodities. Quotes in US cents or other currencies are first converted to US dollars.</li>
+        <li><strong>Convert the unit</strong>The price is divided by the conversion divisor of the commodity (see <a href="#units">Unit conversions</a>) to get a price per Indian unit.</li>
+        <li><strong>Apply USD/INR</strong>The rate comes from the ExchangeRate API (open.er-api.com). If that fails, Yahoo Finance <code>USDINR=X</code> is used.</li>
+        <li><strong>Add customs duty</strong>The commodity-specific duty is added. Duty can depend on the date (cotton) and Live Cattle has no landed price because import is prohibited.</li>
+      </ol>
+      <p>The dashboard refreshes about every 60 seconds while the tab is visible. Polling pauses in hidden tabs and refreshes when you return.</p>
+    </section>
 
-  <!-- ══ PRECIOUS METALS ══ -->
-  <div class="doc-section card" id="meth-precious" style="scroll-margin-top:80px">
-    <h2>
-      <span class="section-badge badge-precious">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg>
-        Precious
-      </span>
-      Gold, Silver, Platinum & Palladium
-    </h2>
-    <p>Precious metals use the <strong>Troy Ounce</strong> as the international standard. India manages gold/silver imports tightly due to their impact on the Current Account Deficit (CAD).</p>
+    <section class="dx-sec" id="units">
+      <h2>Unit conversions</h2>
+      <p>The divisor is the number of international units in one Indian unit. A price per international unit is divided by it.</p>
+      <div class="tbl-wrap"><table class="dx-table conv"><thead><tr><th>Commodity</th><th>Quoted per</th><th>Divisor</th><th>India unit</th><th>Other display</th></tr></thead><tbody><tr><td data-label="Commodity">Gold</td><td data-label="Quoted per">Troy Oz</td><td data-label="Divisor"><code>÷ 31.1035</code></td><td data-label="India unit">₹ per gram</td><td data-label="Other display">10 g (per gram × 10)</td></tr><tr><td data-label="Commodity">Silver</td><td data-label="Quoted per">Troy Oz</td><td data-label="Divisor"><code>÷ 31.1035</code></td><td data-label="India unit">₹ per gram</td><td data-label="Other display">10 g (per gram × 10)</td></tr><tr><td data-label="Commodity">Platinum</td><td data-label="Quoted per">Troy Oz</td><td data-label="Divisor"><code>÷ 31.1035</code></td><td data-label="India unit">₹ per gram</td><td data-label="Other display">10 g (per gram × 10)</td></tr><tr><td data-label="Commodity">Palladium</td><td data-label="Quoted per">Troy Oz</td><td data-label="Divisor"><code>÷ 31.1035</code></td><td data-label="India unit">₹ per gram</td><td data-label="Other display">10 g (per gram × 10)</td></tr><tr><td data-label="Commodity">Copper</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Aluminium</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Zinc</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Nickel</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Lead</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Tin</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Steel (HRC)</td><td data-label="Quoted per">US short ton</td><td data-label="Divisor"><code>÷ 0.907185</code></td><td data-label="India unit">₹ per tonne</td><td data-label="Other display">kg (price per India unit × 0.001)</td></tr><tr><td data-label="Commodity">Iron Ore</td><td data-label="Quoted per">Dry Metric Ton</td><td data-label="Divisor"><code>÷ 1</code></td><td data-label="India unit">₹ per tonne</td><td data-label="Other display">kg (price per India unit × 0.001)</td></tr><tr><td data-label="Commodity">Lithium (Carbonate)</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Cobalt</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Crude Oil (WTI)</td><td data-label="Quoted per">Barrel</td><td data-label="Divisor"><code>÷ 1</code></td><td data-label="India unit">₹ per barrel</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Brent Crude</td><td data-label="Quoted per">Barrel</td><td data-label="Divisor"><code>÷ 1</code></td><td data-label="India unit">₹ per barrel</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Natural Gas</td><td data-label="Quoted per">MMBtu</td><td data-label="Divisor"><code>÷ 1</code></td><td data-label="India unit">₹ per MMBtu</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Wheat</td><td data-label="Quoted per">Bushel</td><td data-label="Divisor"><code>÷ 0.272155</code></td><td data-label="India unit">₹ per quintal</td><td data-label="Other display">kg (price per India unit × 0.01)</td></tr><tr><td data-label="Commodity">Corn (Maize)</td><td data-label="Quoted per">Bushel</td><td data-label="Divisor"><code>÷ 0.254012</code></td><td data-label="India unit">₹ per quintal</td><td data-label="Other display">kg (price per India unit × 0.01)</td></tr><tr><td data-label="Commodity">Soybean</td><td data-label="Quoted per">Bushel</td><td data-label="Divisor"><code>÷ 0.272155</code></td><td data-label="India unit">₹ per quintal</td><td data-label="Other display">kg (price per India unit × 0.01)</td></tr><tr><td data-label="Commodity">Soybean Oil</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">10 kg (price per India unit × 10)</td></tr><tr><td data-label="Commodity">Sugar</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">quintal (price per India unit × 100)</td></tr><tr><td data-label="Commodity">Cotton</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">candy (356 kg) (price per India unit × 356)</td></tr><tr><td data-label="Commodity">Coffee</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Cocoa</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Rice (Rough)</td><td data-label="Quoted per">Cwt</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per quintal</td><td data-label="Other display">kg (price per India unit × 0.01)</td></tr><tr><td data-label="Commodity">Soybean Meal</td><td data-label="Quoted per">Short Ton</td><td data-label="Divisor"><code>÷ 9.07185</code></td><td data-label="India unit">₹ per quintal</td><td data-label="Other display">kg (price per India unit × 0.01)</td></tr><tr><td data-label="Commodity">Orange Juice</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Lumber</td><td data-label="Quoted per">1000 bd ft</td><td data-label="Divisor"><code>÷ 83.3333</code></td><td data-label="India unit">₹ per cu ft</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Canola Oil</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">10 kg (price per India unit × 10)</td></tr><tr><td data-label="Commodity">Palm Oil (CPO)</td><td data-label="Quoted per">Metric Ton</td><td data-label="Divisor"><code>÷ 1000</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">10 kg (price per India unit × 10)</td></tr><tr><td data-label="Commodity">Lean Hogs (Pork)</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>÷ 0.453592</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr><tr><td data-label="Commodity">Live Cattle</td><td data-label="Quoted per">Pound</td><td data-label="Divisor"><code>n/a</code></td><td data-label="India unit">₹ per kg</td><td data-label="Other display">—</td></tr></tbody></table></div>
+      <div class="note"><strong>Steel (HRC).</strong> The app labels the international unit as "Metric Ton", but the code comment and the divisor (0.907185) show that HRC=F is quoted per US short ton. This page shows the unit as used in the calculation.</div>
+      <div class="note"><strong>Reference values.</strong> 1 troy ounce = 31.1035 g; 1 lb = 0.453592 kg; 1 short ton = 907.185 kg; 1 quintal = 100 kg; 1,000 board feet = 83.33 cubic feet.</div>
+    </section>
 
-    <div class="flow-pipeline">
-      <div class="flow-step">
-        <div class="flow-num pm">1</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Source: COMEX/NYMEX Futures (GC=F, SI=F, PL=F, PA=F)</h4>
-          <p>We fetch the active front-month futures contract price in USD per Troy Ounce from the CME Group via Yahoo Finance CDN, with gold-api.com spot as a backup source.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num pm">2</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Troy Ounce → Gram Conversion</h4>
-          <p><strong>1 Troy Ounce = 31.1034768 grams.</strong> We divide the COMEX price by 31.1035 to get the precise USD/gram value. For 10g display: multiply by 10.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num pm">3</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>USD → INR via Live Forex</h4>
-          <p>The per-gram USD price is multiplied by the live USD/INR rate (USDINR=X) to produce ₹/gram before duties.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num pm">4</div>
-        <div class="flow-body">
-          <h4>Apply Import Duties</h4>
-          <p>Gold & Silver: <strong>10% BCD + 5% AIDC = 15% total.</strong> Platinum & Palladium: <strong>10% BCD + 5.4% AIDC ≈ 15.4% total.</strong> (Rates hiked from 6% / 6.4% by customs notifications effective May 13, 2026.)</p>
-        </div>
-      </div>
-    </div>
+    <section class="dx-sec" id="duties">
+      <h2>Duty rate matrix</h2>
+      <p>These are the rates configured in the app. The "Duty applied" column is what the calculation uses today. Rates change with Union Budget announcements and customs notifications.</p>
+      <div class="note tbv"><strong>Needs verification.</strong> The tracker does not read duties from any official feed. Check each rate against current CBIC notifications before relying on it. Cotton is date-based: 0% up to 31 October 2026, then 11% (BCD 5% + AIDC 5% + SWS).</div>
+      <h3 class="dx-h3">Precious metals</h3><div class="tbl-wrap"><table class="dx-table duty"><thead><tr><th>Commodity</th><th>Price source</th><th>Duty applied</th><th>Basis in app</th><th>India unit</th></tr></thead><tbody><tr><td data-label="Commodity"><strong>Gold</strong></td><td data-label="Price source">Yahoo Finance <code>GC=F</code> (backup: gold-api.com)</td><td data-label="Duty applied"><span class="mono">15%</span></td><td data-label="Basis in app">BCD 10% + AIDC 5% = 15%</td><td data-label="India unit">₹/g</td></tr><tr><td data-label="Commodity"><strong>Silver</strong></td><td data-label="Price source">Yahoo Finance <code>SI=F</code> (backup: gold-api.com)</td><td data-label="Duty applied"><span class="mono">15%</span></td><td data-label="Basis in app">BCD 10% + AIDC 5% = 15%</td><td data-label="India unit">₹/g</td></tr><tr><td data-label="Commodity"><strong>Platinum</strong></td><td data-label="Price source">Yahoo Finance <code>PL=F</code> (backup: gold-api.com)</td><td data-label="Duty applied"><span class="mono">15.4%</span></td><td data-label="Basis in app">BCD 10% + AIDC 5.4% = 15.4%</td><td data-label="India unit">₹/g</td></tr><tr><td data-label="Commodity"><strong>Palladium</strong></td><td data-label="Price source">Yahoo Finance <code>PA=F</code> (backup: gold-api.com)</td><td data-label="Duty applied"><span class="mono">15.4%</span></td><td data-label="Basis in app">HS 7110 ~15.4%</td><td data-label="India unit">₹/g</td></tr></tbody></table></div><h3 class="dx-h3">Industrial and battery metals</h3><div class="tbl-wrap"><table class="dx-table duty"><thead><tr><th>Commodity</th><th>Price source</th><th>Duty applied</th><th>Basis in app</th><th>India unit</th></tr></thead><tbody><tr><td data-label="Commodity"><strong>Copper</strong></td><td data-label="Price source">Yahoo Finance <code>HG=F</code></td><td data-label="Duty applied"><span class="mono">5.5%</span></td><td data-label="Basis in app">BCD 5% + SWS = 5.5%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Aluminium</strong></td><td data-label="Price source">Yahoo Finance <code>ALI=F</code></td><td data-label="Duty applied"><span class="mono">8.25%</span></td><td data-label="Basis in app">BCD 7.5% + SWS = 8.25%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Zinc</strong></td><td data-label="Price source">Indicative (USD 3,500 per metric ton)</td><td data-label="Duty applied"><span class="mono">5.5%</span></td><td data-label="Basis in app">BCD 5% + SWS = 5.5%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Nickel</strong></td><td data-label="Price source">Indicative (USD 17,900 per metric ton)</td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">Duty Free (0%)</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Lead</strong></td><td data-label="Price source">Indicative (USD 1,975 per metric ton)</td><td data-label="Duty applied"><span class="mono">5.5%</span></td><td data-label="Basis in app">BCD 5% + SWS = 5.5%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Tin</strong></td><td data-label="Price source">Indicative (USD 45,000 per metric ton)</td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">BCD Free (critical mineral) = 0%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Steel (HRC)</strong></td><td data-label="Price source">Yahoo Finance <code>HRC=F</code></td><td data-label="Duty applied"><span class="mono">19.75%</span></td><td data-label="Basis in app">BCD 7.5% + SWS + safeguard ≈ 19.75%</td><td data-label="India unit">₹/tonne</td></tr><tr><td data-label="Commodity"><strong>Iron Ore</strong></td><td data-label="Price source">Indicative (USD 100 per dry metric ton)</td><td data-label="Duty applied"><span class="mono">2.75%</span></td><td data-label="Basis in app">BCD 2.5% + SWS = 2.75%</td><td data-label="India unit">₹/tonne</td></tr><tr><td data-label="Commodity"><strong>Lithium (Carbonate)</strong></td><td data-label="Price source">Indicative (USD 20,000 per metric ton)</td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">BCD Free (critical mineral) = 0%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Cobalt</strong></td><td data-label="Price source">Indicative (USD 55,000 per metric ton)</td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">BCD Free (critical mineral) = 0%</td><td data-label="India unit">₹/kg</td></tr></tbody></table></div><h3 class="dx-h3">Energy</h3><div class="tbl-wrap"><table class="dx-table duty"><thead><tr><th>Commodity</th><th>Price source</th><th>Duty applied</th><th>Basis in app</th><th>India unit</th></tr></thead><tbody><tr><td data-label="Commodity"><strong>Crude Oil (WTI)</strong></td><td data-label="Price source">Yahoo Finance <code>CL=F</code></td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">BCD Re 1/tonne ≈ 0%</td><td data-label="India unit">₹/barrel</td></tr><tr><td data-label="Commodity"><strong>Brent Crude</strong></td><td data-label="Price source">Yahoo Finance <code>BZ=F</code></td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">BCD Re 1/tonne ≈ 0%</td><td data-label="India unit">₹/barrel</td></tr><tr><td data-label="Commodity"><strong>Natural Gas</strong></td><td data-label="Price source">Yahoo Finance <code>NG=F</code></td><td data-label="Duty applied"><span class="mono">2.75%</span></td><td data-label="Basis in app">BCD 2.5% + SWS = 2.75%</td><td data-label="India unit">₹/MMBtu</td></tr></tbody></table></div><h3 class="dx-h3">Agri commodities</h3><div class="tbl-wrap"><table class="dx-table duty"><thead><tr><th>Commodity</th><th>Price source</th><th>Duty applied</th><th>Basis in app</th><th>India unit</th></tr></thead><tbody><tr><td data-label="Commodity"><strong>Wheat</strong></td><td data-label="Price source">Yahoo Finance <code>ZW=F</code></td><td data-label="Duty applied"><span class="mono">44%</span></td><td data-label="Basis in app">BCD 40% + SWS = 44%</td><td data-label="India unit">₹/quintal</td></tr><tr><td data-label="Commodity"><strong>Corn (Maize)</strong></td><td data-label="Price source">Yahoo Finance <code>ZC=F</code></td><td data-label="Duty applied"><span class="mono">50%</span></td><td data-label="Basis in app">BCD 50% (TRQ 15%)</td><td data-label="India unit">₹/quintal</td></tr><tr><td data-label="Commodity"><strong>Soybean</strong></td><td data-label="Price source">Yahoo Finance <code>ZS=F</code></td><td data-label="Duty applied"><span class="mono">30%</span></td><td data-label="Basis in app">BCD ~30% (indicative)</td><td data-label="India unit">₹/quintal</td></tr><tr><td data-label="Commodity"><strong>Soybean Oil</strong></td><td data-label="Price source">Yahoo Finance <code>ZL=F</code></td><td data-label="Duty applied"><span class="mono">16.5%</span></td><td data-label="Basis in app">BCD 10% + AIDC 5% + SWS = 16.5%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Sugar</strong></td><td data-label="Price source">Yahoo Finance <code>SB=F</code></td><td data-label="Duty applied"><span class="mono">100%</span></td><td data-label="Basis in app">BCD 100%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Cotton</strong></td><td data-label="Price source">Yahoo Finance <code>CT=F</code></td><td data-label="Duty applied"><span class="mono">0%</span></td><td data-label="Basis in app">Duty-free till Oct 31, 2026</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Coffee</strong></td><td data-label="Price source">Yahoo Finance <code>KC=F</code></td><td data-label="Duty applied"><span class="mono">100%</span></td><td data-label="Basis in app">BCD 100%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Cocoa</strong></td><td data-label="Price source">Yahoo Finance <code>CC=F</code></td><td data-label="Duty applied"><span class="mono">33%</span></td><td data-label="Basis in app">BCD 30% + SWS = 33%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Rice (Rough)</strong></td><td data-label="Price source">Yahoo Finance <code>ZR=F</code></td><td data-label="Duty applied"><span class="mono">70%</span></td><td data-label="Basis in app">BCD 70% (non-basmati)</td><td data-label="India unit">₹/quintal</td></tr><tr><td data-label="Commodity"><strong>Soybean Meal</strong></td><td data-label="Price source">Yahoo Finance <code>ZM=F</code></td><td data-label="Duty applied"><span class="mono">16.5%</span></td><td data-label="Basis in app">BCD 15% + SWS = 16.5%</td><td data-label="India unit">₹/quintal</td></tr><tr><td data-label="Commodity"><strong>Orange Juice</strong></td><td data-label="Price source">Yahoo Finance <code>OJ=F</code></td><td data-label="Duty applied"><span class="mono">33%</span></td><td data-label="Basis in app">BCD 30% + SWS = 33%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Lumber</strong></td><td data-label="Price source">Yahoo Finance <code>LBR=F</code></td><td data-label="Duty applied"><span class="mono">11%</span></td><td data-label="Basis in app">BCD 10% + SWS = 11% (sawn wood)</td><td data-label="India unit">₹/cu ft</td></tr><tr><td data-label="Commodity"><strong>Canola Oil</strong></td><td data-label="Price source">Indicative (USD 1,150 per metric ton)</td><td data-label="Duty applied"><span class="mono">27.5%</span></td><td data-label="Basis in app">BCD 20% + AIDC + SWS = 27.5%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Palm Oil (CPO)</strong></td><td data-label="Price source">Indicative (USD 1,000 per metric ton)</td><td data-label="Duty applied"><span class="mono">16.5%</span></td><td data-label="Basis in app">BCD 10% + AIDC 5% + SWS = 16.5%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Lean Hogs (Pork)</strong></td><td data-label="Price source">Yahoo Finance <code>HE=F</code></td><td data-label="Duty applied"><span class="mono">33%</span></td><td data-label="Basis in app">BCD 30% + SWS = 33%</td><td data-label="India unit">₹/kg</td></tr><tr><td data-label="Commodity"><strong>Live Cattle</strong></td><td data-label="Price source">Yahoo Finance <code>LE=F</code></td><td data-label="Duty applied">No landed price</td><td data-label="Basis in app">Import prohibited (DGFT)</td><td data-label="India unit">₹/kg</td></tr></tbody></table></div>
+      <p>For heavily protected crops such as rice, sugar, coffee and wheat, the landed price mainly shows the effect of the tariff wall. It is not a typical transaction price.</p>
+    </section>
 
-    <!-- Purity & Contract Table -->
-    <div style="margin-top:20px">
-      <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Purity Adjustment Formulas</div>
-      <table class="duty-table">
-        <thead><tr><th>Variant</th><th>Formula</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><strong>24K Gold (999)</strong></td><td>Base landed price</td><td class="mono">₹13,440/g</td></tr>
-          <tr><td><strong>22K Gold (916)</strong></td><td>24K × (22 ÷ 24)</td><td class="mono">₹12,320/g</td></tr>
-          <tr><td><strong>18K Gold (750)</strong></td><td>24K × (18 ÷ 24)</td><td class="mono">₹10,080/g</td></tr>
-          <tr><td><strong>999 Silver (Fine)</strong></td><td>Base landed price</td><td class="mono">₹211/g</td></tr>
-          <tr><td><strong>925 Silver (Sterling)</strong></td><td>999 × 0.925</td><td class="mono">₹195/g</td></tr>
-          <tr><td><strong>900 Silver (Coin)</strong></td><td>999 × 0.900</td><td class="mono">₹190/g</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <section class="dx-sec" id="purity">
+      <h2>Purity and contracts</h2>
+      <h3 class="dx-h3">Gold</h3>
+      <div class="formula"><b>Gold purity</b><code>24K = landed price per gram<br>22K = 24K × (22 ÷ 24)<br>18K = 24K × (18 ÷ 24)</code></div>
+      <h3 class="dx-h3">Silver</h3>
+      <div class="formula"><b>Silver purity</b><code>999 Fine = landed price per gram × 1.000<br>925 Sterling = × 0.925<br>900 Coin = × 0.900</code></div>
+      <h3 class="dx-h3">Aggregates</h3>
+      <ul>
+        <li><strong>10 g price</strong> = price per gram × 10. Shown for Gold, Silver, Platinum and Palladium.</li>
+        <li><strong>Per kg price</strong> = price per gram × 1,000. Shown for Gold and Silver.</li>
+        <li>Platinum and Palladium show only the base price (no purity variants).</li>
+      </ul>
+      <h3 class="dx-h3">Contract equivalents</h3>
+      <p>Contract equivalent = landed price per gram × lot size in grams. These are calculations for reference, not exchange quotes.</p>
+      <div class="tbl-wrap"><table class="dx-table mini"><thead><tr><th>Metal</th><th>Contract</th><th>Lot</th><th>Multiplier</th></tr></thead><tbody><tr><td data-label="Metal">Gold</td><td data-label="Contract">Gold Mini</td><td data-label="Lot">100g</td><td data-label="Multiplier">× 100 (per gram)</td></tr><tr><td data-label="Metal">Gold</td><td data-label="Contract">Gold Guinea</td><td data-label="Lot">8g</td><td data-label="Multiplier">× 8 (per gram)</td></tr><tr><td data-label="Metal">Gold</td><td data-label="Contract">Gold Petal</td><td data-label="Lot">1g</td><td data-label="Multiplier">× 1 (per gram)</td></tr><tr><td data-label="Metal">Silver</td><td data-label="Contract">Silver (30 kg)</td><td data-label="Lot">30kg</td><td data-label="Multiplier">× 30,000 (per gram)</td></tr><tr><td data-label="Metal">Silver</td><td data-label="Contract">Silver Mini</td><td data-label="Lot">5kg</td><td data-label="Multiplier">× 5,000 (per gram)</td></tr><tr><td data-label="Metal">Silver</td><td data-label="Contract">Silver Micro</td><td data-label="Lot">1kg</td><td data-label="Multiplier">× 1,000 (per gram)</td></tr></tbody></table></div>
+    </section>
 
-    <div class="formula-block accent-orange" style="margin-top:16px">
-      <div class="formula-label">Retail Contract Equivalent</div>
-      <code class="formula-code">Contract Price = Per-unit Landed Price × Contract Lot Size (e.g. Gold Mini = ₹/g × 100g)</code>
-    </div>
-  </div>
+    <section class="dx-sec" id="sources">
+      <h2>Data sources</h2>
+      <p>The tracker has no server of its own. The browser fetches data directly from public services.</p>
+      <div class="grid2">
+        <div class="card2"><span class="tag">Primary</span><h4>Yahoo Finance</h4><p>Futures prices for 24 commodities and the USD/INR fallback. Reached through public CORS proxies (allorigins.win, corsproxy.io, codetabs.com).</p></div>
+        <div class="card2"><span class="tag">FX</span><h4>ExchangeRate API</h4><p>open.er-api.com gives USD/INR and the other rates used for non-USD quotes and the FX strip.</p></div>
+        <div class="card2"><span class="tag">Backup</span><h4>gold-api.com</h4><p>Spot price for Gold, Silver, Platinum and Palladium when Yahoo Finance fails. No change data is available from it.</p></div>
+        <div class="card2"><span class="tag">Manual</span><h4>Indicative levels</h4><p>Zinc, Nickel, Lead, Tin, Iron Ore, Lithium (Carbonate), Cobalt, Canola Oil, Palm Oil (CPO). Updated by hand in <code>app.js</code>. Last update: 2026-06-12.</p></div>
+        <div class="card2"><span class="tag">Charts</span><h4>Lightweight Charts</h4><p>Open-source charting library by TradingView (v4.1.3). Chart history comes from Yahoo Finance for the commodities that have a futures symbol.</p></div>
+        <div class="card2"><span class="tag">Browser</span><h4>localStorage cache</h4><p>Last prices and FX are saved in your browser. Chart series are cached for 6 hours.</p></div>
+      </div>
+      <h3 class="dx-h3">Price source per commodity</h3>
+      <div class="tbl-wrap"><table class="dx-table src"><thead><tr><th>Commodity</th><th>Source</th></tr></thead><tbody><tr><td data-label="Commodity">Gold</td><td data-label="Source">Yahoo Finance <code>GC=F</code> (backup: gold-api.com)</td></tr><tr><td data-label="Commodity">Silver</td><td data-label="Source">Yahoo Finance <code>SI=F</code> (backup: gold-api.com)</td></tr><tr><td data-label="Commodity">Crude Oil (WTI)</td><td data-label="Source">Yahoo Finance <code>CL=F</code></td></tr><tr><td data-label="Commodity">Brent Crude</td><td data-label="Source">Yahoo Finance <code>BZ=F</code></td></tr><tr><td data-label="Commodity">Natural Gas</td><td data-label="Source">Yahoo Finance <code>NG=F</code></td></tr><tr><td data-label="Commodity">Copper</td><td data-label="Source">Yahoo Finance <code>HG=F</code></td></tr><tr><td data-label="Commodity">Aluminium</td><td data-label="Source">Yahoo Finance <code>ALI=F</code></td></tr><tr><td data-label="Commodity">Zinc</td><td data-label="Source">Indicative (USD 3,500 per metric ton)</td></tr><tr><td data-label="Commodity">Nickel</td><td data-label="Source">Indicative (USD 17,900 per metric ton)</td></tr><tr><td data-label="Commodity">Lead</td><td data-label="Source">Indicative (USD 1,975 per metric ton)</td></tr><tr><td data-label="Commodity">Tin</td><td data-label="Source">Indicative (USD 45,000 per metric ton)</td></tr><tr><td data-label="Commodity">Steel (HRC)</td><td data-label="Source">Yahoo Finance <code>HRC=F</code></td></tr><tr><td data-label="Commodity">Iron Ore</td><td data-label="Source">Indicative (USD 100 per dry metric ton)</td></tr><tr><td data-label="Commodity">Lithium (Carbonate)</td><td data-label="Source">Indicative (USD 20,000 per metric ton)</td></tr><tr><td data-label="Commodity">Cobalt</td><td data-label="Source">Indicative (USD 55,000 per metric ton)</td></tr><tr><td data-label="Commodity">Platinum</td><td data-label="Source">Yahoo Finance <code>PL=F</code> (backup: gold-api.com)</td></tr><tr><td data-label="Commodity">Palladium</td><td data-label="Source">Yahoo Finance <code>PA=F</code> (backup: gold-api.com)</td></tr><tr><td data-label="Commodity">Wheat</td><td data-label="Source">Yahoo Finance <code>ZW=F</code></td></tr><tr><td data-label="Commodity">Corn (Maize)</td><td data-label="Source">Yahoo Finance <code>ZC=F</code></td></tr><tr><td data-label="Commodity">Soybean</td><td data-label="Source">Yahoo Finance <code>ZS=F</code></td></tr><tr><td data-label="Commodity">Soybean Oil</td><td data-label="Source">Yahoo Finance <code>ZL=F</code></td></tr><tr><td data-label="Commodity">Sugar</td><td data-label="Source">Yahoo Finance <code>SB=F</code></td></tr><tr><td data-label="Commodity">Cotton</td><td data-label="Source">Yahoo Finance <code>CT=F</code></td></tr><tr><td data-label="Commodity">Coffee</td><td data-label="Source">Yahoo Finance <code>KC=F</code></td></tr><tr><td data-label="Commodity">Cocoa</td><td data-label="Source">Yahoo Finance <code>CC=F</code></td></tr><tr><td data-label="Commodity">Rice (Rough)</td><td data-label="Source">Yahoo Finance <code>ZR=F</code></td></tr><tr><td data-label="Commodity">Soybean Meal</td><td data-label="Source">Yahoo Finance <code>ZM=F</code></td></tr><tr><td data-label="Commodity">Orange Juice</td><td data-label="Source">Yahoo Finance <code>OJ=F</code></td></tr><tr><td data-label="Commodity">Lumber</td><td data-label="Source">Yahoo Finance <code>LBR=F</code></td></tr><tr><td data-label="Commodity">Canola Oil</td><td data-label="Source">Indicative (USD 1,150 per metric ton)</td></tr><tr><td data-label="Commodity">Palm Oil (CPO)</td><td data-label="Source">Indicative (USD 1,000 per metric ton)</td></tr><tr><td data-label="Commodity">Lean Hogs (Pork)</td><td data-label="Source">Yahoo Finance <code>HE=F</code></td></tr><tr><td data-label="Commodity">Live Cattle</td><td data-label="Source">Yahoo Finance <code>LE=F</code></td></tr></tbody></table></div>
+    </section>
 
-  <!-- ══ INDUSTRIAL METALS ══ -->
-  <div class="doc-section card" id="meth-industrial" style="scroll-margin-top:80px">
-    <h2>
-      <span class="section-badge badge-industrial">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        Industrial
-      </span>
-      Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium & Cobalt
-    </h2>
-    <p>Base, industrial and battery metals reference the <strong>London Metal Exchange (LME)</strong> and <strong>CME Group</strong>, the global benchmarks for metals pricing. Lithium and cobalt are battery metals India treats as <strong>duty-free critical minerals</strong>.</p>
+    <section class="dx-sec" id="freshness">
+      <h2>Data freshness and limitations</h2>
+      <ul>
+        <li><strong>Refresh.</strong> The page refreshes about every 60 seconds. Data older than 10 minutes is marked STALE. If a refresh fails, the last saved prices are shown and marked CACHED or STALE.</li>
+        <li><strong>Futures, not spot.</strong> Yahoo Finance gives front-month futures prices, which can differ from spot and from Indian market rates. Quotes may be delayed.</li>
+        <li><strong>Indicative levels.</strong> 9 commodities do not change live. They show a ~INDICATIVE badge and were last updated on 2026-06-12. Their prices and daily change are not live.</li>
+        <li><strong>Proxies and rate limits.</strong> Free public proxies and APIs can be slow, blocked or rate-limited. A commodity may show "No data" for a while.</li>
+        <li><strong>Charts.</strong> Charts are available only for commodities with a futures symbol. Indicative commodities have no chart.</li>
+        <li><strong>Duty only.</strong> The landed price includes customs duty only. It excludes GST, freight, insurance, port and handling charges, local premiums, quality differences and dealer margins.</li>
+        <li><strong>Duty accuracy.</strong> Duty rates are entered manually and may lag official changes. Needs verification before any decision.</li>
+        <li><strong>Steel.</strong> HRC=F is a US domestic price and is normally much higher than global or Indian ex-mill levels.</li>
+        <li><strong>Livestock.</strong> Lean hog futures track live hogs, not retail pork. Live Cattle shows the international price only.</li>
+      </ul>
+    </section>
 
-    <div class="flow-pipeline">
-      <div class="flow-step">
-        <div class="flow-num im">1</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Source: COMEX/CME Futures + Indicative Levels</h4>
-          <p><strong>Copper</strong> (HG=F, USD/lb), <strong>Aluminium</strong> (ALI=F, USD/MT) and <strong>Steel HRC</strong> (HRC=F, USD/short ton) stream live via Yahoo Finance. <strong>Zinc, Nickel, Lead, Tin, Iron Ore, Lithium & Cobalt</strong> have no free live feed (the old metals.live API shut down; LME has no public JSON), so the tracker uses manually updated indicative levels, clearly badged "~INDICATIVE" on the cards. <em>Note: HRC=F is US Midwest domestic coil and trades above global/India ex-mill levels.</em></p>
-        </div>
+    <section class="dx-sec" id="disclaimer">
+      <h2>Disclaimer</h2>
+      <div class="note warn">
+        <p><strong>Not financial advice.</strong> This tool is for education and information only. It is not investment, trading or tax advice, and not a recommendation to buy or sell anything.</p>
+        <p><strong>Not NSE or MCX data.</strong> The tracker does not display data from the National Stock Exchange or the Multi Commodity Exchange. All Indian values, including contract equivalents, are mathematical estimates from international benchmarks, a USD/INR rate and customs duty.</p>
+        <p style="margin:0">Prices may be delayed, indicative or incorrect. Do not use them for trading or business decisions without checking with an authorised source. The author accepts no liability for any loss arising from use of this tool.</p>
       </div>
-      <div class="flow-step">
-        <div class="flow-num im">2</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Convert to Kilogram</h4>
-          <p><strong>1 Metric Tonne = 1,000 kg</strong> (÷ 1,000), and for Copper <strong>1 lb = 0.453592 kg</strong> (÷ 0.453592) to arrive at the per-kg USD value for Indian retail comparison.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num im">3</div><div class="flow-line"></div>
-        <div class="flow-body"><h4>USD → INR via Live Forex</h4><p>Same USD/INR conversion as precious metals.</p></div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num im">4</div>
-        <div class="flow-body"><h4>Apply Metal-Specific Import Duty</h4><p>Each base metal carries a different tariff structure (see table below).</p></div>
-      </div>
-    </div>
+    </section>
 
-    <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Duty Rate Matrix — Industrial Metals</div>
-    <table class="duty-table">
-      <thead><tr><th>Metal</th><th>Source</th><th>Total Duty</th><th>India Unit</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Copper (refined)</strong></td><td>HG=F live</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Aluminium</strong></td><td>ALI=F live</td><td class="mono">8.25%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Steel (HRC)</strong></td><td>HRC=F live</td><td class="mono">≈19.75% (incl. safeguard)</td><td>₹/tonne</td></tr>
-        <tr><td><strong>Zinc</strong></td><td>indicative</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Lead</strong></td><td>indicative</td><td class="mono">5.5%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Nickel</strong></td><td>indicative</td><td class="mono">0.0%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Tin</strong></td><td>indicative</td><td class="mono">0% (critical mineral)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Iron Ore (62% Fe)</strong></td><td>indicative</td><td class="mono">2.75%</td><td>₹/tonne</td></tr>
-        <tr><td><strong>Lithium (carbonate)</strong></td><td>indicative</td><td class="mono">0% (critical mineral)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Cobalt</strong></td><td>indicative</td><td class="mono">0% (critical mineral)</td><td>₹/kg</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Tin, lithium and cobalt are BCD-free under India's critical-minerals exemption (Notification 36/2024-Customs + Budget 2025-26). Steel's safeguard duty (~11.5–12% on flat products) is conditional on the import CIF price; the headline assumes it applies. Physical Indian markets may carry an additional local premium.</p>
-  </div>
-
-  <!-- ══ ENERGY ══ -->
-  <div class="doc-section card" id="meth-energy" style="scroll-margin-top:80px">
-    <h2>
-      <span class="section-badge badge-energy">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        Energy
-      </span>
-      Crude Oil & Natural Gas
-    </h2>
-    <p>Energy commodities are simpler — no complex unit conversions are needed. A barrel is a barrel, and an MMBtu is an MMBtu worldwide.</p>
-
-    <div class="flow-pipeline">
-      <div class="flow-step">
-        <div class="flow-num en">1</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Source: NYMEX/ICE Futures via Yahoo Finance</h4>
-          <p><strong>WTI Crude (CL=F)</strong> and <strong>Brent Crude (BZ=F)</strong> in USD/barrel. <strong>Natural Gas (NG=F)</strong> in USD/MMBtu.</p>
-        </div>
+    <section class="dx-sec" id="glossary">
+      <h2>Glossary</h2>
+      <div class="gl-search"><label for="gl-q" style="position:absolute;left:-999px">Search glossary</label><input id="gl-q" type="search" placeholder="Search 34 terms, for example quintal or BCD" autocomplete="off"></div>
+      <div class="gl-count" id="gl-count" aria-live="polite">34 terms</div>
+      <div class="gl-grid" id="gl-grid">
+<div class="gl-card" data-term="landed price the estimated cost of bringing a commodity into india. the tracker adds the converted international price, the usd/inr rate and the customs duty. it excludes freight, insurance, gst, port charges and dealer margins."><div class="gl-term">Landed price</div><div class="gl-def">The estimated cost of bringing a commodity into India. The tracker adds the converted international price, the USD/INR rate and the customs duty. It excludes freight, insurance, GST, port charges and dealer margins.</div></div>
+<div class="gl-card" data-term="bcd (basic customs duty) the main import duty charged on goods entering india. the rate differs by commodity. see the duty matrix for the rate used by the tracker."><div class="gl-term">BCD (Basic Customs Duty)</div><div class="gl-def">The main import duty charged on goods entering India. The rate differs by commodity. See the duty matrix for the rate used by the tracker.</div></div>
+<div class="gl-card" data-term="aidc agriculture infrastructure and development cess. an additional levy charged along with bcd on selected goods, for example gold, silver and some edible oils."><div class="gl-term">AIDC</div><div class="gl-def">Agriculture Infrastructure and Development Cess. An additional levy charged along with BCD on selected goods, for example gold, silver and some edible oils.</div></div>
+<div class="gl-card" data-term="sws (social welfare surcharge) a surcharge calculated on the bcd amount, not on the value of goods. a 5% bcd with sws gives about 5.5% in total, as shown in the app labels."><div class="gl-term">SWS (Social Welfare Surcharge)</div><div class="gl-def">A surcharge calculated on the BCD amount, not on the value of goods. A 5% BCD with SWS gives about 5.5% in total, as shown in the app labels.</div></div>
+<div class="gl-card" data-term="safeguard duty a temporary extra duty meant to protect domestic industry from a sudden rise in imports. the steel rate in the app (about 19.75%) includes an allowance for it. whether it applies depends on conditions. needs verification against current notifications."><div class="gl-term">Safeguard duty</div><div class="gl-def">A temporary extra duty meant to protect domestic industry from a sudden rise in imports. The steel rate in the app (about 19.75%) includes an allowance for it. Whether it applies depends on conditions. Needs verification against current notifications.</div></div>
+<div class="gl-card" data-term="critical minerals exemption a customs policy under which selected minerals are imported without bcd. the app uses 0% for tin, lithium and cobalt. needs verification against the current notification."><div class="gl-term">Critical minerals exemption</div><div class="gl-def">A customs policy under which selected minerals are imported without BCD. The app uses 0% for tin, lithium and cobalt. Needs verification against the current notification.</div></div>
+<div class="gl-card" data-term="trq (tariff rate quota) a system where a fixed quantity of imports is allowed at a lower duty and anything above it pays the higher duty. the app shows corn at 50% and notes a 15% in-quota rate."><div class="gl-term">TRQ (Tariff Rate Quota)</div><div class="gl-def">A system where a fixed quantity of imports is allowed at a lower duty and anything above it pays the higher duty. The app shows corn at 50% and notes a 15% in-quota rate.</div></div>
+<div class="gl-card" data-term="dgft directorate general of foreign trade. it controls import and export policy. live cattle and beef imports are prohibited, so the tracker does not show a landed price for them."><div class="gl-term">DGFT</div><div class="gl-def">Directorate General of Foreign Trade. It controls import and export policy. Live cattle and beef imports are prohibited, so the tracker does not show a landed price for them.</div></div>
+<div class="gl-card" data-term="usd/inr the number of indian rupees for one us dollar. every landed price is multiplied by this rate, so a small change in usd/inr moves all prices."><div class="gl-term">USD/INR</div><div class="gl-def">The number of Indian rupees for one US dollar. Every landed price is multiplied by this rate, so a small change in USD/INR moves all prices.</div></div>
+<div class="gl-card" data-term="front-month futures the futures contract nearest to expiry. yahoo finance symbols ending in =f, such as gc=f, usually refer to this contract. it is not the same as the spot price."><div class="gl-term">Front-month futures</div><div class="gl-def">The futures contract nearest to expiry. Yahoo Finance symbols ending in =F, such as GC=F, usually refer to this contract. It is not the same as the spot price.</div></div>
+<div class="gl-card" data-term="spot price the price for immediate delivery. for precious metals the tracker uses gold-api.com spot only as a backup when yahoo finance fails."><div class="gl-term">Spot price</div><div class="gl-def">The price for immediate delivery. For precious metals the tracker uses gold-api.com spot only as a backup when Yahoo Finance fails.</div></div>
+<div class="gl-card" data-term="indicative price a manually updated reference level used where no free live feed exists. the cards show a ~indicative badge. it does not change by itself and can be out of date."><div class="gl-term">Indicative price</div><div class="gl-def">A manually updated reference level used where no free live feed exists. The cards show a ~INDICATIVE badge. It does not change by itself and can be out of date.</div></div>
+<div class="gl-card" data-term="comex commodity exchange, part of cme group. source of gold, silver and copper futures (gc=f, si=f, hg=f)."><div class="gl-term">COMEX</div><div class="gl-def">Commodity Exchange, part of CME Group. Source of gold, silver and copper futures (GC=F, SI=F, HG=F).</div></div>
+<div class="gl-card" data-term="nymex new york mercantile exchange, part of cme group. source of wti crude oil, natural gas, platinum and palladium futures."><div class="gl-term">NYMEX</div><div class="gl-def">New York Mercantile Exchange, part of CME Group. Source of WTI crude oil, natural gas, platinum and palladium futures.</div></div>
+<div class="gl-card" data-term="cme chicago mercantile exchange. source of aluminium, steel hrc, lumber, lean hogs and live cattle futures used here."><div class="gl-term">CME</div><div class="gl-def">Chicago Mercantile Exchange. Source of aluminium, steel HRC, lumber, lean hogs and live cattle futures used here.</div></div>
+<div class="gl-card" data-term="cbot chicago board of trade, part of cme group. source of wheat, corn, soybean, soybean oil, soybean meal and rough rice futures."><div class="gl-term">CBOT</div><div class="gl-def">Chicago Board of Trade, part of CME Group. Source of wheat, corn, soybean, soybean oil, soybean meal and rough rice futures.</div></div>
+<div class="gl-card" data-term="ice intercontinental exchange. source of brent crude, sugar, cotton, coffee, cocoa and orange juice futures."><div class="gl-term">ICE</div><div class="gl-def">Intercontinental Exchange. Source of Brent crude, sugar, cotton, coffee, cocoa and orange juice futures.</div></div>
+<div class="gl-card" data-term="lme london metal exchange. the global reference market for base metals. yahoo finance has no usable lme feed, so zinc, nickel, lead and tin use indicative levels."><div class="gl-term">LME</div><div class="gl-def">London Metal Exchange. The global reference market for base metals. Yahoo Finance has no usable LME feed, so zinc, nickel, lead and tin use indicative levels.</div></div>
+<div class="gl-card" data-term="us cents (usx) many us grain, softs and livestock contracts are quoted in cents. yahoo finance flags these as usx. the tracker divides by 100 to get us dollars first."><div class="gl-term">US cents (USX)</div><div class="gl-def">Many US grain, softs and livestock contracts are quoted in cents. Yahoo Finance flags these as USX. The tracker divides by 100 to get US dollars first.</div></div>
+<div class="gl-card" data-term="troy ounce the weight unit for precious metals. 1 troy ounce is 31.1035 grams in the app, which is used as the divisor."><div class="gl-term">Troy ounce</div><div class="gl-def">The weight unit for precious metals. 1 troy ounce is 31.1035 grams in the app, which is used as the divisor.</div></div>
+<div class="gl-card" data-term="metric tonne 1,000 kg. used for most base metals and for cocoa and oils."><div class="gl-term">Metric tonne</div><div class="gl-def">1,000 kg. Used for most base metals and for cocoa and oils.</div></div>
+<div class="gl-card" data-term="short ton the us ton of 2,000 lb, equal to 907.185 kg. steel hrc and soybean meal futures are quoted per short ton."><div class="gl-term">Short ton</div><div class="gl-def">The US ton of 2,000 lb, equal to 907.185 kg. Steel HRC and soybean meal futures are quoted per short ton.</div></div>
+<div class="gl-card" data-term="pound (lb) 0.453592 kg. used for copper, sugar, cotton, coffee, soybean oil, orange juice and livestock futures."><div class="gl-term">Pound (lb)</div><div class="gl-def">0.453592 kg. Used for copper, sugar, cotton, coffee, soybean oil, orange juice and livestock futures.</div></div>
+<div class="gl-card" data-term="bushel a volume-based grain unit. the app uses 60 lb (27.2155 kg) for wheat and soybean, and 56 lb (25.4012 kg) for corn."><div class="gl-term">Bushel</div><div class="gl-def">A volume-based grain unit. The app uses 60 lb (27.2155 kg) for wheat and soybean, and 56 lb (25.4012 kg) for corn.</div></div>
+<div class="gl-card" data-term="hundredweight (cwt) a us weight of 100 lb, equal to 45.3592 kg. rough rice futures are quoted per cwt."><div class="gl-term">Hundredweight (cwt)</div><div class="gl-def">A US weight of 100 lb, equal to 45.3592 kg. Rough rice futures are quoted per cwt.</div></div>
+<div class="gl-card" data-term="quintal 100 kg. the usual mandi unit for grains in india."><div class="gl-term">Quintal</div><div class="gl-def">100 kg. The usual mandi unit for grains in India.</div></div>
+<div class="gl-card" data-term="candy an indian cotton trade unit. the app uses 356 kg per candy for the secondary cotton price."><div class="gl-term">Candy</div><div class="gl-def">An Indian cotton trade unit. The app uses 356 kg per candy for the secondary cotton price.</div></div>
+<div class="gl-card" data-term="board foot a lumber volume unit. lumber futures are for 1,000 board feet, which the app converts to 83.33 cubic feet."><div class="gl-term">Board foot</div><div class="gl-def">A lumber volume unit. Lumber futures are for 1,000 board feet, which the app converts to 83.33 cubic feet.</div></div>
+<div class="gl-card" data-term="mmbtu one million british thermal units. the standard unit for natural gas prices."><div class="gl-term">MMBtu</div><div class="gl-def">One million British thermal units. The standard unit for natural gas prices.</div></div>
+<div class="gl-card" data-term="karat (k) gold purity on a scale of 24. the app shows 24k, 22k (24k × 22/24) and 18k (24k × 18/24)."><div class="gl-term">Karat (K)</div><div class="gl-def">Gold purity on a scale of 24. The app shows 24K, 22K (24K × 22/24) and 18K (24K × 18/24).</div></div>
+<div class="gl-card" data-term="fineness silver purity in parts per thousand. the app shows 999, 925 (sterling) and 900 (coin)."><div class="gl-term">Fineness</div><div class="gl-def">Silver purity in parts per thousand. The app shows 999, 925 (sterling) and 900 (coin).</div></div>
+<div class="gl-card" data-term="contract equivalent the per-gram or per-kg landed price multiplied by a lot size, for example 100 g for gold mini. it is a calculation and not an nse or mcx quote."><div class="gl-term">Contract equivalent</div><div class="gl-def">The per-gram or per-kg landed price multiplied by a lot size, for example 100 g for Gold Mini. It is a calculation and not an NSE or MCX quote.</div></div>
+<div class="gl-card" data-term="current account deficit (cad) the gap when india pays more for imports than it earns from exports. high gold imports add to it, which is one reason for high bullion duties."><div class="gl-term">Current account deficit (CAD)</div><div class="gl-def">The gap when India pays more for imports than it earns from exports. High gold imports add to it, which is one reason for high bullion duties.</div></div>
+<div class="gl-card" data-term="windfall tax a special levy on oil producers when prices rise sharply. the tracker does not model it. crude oil duty in the app is fixed at about 0%."><div class="gl-term">Windfall tax</div><div class="gl-def">A special levy on oil producers when prices rise sharply. The tracker does not model it. Crude oil duty in the app is fixed at about 0%.</div></div>
       </div>
-      <div class="flow-step">
-        <div class="flow-num en">2</div><div class="flow-line"></div>
-        <div class="flow-body"><h4>No Unit Conversion Needed</h4><p>International barrels and MMBtu map directly to Indian usage — the conversion divisor is 1.</p></div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num en">3</div><div class="flow-line"></div>
-        <div class="flow-body"><h4>USD → INR via Live Forex</h4><p>Same real-time USD/INR conversion applied to the per-unit price.</p></div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num en">4</div>
-        <div class="flow-body"><h4>Apply Energy Import Duty</h4><p><strong>Crude Oil:</strong> BCD Re 1/tonne ≈ 0% effective ad-valorem duty (Budget 2026-27). <strong>Natural Gas:</strong> 2.75% (2.5% BCD + SWS).</p></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ AGRI COMMODITIES ══ -->
-  <div class="doc-section card" id="meth-agri" style="scroll-margin-top:80px">
-    <h2>
-      <span class="section-badge badge-energy">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg>
-        Agri
-      </span>
-      Grains, Softs, Oils & Livestock
-    </h2>
-    <p>Agri commodities reference <strong>CBOT</strong> (Chicago Board of Trade) grains, <strong>ICE</strong> softs and <strong>CME</strong> livestock — the global benchmarks for agricultural pricing. Many of these quote in <strong>US cents</strong> (per bushel / per pound / per cwt); the engine auto-detects this via Yahoo's currency flag and normalizes to dollars. Canola and palm oil have no usable free feed, so they use indicative levels.</p>
-
-    <div class="flow-pipeline">
-      <div class="flow-step">
-        <div class="flow-num en">1</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Source: CBOT, ICE & CME Futures via Yahoo Finance</h4>
-          <p><strong>Wheat (ZW=F), Corn (ZC=F), Soybean (ZS=F)</strong> in cents/bushel; <strong>Rice (ZR=F)</strong> in USD/cwt; <strong>Soybean Meal (ZM=F)</strong> in USD/short ton; <strong>Soybean Oil (ZL=F), Sugar (SB=F), Cotton (CT=F), Coffee (KC=F), Orange Juice (OJ=F), Lean Hogs (HE=F), Live Cattle (LE=F)</strong> in cents/lb; <strong>Cocoa (CC=F)</strong> USD/tonne; <strong>Lumber (LBR=F)</strong> USD/1,000 board ft. Canola & Palm oil use indicative USD/tonne levels.</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num en">2</div><div class="flow-line"></div>
-        <div class="flow-body">
-          <h4>Convert to Indian Market Units</h4>
-          <p>Grains/rice/meal → <strong>₹/quintal</strong> (bushel→kg by crop; 1 cwt = 45.36 kg; 1 short ton = 907.185 kg; 1 quintal = 100 kg). Softs, oils, livestock → <strong>₹/kg</strong> (1 lb = 0.453592 kg). Lumber → <strong>₹/cu ft</strong> (1,000 bd ft = 83.33 cu ft).</p>
-        </div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num en">3</div><div class="flow-line"></div>
-        <div class="flow-body"><h4>USD → INR via Live Forex</h4><p>Same real-time USD/INR conversion as all other commodities.</p></div>
-      </div>
-      <div class="flow-step">
-        <div class="flow-num en">4</div>
-        <div class="flow-body"><h4>Apply Agri Import Duty</h4><p>India protects domestic agriculture with steep tariffs — see the matrix below. Cotton duty is date-conditional (exempt Jun 1 – Oct 31, 2026) and the engine resolves it automatically by date.</p></div>
-      </div>
-    </div>
-
-    <div style="font-size:12px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Duty Rate Matrix — Agri Commodities</div>
-    <table class="duty-table">
-      <thead><tr><th>Commodity</th><th>Benchmark</th><th>Total Duty</th><th>India Unit</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Wheat</strong></td><td>CBOT ZW=F</td><td class="mono">44% (BCD 40% + SWS)</td><td>₹/quintal</td></tr>
-        <tr><td><strong>Corn (Maize)</strong></td><td>CBOT ZC=F</td><td class="mono">50% (TRQ in-quota 15%)</td><td>₹/quintal</td></tr>
-        <tr><td><strong>Soybean</strong></td><td>CBOT ZS=F</td><td class="mono">~30% (indicative)</td><td>₹/quintal</td></tr>
-        <tr><td><strong>Soybean Oil (crude)</strong></td><td>CBOT ZL=F</td><td class="mono">16.5% (BCD 10% + AIDC 5% + SWS)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Sugar</strong></td><td>ICE SB=F</td><td class="mono">100%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Cotton</strong></td><td>ICE CT=F</td><td class="mono">0% till Oct 31, 2026 (then 11%)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Coffee</strong></td><td>ICE KC=F</td><td class="mono">100%</td><td>₹/kg</td></tr>
-        <tr><td><strong>Cocoa</strong></td><td>ICE CC=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Rice (non-basmati)</strong></td><td>CBOT ZR=F</td><td class="mono">70%</td><td>₹/quintal</td></tr>
-        <tr><td><strong>Soybean Meal</strong></td><td>CBOT ZM=F</td><td class="mono">16.5% (BCD 15% + SWS)</td><td>₹/quintal</td></tr>
-        <tr><td><strong>Orange Juice</strong></td><td>ICE OJ=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Lumber</strong></td><td>CME LBR=F</td><td class="mono">11% (BCD 10% + SWS)</td><td>₹/cu ft</td></tr>
-        <tr><td><strong>Canola Oil</strong></td><td>indicative</td><td class="mono">27.5% (BCD 20% + AIDC + SWS)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Palm Oil (CPO)</strong></td><td>indicative</td><td class="mono">16.5% (BCD 10% + AIDC 5% + SWS)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Lean Hogs (Pork)</strong></td><td>CME HE=F</td><td class="mono">33% (BCD 30% + SWS)</td><td>₹/kg</td></tr>
-        <tr><td><strong>Live Cattle / Beef</strong></td><td>CME LE=F</td><td class="mono" style="color:var(--red)">Import prohibited</td><td>—</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12px;color:var(--t4);font-style:italic;margin-top:8px">* Landed-price math is most meaningful for commodities India actually imports (edible oils, cocoa, pulses). For heavily protected crops (rice, sugar, coffee, wheat) the landed price illustrates the tariff wall rather than a typical transaction price. <strong>Beef / live cattle import is prohibited under India's DGFT policy</strong> — that card shows the international futures price only, with no landed price computed. Lean-hog and live-cattle futures track live-weight animals, not retail cuts. Quality/grade differentials are not modelled.</p>
-  </div>
-
-  <!-- ══ DATA SOURCES ══ -->
-  <div class="doc-section card" id="data-sources" style="scroll-margin-top:80px">
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-      Data Sources & Architecture
-    </h2>
-    <p>This is a fully client-side application. No backend server is required. All data flows through public CORS proxies to bypass browser security restrictions on cross-origin API calls.</p>
-
-    <div class="source-grid">
-      <div class="source-card">
-        <div class="src-name">Yahoo Finance</div>
-        <div class="src-desc">Precious metals, energy, copper, aluminium, steel (HRC=F), agri & livestock futures, forex</div>
-        <div class="src-badge" style="background:hsl(38 92% 48% / 0.1);color:var(--orange)">Primary</div>
-      </div>
-      <div class="source-card">
-        <div class="src-name">gold-api.com</div>
-        <div class="src-desc">Precious metals spot (backup, no key, CORS-friendly)</div>
-        <div class="src-badge" style="background:hsl(152 60% 40% / 0.1);color:var(--teal)">Backup</div>
-      </div>
-      <div class="source-card">
-        <div class="src-name">Indicative Levels</div>
-        <div class="src-desc">Zn, Ni, Pb, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil — manually updated (no free live feed)</div>
-        <div class="src-badge" style="background:hsl(0 60% 50% / 0.1);color:var(--red)">Static</div>
-      </div>
-      <div class="source-card">
-        <div class="src-name">Browser Cache</div>
-        <div class="src-desc">Chart history cached in localStorage (6h) for instant, resilient charts</div>
-        <div class="src-badge" style="background:hsl(252 36% 54% / 0.1);color:var(--purple)">Local</div>
-      </div>
-      <div class="source-card">
-        <div class="src-name">CORS Proxies</div>
-        <div class="src-desc">allorigins.win, corsproxy.io</div>
-        <div class="src-badge" style="background:hsl(252 36% 54% / 0.1);color:var(--purple)">Transport</div>
-      </div>
-      <div class="source-card">
-        <div class="src-name">TradingView Charts</div>
-        <div class="src-desc">Lightweight Charts v4 (COMEX historical)</div>
-        <div class="src-badge" style="background:hsl(210 70% 50% / 0.1);color:hsl(210 70% 55%)">Visualization</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ COMPLIANCE ══ -->
-  <div class="doc-section" id="compliance" style="scroll-margin-top:80px">
-    <div class="compliance-banner">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <div>
-        <p><strong>SEBI Research Analyst Compliance Notice:</strong> This application does <strong>NOT</strong> display live data sourced from NSE or MCX. All Indian commodity quotes — including Retail Contract Equivalents — are <strong>mathematical approximations</strong> derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates with published customs duty overlays. Prices are for <strong>illustrative and educational purposes only</strong> and do not constitute financial advice.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ GLOSSARY ══ -->
-  <div class="doc-section card" id="glossary" style="scroll-margin-top:80px">
-    <h2>
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      Financial Glossary
-    </h2>
-    <div class="glossary-grid">
-      <div class="gl-card gl-orange">
-        <div class="gl-term">Landed Price</div>
-        <div class="gl-def">The computed cost of importing a commodity into India — combining the international spot price, forex conversion, and all applicable customs duties. This is the "theoretical floor price" before any dealer markup.</div>
-      </div>
-      <div class="gl-card gl-orange">
-        <div class="gl-term">Basic Customs Duty (BCD)</div>
-        <div class="gl-def">The primary tariff levied by India's Ministry of Finance on imported goods. Rates vary by commodity — from 0% (Nickel) to 100% (Sugar, Coffee). Updated in the Union Budget and by mid-year customs notifications.</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">AIDC</div>
-        <div class="gl-def">Agriculture Infrastructure & Development Cess — a supplementary levy collected alongside BCD, earmarked for rural infrastructure development. Currently 5% on Gold/Silver imports (raised from 1% in May 2026).</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">SWS (Social Welfare Surcharge)</div>
-        <div class="gl-def">A 10% surcharge computed on the BCD amount (not the goods value) — so a 5% BCD carries 0.5% SWS, making the effective duty 5.5%. Some notifications exempt specific goods from SWS.</div>
-      </div>
-      <div class="gl-card gl-purple">
-        <div class="gl-term">COMEX</div>
-        <div class="gl-def">The Commodity Exchange (part of CME Group) — the world's primary precious metals and energy derivatives marketplace. COMEX Gold (GC=F) is the global benchmark for gold pricing.</div>
-      </div>
-      <div class="gl-card gl-purple">
-        <div class="gl-term">NYMEX</div>
-        <div class="gl-def">New York Mercantile Exchange — sister exchange to COMEX under CME Group. Handles energy futures including WTI Crude Oil (CL=F) and Natural Gas (NG=F).</div>
-      </div>
-      <div class="gl-card gl-blue">
-        <div class="gl-term">LME</div>
-        <div class="gl-def">London Metal Exchange — the world's oldest and largest marketplace for industrial metals. Sets the global reference price for Copper, Aluminium, Zinc, Nickel, Lead, and Tin.</div>
-      </div>
-      <div class="gl-card gl-purple">
-        <div class="gl-term">CBOT</div>
-        <div class="gl-def">Chicago Board of Trade (part of CME Group) — the global benchmark exchange for grain and oilseed futures: Wheat, Corn, Soybean, Soybean Oil. Quotes are in US cents per bushel or per pound.</div>
-      </div>
-      <div class="gl-card gl-blue">
-        <div class="gl-term">ICE</div>
-        <div class="gl-def">Intercontinental Exchange — hosts the global "softs" benchmarks: Sugar #11, Cotton #2, Coffee C, and Cocoa, plus Brent Crude. Most softs are quoted in US cents per pound.</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">Bushel</div>
-        <div class="gl-def">The volume-based grain unit used by CBOT. By weight: 1 bushel of wheat or soybeans = 27.2155 kg (60 lb); 1 bushel of corn = 25.4012 kg (56 lb).</div>
-      </div>
-      <div class="gl-card gl-orange">
-        <div class="gl-term">Quintal</div>
-        <div class="gl-def">The standard Indian mandi (wholesale market) unit for grains and sugar. 1 quintal = 100 kg. Indian MSP (Minimum Support Price) announcements are quoted per quintal.</div>
-      </div>
-      <div class="gl-card gl-blue">
-        <div class="gl-term">Critical Minerals Exemption</div>
-        <div class="gl-def">Notification 36/2024-Customs (and Budget 2025-26) made 25+ strategic minerals — including lithium, cobalt and tin — fully BCD-free (and SWS-free) to secure supply for EVs, batteries and electronics manufacturing.</div>
-      </div>
-      <div class="gl-card gl-orange">
-        <div class="gl-term">Safeguard Duty</div>
-        <div class="gl-def">A temporary extra duty to shield domestic industry from an import surge. India levies ~11.5–12% on certain flat steel products (2025–2028), applied only when the import CIF price falls below set thresholds.</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">Hundredweight (cwt)</div>
-        <div class="gl-def">A US weight unit used to quote CBOT rough rice. 1 cwt = 100 lb = 45.3592 kg. The engine converts USD/cwt to ₹/quintal for the Indian market.</div>
-      </div>
-      <div class="gl-card gl-orange">
-        <div class="gl-term">Troy Ounce (oz t)</div>
-        <div class="gl-def">The standard unit of weight for precious metals globally. 1 Troy Ounce = 31.1034768 grams. Different from the common avoirdupois ounce (28.35g) used for everyday items.</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">Metric Tonne (MT)</div>
-        <div class="gl-def">Standard weight unit for industrial metals on the LME. 1 MT = 1,000 kilograms. Indian retail prices are quoted per kilogram, so we divide by 1,000.</div>
-      </div>
-      <div class="gl-card gl-orange">
-        <div class="gl-term">Karat (K)</div>
-        <div class="gl-def">The purity measurement for gold. 24K = 99.9% pure gold. 22K = 91.6% (most Indian jewellery). 18K = 75.0% (used in premium watches and accessories).</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">Fineness</div>
-        <div class="gl-def">Silver purity is expressed as "fineness" rather than karats. 999 = 99.9% pure. 925 = Sterling Silver (92.5% silver + 7.5% copper alloy). 900 = Coin Silver.</div>
-      </div>
-      <div class="gl-card gl-purple">
-        <div class="gl-term">USD/INR</div>
-        <div class="gl-def">The exchange rate between US Dollar and Indian Rupee. This is the single most critical variable in the pricing engine — a ₹1 movement in forex shifts every commodity price significantly.</div>
-      </div>
-      <div class="gl-card gl-blue">
-        <div class="gl-term">Retail Contract Equivalent</div>
-        <div class="gl-def">A synthetic value representing what a standard retail-sized trading contract would be worth. Calculated by multiplying the per-unit landed price by the contract's lot size (e.g., 100g for Gold Mini).</div>
-      </div>
-      <div class="gl-card gl-blue">
-        <div class="gl-term">MMBtu</div>
-        <div class="gl-def">One Million British Thermal Units — the standard measurement for natural gas trading globally. Both NYMEX futures and Indian gas contracts use this unit.</div>
-      </div>
-      <div class="gl-card gl-green">
-        <div class="gl-term">CAD (Current Account Deficit)</div>
-        <div class="gl-def">The trade gap when India's imports exceed exports. Gold/Silver imports significantly contribute to CAD, which is why the government maintains elevated customs duties on precious metals.</div>
-      </div>
-      <div class="gl-card gl-purple">
-        <div class="gl-term">Windfall Tax</div>
-        <div class="gl-def">A special tax imposed on crude oil when international prices surge above a threshold. This makes effective duty on crude oil variable rather than fixed, unlike other commodities.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating Navbar -->
-  <nav class="tabs-wrap">
-    <a href="/" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="tab-txt">Home</span></a>
-    <a href="/index.html?cat=precious" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg><span class="tab-txt">Precious</span></a>
-    <a href="/index.html?cat=industrial" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span class="tab-txt">Industrial</span></a>
-    <a href="/index.html?cat=energy" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="tab-txt">Energy</span></a>
-    <a href="/index.html?cat=agri" class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg><span class="tab-txt">Agri</span></a>
-    <a href="/docs.html" class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="tab-txt">Docs</span></a>
-  </nav>
-
-  <footer class="app-footer">
-    <p>Built by <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Mr. Chartist</a> · Technical Documentation</p>
-    <p style="margin-top:4px;font-size:10px;color:var(--t4)">Prices for illustrative purposes only · Not financial advice</p>
-  </footer>
+      <div class="gl-empty" id="gl-empty" hidden>No matching terms.</div>
+    </section>
+  </main>
 </div>
 
+<footer class="dx-foot">
+  <div class="dx-foot-in">
+    <div class="brand">Built by <span>@MrChartist</span></div>
+    <div class="dx-foot-links">
+      <a href="/">Dashboard</a><a href="docs.html">Docs</a><a href="about.html">About</a>
+      <a href="https://mrchartist.com" target="_blank" rel="noopener">mrchartist.com</a>
+      <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://github.com/MrChartist" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://buymeacoffee.com/mrchartist" target="_blank" rel="noopener">Support</a>
+    </div>
+    <div>Part of the <a href="https://mrchartist.com" target="_blank" rel="noopener">mrchartist.com</a> ecosystem. For education only. Not financial advice. Not NSE or MCX data.</div>
+  </div>
+</footer>
+
+<button type="button" id="to-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>
+
 <script>
-function toggleTheme(){const h=document.documentElement,c=h.getAttribute('data-theme'),n=c==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('commodity-theme',n);updateThemeUI(n)}
-function updateThemeUI(t){const l=document.getElementById('theme-label'),i=document.getElementById('theme-icon');if(!l||!i)return;if(t==='dark'){l.textContent='Light';i.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'}else{l.textContent='Dark';i.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'}}
-const s=localStorage.getItem('commodity-theme');if(s){document.documentElement.setAttribute('data-theme',s);updateThemeUI(s)}
-// Smooth scroll for quick nav
-document.querySelectorAll('.qn-link').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+(function(){
+  var root=document.documentElement;
+  function setTheme(t){root.setAttribute('data-theme',t);try{localStorage.setItem('commodity-theme',t)}catch(e){}var b=document.getElementById('theme-toggle');if(b)b.textContent=t==='dark'?'Light mode':'Dark mode'}
+  var saved=null;try{saved=localStorage.getItem('commodity-theme')}catch(e){}
+  setTheme(saved||root.getAttribute('data-theme')||'dark');
+  document.getElementById('theme-toggle').addEventListener('click',function(){setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark')});
+
+  // TOC: open on desktop, collapsed on mobile
+  var box=document.getElementById('toc-box'),mq=window.matchMedia('(min-width:1024px)');
+  function syncToc(){if(mq.matches)box.setAttribute('open','');else box.removeAttribute('open')}
+  syncToc();if(mq.addEventListener)mq.addEventListener('change',syncToc);
+  box.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(!mq.matches)box.removeAttribute('open')})});
+
+  // Scrollspy
+  var links={};document.querySelectorAll('[data-spy]').forEach(function(a){links[a.dataset.spy]=a});
+  var secs=Array.prototype.slice.call(document.querySelectorAll('.dx-sec'));
+  function spy(){var y=window.scrollY+110,cur=secs[0];secs.forEach(function(s){if(s.offsetTop<=y)cur=s});
+    if(window.innerHeight+window.scrollY>=document.body.scrollHeight-4)cur=secs[secs.length-1];
+    for(var k in links)links[k].classList.toggle('active',k===cur.id)}
+  window.addEventListener('scroll',spy,{passive:true});spy();
+
+  // Back to top
+  var tt=document.getElementById('to-top');
+  window.addEventListener('scroll',function(){tt.classList.toggle('show',window.scrollY>600)},{passive:true});
+  tt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // Glossary search
+  var q=document.getElementById('gl-q'),cards=document.querySelectorAll('.gl-card'),cnt=document.getElementById('gl-count'),emp=document.getElementById('gl-empty');
+  q.addEventListener('input',function(){var v=q.value.trim().toLowerCase(),n=0;cards.forEach(function(c){var hit=!v||c.dataset.term.indexOf(v)>-1;c.hidden=!hit;if(hit)n++});
+    cnt.textContent=n+(n===1?' term':' terms');emp.hidden=n>0});
+})();
 </script>
 </body>
 </html>

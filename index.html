@@ -3,62 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- SEO Meta Tags -->
-<title>India Commodity Price Tracker | Live Metals, Energy & Agri Prices - Mr Chartist</title>
-<meta name="description" content="Track real-time commodity prices in India with import landed calculations. 30+ commodities: Gold, Silver, Platinum, Palladium, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt, Wheat, Corn, Soybean, Rice, Sugar, Cotton, Coffee, Cocoa, Palm Oil & more with customs duty breakdowns.">
-<meta name="keywords" content="Gold Price India, Silver Price Today, Crude Oil Price, Natural Gas Price, Copper Price, Aluminium Price, Zinc Price, Nickel Price, Tin Price, Steel Price India, Iron Ore Price, Lithium Price, Cobalt Price, Wheat Price India, Rice Price, Sugar Price, Cotton Price, Coffee Price, Palm Oil Price, Agri Commodity Prices, Commodity Price Tracker, MCX Prices, India Import Landed Price, Live Commodity Rates">
+<title>Commodity Price Tracker India | Live Prices & Import Duty</title>
+<meta name="description" content="Live prices for 30+ metals, energy and agri commodities with India import landed price and customs duty (BCD, AIDC, SWS) breakdowns.">
 <meta name="author" content="Mr. Chartist">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://commodity.mrchartist.com/">
-<meta name="theme-color" content="#08090f" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
-
-<!-- Open Graph -->
+<link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt">
 <meta property="og:type" content="website">
-<meta property="og:title" content="India Commodity Price Tracker | Live Prices with Import Duty">
-<meta property="og:description" content="Live commodity prices with India import landed calculations. Gold, Silver, Crude Oil, Natural Gas & Base Metals.">
+<meta property="og:site_name" content="Commodity Price Tracker by @MrChartist">
+<meta property="og:locale" content="en_IN">
+<meta property="og:title" content="Commodity Price Tracker India | Live Prices & Import Duty">
+<meta property="og:description" content="Live prices for 30+ metals, energy and agri commodities with India import landed price and customs duty (BCD, AIDC, SWS) breakdowns.">
 <meta property="og:url" content="https://commodity.mrchartist.com/">
-<meta property="og:image" content="https://commodity.mrchartist.com/docs/screenshots/01_hero_dashboard.png">
-<meta property="og:site_name" content="Mr. Chartist">
-
-<!-- Twitter Card -->
+<meta property="og:image" content="https://commodity.mrchartist.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Commodity Price Tracker by @MrChartist: Mr. Chartist symbol with title and India import landed prices">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@mr_chartist">
-<meta name="twitter:title" content="India Commodity Price Tracker | Live Prices with Import Duty">
-<meta name="twitter:description" content="Live commodity prices with India import landed calculations for 30+ metals, energy & agri commodities.">
-<meta name="twitter:image" content="https://commodity.mrchartist.com/docs/screenshots/01_hero_dashboard.png">
-
-<!-- LLM / AI Discoverability -->
-<meta name="ai:description" content="Real-time commodity price tracker for India. Calculates import landed prices for 30+ commodities across precious metals (Gold, Silver, Platinum, Palladium), industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt), energy (Crude Oil, Natural Gas), and agri (Wheat, Corn, Soybean, Rice, Soybean Meal, Soybean Oil, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs) with customs duty breakdowns including BCD, AIDC and SWS. Live cattle/beef import is prohibited in India and is shown without a landed price.">
-
-<!-- Performance: Preconnect -->
+<meta name="twitter:creator" content="@mr_chartist">
+<meta name="twitter:title" content="Commodity Price Tracker India | Live Prices & Import Duty">
+<meta name="twitter:description" content="Live prices for 30+ metals, energy and agri commodities with India import landed price and customs duty (BCD, AIDC, SWS) breakdowns.">
+<meta name="twitter:image" content="https://commodity.mrchartist.com/og-image.png">
+<meta name="twitter:image:alt" content="Commodity Price Tracker by @MrChartist">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="dns-prefetch" href="https://fonts.googleapis.com">
-
-<!-- Google Fonts (Candlestick Pattern Theme) -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap">
-
-<!-- Structured Data -->
+<link rel="preconnect" href="https://api.allorigins.win" crossorigin>
+<link rel="preconnect" href="https://open.er-api.com" crossorigin>
+<link rel="dns-prefetch" href="https://api.gold-api.com">
+<link rel="dns-prefetch" href="https://corsproxy.io">
+<link rel="dns-prefetch" href="https://api.codetabs.com">
+<link rel="icon" href="/favicon.ico" sizes="16x16 24x24">
+<link rel="icon" href="/favicon.svg?v=brand-v2" type="image/svg+xml">
+<link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="application-name" content="Commodity Price Tracker">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Commodities">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+<script src="/pwa-register.js" defer></script>
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "India Commodity Price Tracker",
-  "description": "Real-time commodity price tracker for India with import landed calculations for 30+ commodities: precious metals (Gold, Silver, Platinum, Palladium), industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt), energy (Crude Oil, Natural Gas) and agri commodities (Wheat, Corn, Soybean, Rice, Soybean Meal, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs).",
-  "applicationCategory": "FinanceApplication",
-  "operatingSystem": "All",
-  "author": {
-    "@type": "Person",
-    "name": "Mr. Chartist",
-    "url": "https://twitter.com/mr_chartist"
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://commodity.mrchartist.com/#website",
+   "url": "https://commodity.mrchartist.com/",
+   "name": "Commodity Price Tracker by @MrChartist",
+   "inLanguage": "en-IN",
+   "publisher": {
+    "@id": "https://mrchartist.com/#org"
+   }
   },
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+  {
+   "@type": "WebApplication",
+   "@id": "https://commodity.mrchartist.com/#app",
+   "name": "Commodity Price Tracker by @MrChartist",
+   "url": "https://commodity.mrchartist.com/",
+   "description": "Live prices for 30+ metals, energy and agri commodities with India import landed price and customs duty (BCD, AIDC, SWS) breakdowns.",
+   "applicationCategory": "FinanceApplication",
+   "operatingSystem": "Any (web browser)",
+   "browserRequirements": "Requires JavaScript",
+   "image": "https://commodity.mrchartist.com/og-image.png",
+   "inLanguage": "en-IN",
+   "isAccessibleForFree": true,
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "INR"
+   },
+   "author": {
+    "@id": "https://mrchartist.com/#person"
+   },
+   "publisher": {
+    "@id": "https://mrchartist.com/#org"
+   }
+  },
+  {
+   "@type": "Person",
+   "@id": "https://mrchartist.com/#person",
+   "name": "Mr. Chartist",
+   "url": "https://mrchartist.com",
+   "sameAs": [
+    "https://mrchartist.com",
+    "https://twitter.com/mr_chartist"
+   ]
+  },
+  {
+   "@type": "Organization",
+   "@id": "https://mrchartist.com/#org",
+   "name": "Mr. Chartist",
+   "url": "https://mrchartist.com",
+   "logo": "https://commodity.mrchartist.com/icons/icon-512.png",
+   "founder": {
+    "@id": "https://mrchartist.com/#person"
+   },
+   "sameAs": [
+    "https://mrchartist.com",
+    "https://twitter.com/mr_chartist"
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://commodity.mrchartist.com/#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "What is the India import landed price?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "It is the theoretical cost of bringing a commodity onto Indian soil: the international futures price converted to INR at the live USD/INR rate, with the commodity-specific import duty (BCD plus AIDC and SWS where applicable) layered on top."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does this tracker show live NSE or MCX prices?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. It does not display live data from NSE or MCX. All Indian quotes are mathematical approximations derived from international COMEX, NYMEX and LME benchmarks converted to INR using live forex rates, and are for illustrative purposes only."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What import duty is applied to gold and silver?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Gold and Silver use 10% BCD plus 5% AIDC, 15% in total. Platinum and Palladium use 10% BCD plus 5.4% AIDC, about 15.4% in total, per the rates described in the documentation."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Where does the price data come from?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "International futures and forex come from Yahoo Finance, with gold-api.com as a precious metals spot backup. Commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola and Palm oil) use manually updated indicative levels."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Why does live cattle or beef show no landed price?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Beef and live cattle imports are prohibited under India's DGFT policy, so that card shows only the international futures price and no landed price is computed."
+     }
+    }
+   ]
+  }
+ ]
 }
 </script>
-
-<link rel="stylesheet" href="style.css">
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>

@@ -1,5 +1,35 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/docs", "destination": "/docs.html" }
+  ],
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.allorigins.win https://corsproxy.io https://api.codetabs.com https://open.er-api.com https://api.gold-api.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains" }
+      ]
+    },
+    { "source": "/sw.js", "headers": [
+      { "key": "Cache-Control", "value": "no-cache, max-age=0, must-revalidate" },
+      { "key": "Service-Worker-Allowed", "value": "/" } ] },
+    { "source": "/manifest.webmanifest", "headers": [
+      { "key": "Content-Type", "value": "application/manifest+json" },
+      { "key": "Cache-Control", "value": "public, max-age=86400" } ] },
+    { "source": "/icons/(.*)", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" } ] },
+    { "source": "/(favicon.svg|favicon.ico|og-image.png)", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" } ] },
+    { "source": "/docs/screenshots/(.*)", "headers": [
+      { "key": "Cache-Control", "value": "public, max-age=86400" } ] }
   ]
 }
