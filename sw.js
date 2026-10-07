@@ -1,5 +1,5 @@
 /* Service worker: app shell cache + stale-while-revalidate. Live price/proxy APIs are never cached. */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'cpt-' + VERSION;
 const SHELL = ['/', '/docs', '/style.css', '/app.js', '/pwa-register.js', '/favicon.svg', '/favicon.ico', '/manifest.webmanifest',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];
@@ -41,6 +41,7 @@ self.addEventListener('fetch', (e) => {
     if (STATIC_HOSTS.includes(url.hostname)) e.respondWith(swr(req).catch(() => Response.error()));
     return; // price APIs and proxies: browser network only, never cached
   }
+  if (url.pathname.startsWith('/api/')) return; // live data endpoints: network only, never cached
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req).then((res) => {

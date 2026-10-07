@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://commodity.mrchartist.com/"><img src="https://img.shields.io/badge/Live-commodity.mrchartist.com-007AFF?style=flat-square" alt="Live dashboard"></a>
   <img src="https://img.shields.io/badge/License-MIT-30D158?style=flat-square" alt="MIT licence">
-  <img src="https://img.shields.io/badge/Backend-none-8E8E93?style=flat-square" alt="No backend">
+  <img src="https://img.shields.io/badge/Backend-serverless_API-8E8E93?style=flat-square" alt="Light backend">
   <img src="https://img.shields.io/badge/PWA-offline_ready-0A84FF?style=flat-square" alt="PWA">
   <a href="https://twitter.com/mr_chartist"><img src="https://img.shields.io/badge/Twitter-@mr__chartist-0d1117?style=flat-square&logo=x&logoColor=white" alt="Twitter"></a>
   <a href="https://buymeacoffee.com/mrchartist"><img src="https://img.shields.io/badge/Support-Buy_Me_A_Coffee-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
@@ -49,15 +49,15 @@ Prices come from international futures (Yahoo Finance) or, where no free live fe
 | FX strip | USD/INR with daily change and EUR, GBP, JPY, CNY, AED rates |
 | PWA and offline | Installable. Last prices are cached and flagged CACHED or STALE if refresh fails |
 | Light and dark themes | Follows your choice and is saved in the browser |
-| Zero backend | Static files only. No server, database or login |
+| Light backend | Static files plus two small serverless endpoints for live data. No database or login |
 
 ## Data sources
 
 | Source | Use |
 |---|---|
-| Yahoo Finance (through public CORS proxies) | Futures prices, charts, USD/INR fallback |
-| open.er-api.com | USD/INR and other FX rates |
-| gold-api.com | Spot backup for gold, silver, platinum, palladium |
+| Yahoo Finance (server-side via `/api/quotes`, `/api/chart`) | Futures prices, chart history and the live USD/INR rate |
+| open.er-api.com | Other FX rates; USD/INR fallback (updates once a day) |
+| gold-api.com | Live spot price for gold, silver, platinum, palladium |
 | Indicative levels in `app.js` | Zinc, nickel, lead, tin, iron ore, lithium, cobalt, canola oil, palm oil (last updated 2026-06-12) |
 
 ## Project structure
@@ -78,6 +78,8 @@ Prices come from international futures (Yahoo Finance) or, where no free live fe
 ├── brand/                  Mr. Chartist logo and brand files
 ├── og-image.png            Social preview image
 ├── robots.txt / sitemap.xml / llms.txt / humans.txt
+├── api/                    Serverless live-data endpoints (quotes, chart)
+├── scripts/dev-server.js   Local server: static files plus /api (npm run dev)
 ├── vercel.json             Hosting config and security headers
 ├── package.json
 ├── docs/screenshots/       README screenshots

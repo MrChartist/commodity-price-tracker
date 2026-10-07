@@ -6,8 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "npx -y serve .",
-    "start": "npx -y serve ."
+    "dev": "node scripts/dev-server.js",
+    "start": "node scripts/dev-server.js"
   },
   "keywords": [
     "commodity",

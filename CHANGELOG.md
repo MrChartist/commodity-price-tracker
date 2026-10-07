@@ -2,6 +2,15 @@
 
 All notable changes to this project are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Unreleased
+
+### Fixed
+- Live data: the public CORS proxies the app depended on had stopped working (403/503/522), so most commodities fell back to stale values. Prices and chart history now come through our own `/api/quotes` and `/api/chart` endpoints, edge-cached for about 15 seconds.
+- USD/INR now uses the live Yahoo Finance rate. The previous source updates only once a day.
+- Gold, silver, platinum and palladium are priced from live spot (the basis for Indian bullion prices), with the daily change taken from futures. Previously the futures price was used, about 0.8% above spot for gold.
+- Day change uses the previous session close, chosen by bar date.
+- The service worker no longer caches `/api/` responses.
+
 ## [1.1.0]
 
 ### Added

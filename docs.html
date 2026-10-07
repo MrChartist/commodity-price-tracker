@@ -30,8 +30,6 @@
 <link rel="preconnect" href="https://api.allorigins.win" crossorigin>
 <link rel="preconnect" href="https://open.er-api.com" crossorigin>
 <link rel="dns-prefetch" href="https://api.gold-api.com">
-<link rel="dns-prefetch" href="https://corsproxy.io">
-<link rel="dns-prefetch" href="https://api.codetabs.com">
 <link rel="icon" href="/favicon.ico" sizes="16x16 24x24">
 <link rel="icon" href="/favicon.svg?v=brand-v2" type="image/svg+xml">
 <link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -245,7 +243,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
       <ol class="steps">
         <li><strong>Get the international price</strong>Yahoo Finance futures price in USD for 24 commodities, or a manually updated indicative level for 9 commodities. Quotes in US cents or other currencies are first converted to US dollars.</li>
         <li><strong>Convert the unit</strong>The price is divided by the conversion divisor of the commodity (see <a href="#units">Unit conversions</a>) to get a price per Indian unit.</li>
-        <li><strong>Apply USD/INR</strong>The rate comes from the ExchangeRate API (open.er-api.com). If that fails, Yahoo Finance <code>USDINR=X</code> is used.</li>
+        <li><strong>Apply USD/INR</strong>The live rate comes from Yahoo Finance <code>USDINR=X</code>. If that fails, the ExchangeRate API (open.er-api.com, updated once a day) is used.</li>
         <li><strong>Add customs duty</strong>The commodity-specific duty is added. Duty can depend on the date (cotton) and Live Cattle has no landed price because import is prohibited.</li>
       </ol>
       <p>The dashboard refreshes about every 60 seconds while the tab is visible. Polling pauses in hidden tabs and refreshes when you return.</p>
@@ -287,11 +285,11 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 
     <section class="dx-sec" id="sources">
       <h2>Data sources</h2>
-      <p>The tracker has no server of its own. The browser fetches data directly from public services.</p>
+      <p>The page is static, with one small serverless layer on the same domain (<code>/api/quotes</code> and <code>/api/chart</code>). It fetches Yahoo Finance on the server, because Yahoo does not allow direct browser requests, and shares one cached result (about 15 seconds) between all visitors. Prices refresh every 60 seconds.</p>
       <div class="grid2">
-        <div class="card2"><span class="tag">Primary</span><h4>Yahoo Finance</h4><p>Futures prices for 24 commodities and the USD/INR fallback. Reached through public CORS proxies (allorigins.win, corsproxy.io, codetabs.com).</p></div>
-        <div class="card2"><span class="tag">FX</span><h4>ExchangeRate API</h4><p>open.er-api.com gives USD/INR and the other rates used for non-USD quotes and the FX strip.</p></div>
-        <div class="card2"><span class="tag">Backup</span><h4>gold-api.com</h4><p>Spot price for Gold, Silver, Platinum and Palladium when Yahoo Finance fails. No change data is available from it.</p></div>
+        <div class="card2"><span class="tag">Primary</span><h4>Yahoo Finance</h4><p>Futures prices for 24 commodities, the live USD/INR rate and chart history. Fetched server-side through our own <code>/api</code> endpoints. A public CORS proxy (allorigins.win) is kept only as a last-resort fallback.</p></div>
+        <div class="card2"><span class="tag">FX</span><h4>ExchangeRate API</h4><p>open.er-api.com gives the other currency rates used for non-USD quotes and the FX strip. It updates once a day, so it is the USD/INR fallback only.</p></div>
+        <div class="card2"><span class="tag">Spot</span><h4>gold-api.com</h4><p>Live spot price for Gold, Silver, Platinum and Palladium. India's bullion price follows spot, so the price shown is spot; the daily change comes from the COMEX/NYMEX futures.</p></div>
         <div class="card2"><span class="tag">Manual</span><h4>Indicative levels</h4><p>Zinc, Nickel, Lead, Tin, Iron Ore, Lithium (Carbonate), Cobalt, Canola Oil, Palm Oil (CPO). Updated by hand in <code>app.js</code>. Last update: 2026-06-12.</p></div>
         <div class="card2"><span class="tag">Charts</span><h4>Lightweight Charts</h4><p>Open-source charting library by TradingView (v4.1.3). Chart history comes from Yahoo Finance for the commodities that have a futures symbol.</p></div>
         <div class="card2"><span class="tag">Browser</span><h4>localStorage cache</h4><p>Last prices and FX are saved in your browser. Chart series are cached for 6 hours.</p></div>
