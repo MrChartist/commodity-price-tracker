@@ -2,13 +2,15 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.gold-api.com https://open.er-api.com https://raw.githubusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Commodity Price Tracker India | Live Prices & Import Duty</title>
 <meta name="description" content="Live prices for 30+ metals, energy and agri commodities with India import landed price and customs duty (BCD, AIDC, SWS) breakdowns.">
 <meta name="author" content="Mr. Chartist">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://commodity.mrchartist.com/">
-<link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt">
+<link rel="alternate" type="text/plain" href="llms.txt" title="LLMs.txt">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Commodity Price Tracker by @MrChartist">
 <meta property="og:locale" content="en_IN">
@@ -28,14 +30,14 @@
 <meta name="twitter:image:alt" content="Commodity Price Tracker by @MrChartist">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://api.allorigins.win" crossorigin>
+<link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
 <link rel="preconnect" href="https://open.er-api.com" crossorigin>
 <link rel="dns-prefetch" href="https://api.gold-api.com">
-<link rel="icon" href="/favicon.ico" sizes="16x16 24x24">
-<link rel="icon" href="/favicon.svg?v=brand-v2" type="image/svg+xml">
-<link rel="icon" href="/icons/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="16x16 24x24">
+<link rel="icon" href="favicon.svg?v=brand-v2" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
@@ -47,7 +49,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&family=DM+Serif+Display&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;700;800&family=DM+Serif+Display&display=swap">
 <link rel="stylesheet" href="style.css">
-<script src="/pwa-register.js" defer></script>
+<script src="pwa-register.js" defer></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -143,7 +145,7 @@
      "name": "Where does the price data come from?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "International futures and forex come from Yahoo Finance, with gold-api.com as a precious metals spot backup. Commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola and Palm oil) use manually updated indicative levels."
+      "text": "International futures and forex come from Yahoo Finance, fetched by a scheduled GitHub Actions job (up to about 5 minutes delayed). Gold, silver, platinum and palladium spot comes from gold-api.com about every minute. Commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola and Palm oil) use manually updated indicative levels."
      }
     },
     {
@@ -299,6 +301,8 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="config.js"></script>
+<script src="config.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

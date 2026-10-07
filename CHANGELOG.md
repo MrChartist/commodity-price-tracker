@@ -5,6 +5,25 @@ All notable changes to this project are listed here. The format follows [Keep a 
 ## Unreleased
 
 ### Changed
+- Moved hosting from Vercel to GitHub Pages. The site is now fully static and the project is open source for anyone to fork.
+- New data pipeline: a GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX on the runner, and force-pushes `prices.json` to an orphan `data` branch. A daily workflow publishes chart history under `charts/` on the same branch. The browser reads `raw.githubusercontent.com` (location set in `config.js`) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. The `/api` endpoints are removed.
+- Freshness wording corrected: precious metals spot is about a minute old; everything else and USD/INR can be up to about 5 minutes old, and more when GitHub delays or pauses scheduled runs.
+- All URLs, the service worker, the manifest and `404.html` are now relative, so the site works at the root of a domain or at a sub-path such as `owner.github.io/repo/`.
+- Screenshots moved from `docs/screenshots` to `assets/screenshots`, so `docs/` no longer clashes with `docs.html` on GitHub Pages.
+- Canonical URLs, sitemap and links use `docs.html` and `about.html`.
+
+### Security
+- Content Security Policy and referrer policy added as `<meta>` tags, replacing the Vercel headers. `frame-ancestors` cannot be set with a meta tag and is no longer enforced.
+- Added `SECURITY.md` and updated `.well-known/security.txt`.
+
+### Added
+- `CNAME`, `.nojekyll` and a Dependabot configuration for GitHub Actions.
+- README guide: fork and run your own copy.
+
+### Removed
+- `vercel.json`.
+
+### Changed (earlier, same release)
 - Minimal cards: one headline India landed price, with the full breakdown, notes and source behind a "Details" toggle.
 - Removed the duplicate bottom tab bar, the long methodology block, the keyboard legend and the long footer text. Methodology lives in the docs.
 - README screenshots retaken from the new design with live data.

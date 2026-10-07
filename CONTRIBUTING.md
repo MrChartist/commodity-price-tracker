@@ -22,10 +22,10 @@ Thank you for helping to improve the India Commodity Price Tracker.
 ```bash
 git clone https://github.com/MrChartist/commodity-price-tracker.git
 cd commodity-price-tracker
-npx serve .
+npm run dev
 ```
 
-Open the local address shown in the terminal.
+Open the local address shown in the terminal (port 3000 by default; set `PORT` to change it). The dev server only needs Node.js. There is nothing to install.
 
 ## Pull requests
 

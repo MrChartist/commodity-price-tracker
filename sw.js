@@ -1,9 +1,10 @@
-/* Service worker: app shell cache + stale-while-revalidate. Live price/proxy APIs are never cached. */
-const VERSION = 'v3';
+/* Service worker: app shell cache + stale-while-revalidate. Live price data is never cached. */
+const VERSION = 'v4';
 const CACHE = 'cpt-' + VERSION;
-const SHELL = ['/', '/docs', '/style.css', '/app.js', '/pwa-register.js', '/favicon.svg', '/favicon.ico', '/manifest.webmanifest',
-  '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];
-// Cross-origin static assets safe to cache (library + fonts). Everything else cross-origin (price APIs, CORS proxies) is network-only.
+// Relative URLs resolve against this file, so the same code works at / or at a sub-path such as /commodity-price-tracker/.
+const SHELL = ['./', 'index.html', 'docs.html', 'about.html', 'style.css', 'config.js', 'app.js', 'pwa-register.js', 'favicon.svg', 'favicon.ico', 'manifest.webmanifest',
+  'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
+// Cross-origin static assets safe to cache (library + fonts). Everything else cross-origin (spot, FX and the raw.githubusercontent.com price snapshot) is network-only.
 const STATIC_HOSTS = ['unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', (e) => {
@@ -41,14 +42,13 @@ self.addEventListener('fetch', (e) => {
     if (STATIC_HOSTS.includes(url.hostname)) e.respondWith(swr(req).catch(() => Response.error()));
     return; // price APIs and proxies: browser network only, never cached
   }
-  if (url.pathname.startsWith('/api/')) return; // live data endpoints: network only, never cached
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req).then((res) => {
         if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
         return res;
       }).catch(() =>
-        caches.match(req).then((hit) => hit || caches.match(url.pathname.startsWith('/docs') ? '/docs' : '/'))
+        caches.match(req).then((hit) => hit || caches.match(/\/docs(\.html)?$/.test(url.pathname) ? 'docs.html' : /\/about(\.html)?$/.test(url.pathname) ? 'about.html' : './'))
       )
     );
     return;

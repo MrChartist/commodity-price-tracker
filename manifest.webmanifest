@@ -2,9 +2,9 @@
   "name": "Commodity Price Tracker by @MrChartist",
   "short_name": "Commodities",
   "description": "Live commodity prices with India import landed price and customs duty breakdowns.",
-  "id": "/",
-  "start_url": "/?utm_source=pwa",
-  "scope": "/",
+  "id": "./",
+  "start_url": "./?utm_source=pwa",
+  "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#000000",
@@ -12,15 +12,15 @@
   "lang": "en-IN",
   "categories": ["finance", "business"],
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
-    { "src": "/favicon.svg?v=brand-v2", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "favicon.svg?v=brand-v2", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ],
   "shortcuts": [
-    { "name": "Precious Metals", "short_name": "Precious", "url": "/?cat=precious", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Industrial Metals", "short_name": "Industrial", "url": "/?cat=industrial", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Energy", "short_name": "Energy", "url": "/?cat=energy", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Agri", "short_name": "Agri", "url": "/?cat=agri", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Precious Metals", "short_name": "Precious", "url": "./?cat=precious", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Industrial Metals", "short_name": "Industrial", "url": "./?cat=industrial", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Energy", "short_name": "Energy", "url": "./?cat=energy", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Agri", "short_name": "Agri", "url": "./?cat=agri", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

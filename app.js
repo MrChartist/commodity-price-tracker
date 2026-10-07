@@ -702,7 +702,7 @@ const SORTS = ['default', 'az', 'gainers', 'losers'];
 const PRICE_CACHE_KEY = 'cpt_prices_v1';
 const WATCH_KEY = 'cpt_watchlist_v1';
 const THEME_KEY = 'commodity-theme';
-const PRICE_STALE_MS = 10 * 60 * 1000; // data older than 10 min is flagged stale
+const PRICE_STALE_MS = 20 * 60 * 1000; // snapshots refresh ~5 min (GitHub schedules can lag); older than 20 min is flagged stale
 const POLL_INTERVAL_MS = 60000;
 const POLL_RETRY_MS = 30000;
 const SITE_URL = 'https://commodity.mrchartist.com/';
@@ -829,31 +829,25 @@ function hydrateFromCache() {
 }
 
 // ── NETWORK ──
-// Last-resort fallback only. The primary path is our own same-origin /api/quotes
-// (Yahoo has no CORS headers, so the browser cannot call it directly).
-const CORS_PROXIES = [
-  'https://api.allorigins.win/raw?url=',
-];
+// Live data comes from a static snapshot (prices.json) that a scheduled GitHub Action
+// publishes (Yahoo has no CORS headers, so browsers cannot call it directly).
+const DATA_BASE = (window.CPT_CONFIG && window.CPT_CONFIG.dataBase) || '';
+const IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+const dataSources = () => (IS_LOCAL ? ['data', DATA_BASE] : [DATA_BASE, 'data']).filter(Boolean);
 
-// Per-cycle batch from /api/quotes: { quotes, spot, fxRates } or null if unavailable.
+// Per-cycle snapshot: { ts, quotes, spot, fxRates } or null if unavailable.
 let batch = null;
 
-async function fetchBatch(symbols) {
+async function fetchBatch() {
   if (!/^https?:$/.test(location.protocol)) return null;
-  try {
-    const resp = await fetch(`/api/quotes?s=${encodeURIComponent([...symbols].sort().join(','))}`, { signal: AbortSignal.timeout(10000), cache: 'no-store' });
-    if (!resp.ok) return null;
-    const data = await resp.json();
-    return data && data.quotes && Object.keys(data.quotes).length ? data : null;
-  } catch (e) { return null; }
-}
-
-async function fetchWithProxy(url, timeout = 8000) {
-  for (const proxy of CORS_PROXIES) {
+  const bucket = Math.floor(Date.now() / 60000); // bypass CDN edge cache at most once a minute
+  for (const base of dataSources()) {
     try {
-      const resp = await fetch(proxy + encodeURIComponent(url), { signal: AbortSignal.timeout(timeout) });
-      if (resp.ok) return JSON.parse(await resp.text());
-    } catch (e) { /* try next proxy */ }
+      const resp = await fetch(`${base}/prices.json?t=${bucket}`, { signal: AbortSignal.timeout(10000), cache: 'no-store' });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      if (data && data.quotes && Object.keys(data.quotes).length && isNum(data.ts)) return data;
+    } catch (e) { /* try next source */ }
   }
   return null;
 }
@@ -869,25 +863,7 @@ async function fetchYahooQuote(symbol) {
     const change = hasPrev ? price - prevUsd : 0;
     return { price, change, changePct: hasPrev ? (change / prevUsd) * 100 : 0 };
   }
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
-    const data = await fetchWithProxy(url);
-    if (!data) throw new Error('All proxies failed');
-    const meta = data?.chart?.result?.[0]?.meta;
-    if (!meta) throw new Error('No data in response');
-    // Normalise every quote to USD (US-cents contracts are flagged "USX"; canola is CAD).
-    const price = toUsd(meta.regularMarketPrice, meta.currency);
-    if (!isNum(price) || price <= 0) throw new Error('Invalid price');
-    const prevRaw = meta.chartPreviousClose || meta.previousClose;
-    const prevClose = prevRaw ? toUsd(prevRaw, meta.currency) : null;
-    const hasPrev = isNum(prevClose) && prevClose > 0;
-    const change = hasPrev ? price - prevClose : 0;
-    const changePct = hasPrev ? (change / prevClose) * 100 : 0;
-    return { price, change, changePct };
-  } catch (e) {
-    console.warn(`Yahoo fetch failed for ${symbol}:`, e.message);
-    return null;
-  }
+  return null; // no snapshot available: quote stays on its cached value
 }
 
 async function fetchWithFallbacks(primarySymbol, fallbackSymbols = []) {
@@ -899,7 +875,7 @@ async function fetchWithFallbacks(primarySymbol, fallbackSymbols = []) {
 }
 
 async function fetchUsdInr() {
-  // Live rate first (Yahoo, via /api/quotes). open.er-api.com updates only once a day.
+  // Live rate first (Yahoo, via the published snapshot). open.er-api.com updates only once a day.
   const live = batch?.quotes?.['USDINR=X'];
   if (live && isNum(live.price) && live.price > 0) {
     const change = isNum(live.prev) && live.prev > 0 ? live.price - live.prev : null;
@@ -956,9 +932,10 @@ async function fetchAllPrices() {
   const indicativeKeys = keys.filter(k => COMMODITIES[k].indicative);
   const now = Date.now();
 
-  const symbols = new Set(['USDINR=X']);
-  yahooKeys.forEach(k => { symbols.add(COMMODITIES[k].yahooSymbol); (COMMODITIES[k].yahooFallbacks || []).forEach(f => symbols.add(f)); });
-  batch = await fetchBatch(symbols);
+  batch = await fetchBatch();
+  // Data time: when the snapshot was generated (not when we downloaded it), so
+  // LIVE / STALE reflects the real age of the numbers.
+  const dataTs = batch ? Math.min(batch.ts, now) : now;
   if (batch?.fxRates) state.fxRates = batch.fxRates; // needed before toUsd() for non-USD contracts
 
   const [fxRes, ...liveRes] = await Promise.allSettled([
@@ -969,8 +946,9 @@ async function fetchAllPrices() {
       if (GOLD_API_SYMBOLS[key]) {
         // India's bullion price follows SPOT, not the futures curve. Use live spot for the
         // price and the COMEX/NYMEX futures only for the daily % change.
+        const live = await fetchGoldApiSpot(key);
         const bs = batch?.spot?.[GOLD_API_SYMBOLS[key]];
-        const spot = bs && isNum(bs.price) ? { price: bs.price } : await fetchGoldApiSpot(key);
+        const spot = live || (bs && isNum(bs.price) ? { price: bs.price } : null);
         if (spot && data) {
           const pct = data.changePct;
           data = { price: spot.price, change: spot.price - spot.price / (1 + pct / 100), changePct: pct, isSpot: true };
@@ -997,7 +975,7 @@ async function fetchAllPrices() {
     const key = yahooKeys[i];
     const data = res.status === 'fulfilled' && res.value ? res.value[1] : null;
     if (data) {
-      state.prices[key] = { ...data, ts: now };
+      state.prices[key] = { ...data, ts: data.isSpot || data.isSpotBackup ? now : dataTs };
       delete state.errors[key];
       freshLive++;
     } else {
@@ -1018,8 +996,8 @@ async function fetchAllPrices() {
   if (freshLive > 0 && isNum(state.usdInr)) {
     state.fromCache = false;
     state.failedCycles = 0;
-    state.lastSuccess = now;
-    state.lastUpdate = new Date(now);
+    state.lastSuccess = dataTs;
+    state.lastUpdate = new Date(dataTs);
     savePriceCache();
   } else {
     state.failedCycles++;
@@ -1783,34 +1761,19 @@ function writeChartCache(symbol, range, data) { store.set(`cpt_chart_${symbol}_$
 async function fetchHistoricalData(symbol, range) {
   const cached = readChartCache(symbol, range);
   if (cached && cached.fresh) return { data: cached.data, stale: false };
-  const interval = ['1mo', '3mo', '6mo', '1y', '2y'].includes(range) ? '1d' : '1wk';
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
-  const sources = [
-    { build: () => `/api/chart?s=${encodeURIComponent(symbol)}&range=${range}`, own: true },
-    { build: () => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}` },
-  ];
-  for (const src of sources) {
-    try {
-      if (src.own && !/^https?:$/.test(location.protocol)) continue;
-      const resp = await fetch(src.build(), { signal: AbortSignal.timeout(12000) });
-      if (!resp.ok) continue;
-      const body = await resp.json();
-      if (src.own) {
-        const rows = (body.ohlc || []).filter(r => [r.open, r.high, r.low, r.close].every(isNum))
-          .map(r => ({ time: r.time, open: +r.open.toFixed(2), high: +r.high.toFixed(2), low: +r.low.toFixed(2), close: +r.close.toFixed(2) }));
+  const slice = (rows, cutoff) => rows.filter(r => r[0] >= cutoff).map(r => ({ time: r[0], open: +r[1].toFixed(2), high: +r[2].toFixed(2), low: +r[3].toFixed(2), close: +r[4].toFixed(2) }));
+  const DAYS = { '1mo': 31, '3mo': 92, '6mo': 183, '1y': 366, '2y': 731, '5y': 1827, '10y': 3653, max: 36500 };
+  if (/^https?:$/.test(location.protocol)) {
+    for (const base of dataSources()) {
+      try {
+        const resp = await fetch(`${base}/charts/${encodeURIComponent(symbol)}.json?t=${Math.floor(Date.now() / 3600000)}`, { signal: AbortSignal.timeout(12000) });
+        if (!resp.ok) continue;
+        const body = await resp.json();
+        const cutoff = Date.now() / 1000 - (DAYS[range] || 366) * 86400;
+        const rows = slice(['1mo', '3mo', '6mo', '1y', '2y'].includes(range) ? body.daily : range === 'max' ? body.monthly : body.weekly, cutoff).filter(r => [r.open, r.high, r.low, r.close].every(isNum));
         if (rows.length) { writeChartCache(symbol, range, rows); return { data: rows, stale: false }; }
-        continue;
-      }
-      const result = body?.chart?.result?.[0];
-      const ts = result?.timestamp, q = result?.indicators?.quote?.[0];
-      if (!Array.isArray(ts) || !q) continue;
-      const ohlc = [];
-      for (let i = 0; i < ts.length; i++) {
-        if (![q.open?.[i], q.high?.[i], q.low?.[i], q.close?.[i]].every(isNum)) continue;
-        ohlc.push({ time: ts[i], open: +q.open[i].toFixed(2), high: +q.high[i].toFixed(2), low: +q.low[i].toFixed(2), close: +q.close[i].toFixed(2) });
-      }
-      if (ohlc.length) { writeChartCache(symbol, range, ohlc); return { data: ohlc, stale: false }; }
-    } catch (e) { /* try next proxy */ }
+      } catch (e) { /* try next source */ }
+    }
   }
   return cached ? { data: cached.data, stale: true } : { data: null, stale: false };
 }

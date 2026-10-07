@@ -20,7 +20,7 @@
     if (reloading) return; reloading = true; location.reload();
   });
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/sw.js').then(function (reg) {
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
       if (reg.waiting && navigator.serviceWorker.controller) banner(reg.waiting);
       reg.addEventListener('updatefound', function () {
         var w = reg.installing;

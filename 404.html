@@ -2,12 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Page not found | Commodity Price Tracker</title>
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#000000">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>
+/* GitHub Pages serves this file for unknown paths at any depth. Work out the site root so relative links below resolve:
+   project sites (owner.github.io/repo/...) live under the first path segment; custom domains and local servers live at "/". */
+(function(){var p=location.pathname,r='/';if(/\.github\.io$/i.test(location.hostname)){var s=p.split('/')[1];if(s)r='/'+s+'/'}
+document.write('<base href="'+r+'">')})();
+</script>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 :root{--bg:#000000;--t1:#eef1f5;--t3:#a8b0c4;--pr:#0a84ff}
 @media (prefers-color-scheme:light){:root{--bg:#F2F2F7;--t1:#1b1d27;--t3:#555b6e;--pr:#007aff}}
@@ -17,9 +25,9 @@ a{display:inline-block;background:var(--pr);color:#fff;text-decoration:none;font
 </style>
 </head>
 <body><main>
-<img src="/favicon.svg" alt="" width="88" height="88">
+<img src="favicon.svg" alt="" width="88" height="88">
 <h1>404</h1>
 <p>This page does not exist. The price you are looking for may have moved.</p>
-<a href="/">Back to the tracker</a>
+<a href="index.html">Back to the tracker</a>
 </main></body>
 </html>

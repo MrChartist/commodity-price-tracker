@@ -4,6 +4,7 @@
   "description": "India Commodity Price Tracker: import landed prices in rupees for 33 commodities from international futures, live USD/INR and Indian customs duty.",
   "author": "Mr. Chartist",
   "license": "MIT",
+  "engines": { "node": ">=18" },
   "private": true,
   "scripts": {
     "dev": "node scripts/dev-server.js",

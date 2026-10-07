@@ -1,6 +1,6 @@
-// Shared helpers for the serverless data layer (Vercel Node runtime).
-// Yahoo Finance sends no CORS headers, so the browser cannot call it directly.
-// These functions call it server-side and re-serve the data from our own origin.
+// Yahoo Finance sends no CORS headers, so browsers cannot call it directly.
+// These helpers run in Node (GitHub Actions or the local dev server) and the
+// results are published as static JSON the browser can read.
 const UA = 'Mozilla/5.0 (compatible; CommodityPriceTracker/1.1; +https://commodity.mrchartist.com)';
 const HOSTS = ['query1.finance.yahoo.com', 'query2.finance.yahoo.com'];
 const SYMBOL_RE = /^[A-Z0-9=^.\-]{1,14}$/;
