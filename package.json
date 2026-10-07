@@ -1,12 +1,32 @@
 {
   "name": "commodity-price-tracker",
-  "version": "1.0.0",
-  "description": "Live India Commodity Price Tracker with Import Landed Calculations - Gold, Silver, Crude Oil, Natural Gas, Copper, Aluminium, Zinc, Nickel",
+  "version": "1.1.0",
+  "description": "India Commodity Price Tracker: import landed prices in rupees for 33 commodities from international futures, live USD/INR and Indian customs duty.",
   "author": "Mr. Chartist",
   "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "npx -y serve .",
     "start": "npx -y serve ."
+  },
+  "keywords": [
+    "commodity",
+    "india",
+    "gold",
+    "silver",
+    "crude-oil",
+    "import-duty",
+    "landed-price",
+    "usd-inr",
+    "pwa",
+    "mr-chartist"
+  ],
+  "homepage": "https://commodity.mrchartist.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrChartist/commodity-price-tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MrChartist/commodity-price-tracker/issues"
   }
 }

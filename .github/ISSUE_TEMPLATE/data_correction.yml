@@ -1,0 +1,28 @@
+name: Data correction
+description: A wrong duty rate, unit conversion, source or indicative price
+labels: [data]
+body:
+  - type: input
+    id: commodity
+    attributes:
+      label: Commodity
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is wrong?
+      options: [Duty rate, Unit conversion, Data source, Indicative price, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Current value and correct value
+    validations:
+      required: true
+  - type: input
+    id: ref
+    attributes:
+      label: Reference link
+      description: Official notification or other source, if available.

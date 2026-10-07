@@ -164,190 +164,221 @@
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#commodity-grid">Skip to prices</a>
 
-<!-- Ambient Background Orbs -->
-<div class="ambient-orb ambient-orb-1"></div>
-<div class="ambient-orb ambient-orb-2"></div>
+<!-- Official Mr. Chartist four-band symbol (path data unaltered; colour follows currentColor) -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <symbol id="mc-symbol" viewBox="0 0 1024 1024"><g fill="currentColor" transform="translate(512.0,512.0) scale(0.9053045186640472) translate(-598.5,-627)"><path d="M113.000 419.000 C128.592 434.006 145.057 448.270 162.000 461.824 C299.947 577.880 486.231 594.815 659.000 599.706 C680.524 601.629 702.137 604.069 723.000 609.941 C739.114 614.722 756.237 621.994 765.294 637.000 C772.039 648.057 770.249 662.141 764.059 673.000 C757.496 684.792 747.292 693.980 737.000 702.471 C622.184 776.562 493.076 829.586 375.000 896.000 L375.000 963.000 C515.515 883.674 670.173 822.286 802.000 726.706 C813.556 716.290 824.300 704.439 830.529 690.000 C838.815 671.480 839.343 649.379 830.353 631.000 C820.580 611.223 801.894 597.282 782.000 588.706 C761.954 580.063 740.467 575.548 719.000 572.118 C554.209 556.993 381.998 531.255 246.000 428.882 C217.642 409.437 190.041 388.438 165.000 365.000 L113.000 419.000 Z"/><path d="M188.000 337.000 C316.846 468.242 496.277 534.615 677.000 549.412 C696.033 552.012 715.091 554.437 734.000 557.882 C755.462 561.939 776.867 567.125 797.000 575.765 C818.791 584.906 838.835 599.627 851.294 620.000 C862.243 638.513 866.051 660.948 861.588 682.000 C858.237 697.772 850.648 712.466 840.588 725.000 C831.364 736.435 820.525 746.457 809.000 755.529 C693.716 834.576 560.949 886.762 440.000 954.000 L440.000 1019.000 C574.338 944.999 718.397 882.423 848.000 798.000 C858.899 789.873 869.372 781.082 878.529 771.000 C894.178 753.831 906.631 733.452 912.941 711.000 C920.380 682.285 918.024 650.759 904.941 624.000 C893.907 601.346 875.568 582.806 854.000 570.000 C832.847 557.324 809.419 549.133 786.000 541.765 C766.238 535.785 746.114 531.161 726.000 526.529 C548.716 496.882 375.210 416.898 258.000 278.000 L188.000 337.000 Z"/><path d="M290.000 254.000 C308.447 274.155 327.161 295.512 348.000 314.000 C453.478 424.326 599.037 483.129 746.000 513.353 C763.758 517.829 781.437 522.609 799.000 527.824 C820.526 534.566 841.986 542.016 862.000 552.529 C886.185 565.229 907.447 583.869 922.118 607.000 C936.227 629.718 943.569 656.320 944.000 683.000 C943.512 706.016 937.438 728.767 926.471 749.000 C918.039 764.406 907.264 778.449 895.000 791.000 C883.493 802.227 871.026 812.419 858.000 821.824 C746.244 894.490 621.481 948.074 505.000 1010.000 L504.000 1076.000 C632.480 1005.064 770.972 946.800 897.000 869.294 C910.758 860.022 923.644 849.526 936.000 838.471 C949.658 825.478 962.100 811.081 972.000 795.000 C986.214 772.034 994.894 745.857 997.529 719.000 C999.937 688.692 995.002 657.792 982.588 630.000 C968.964 599.153 947.229 572.032 920.000 552.118 C902.365 539.381 883.111 528.960 863.000 520.706 C845.298 513.239 827.109 507.048 809.000 500.647 C636.074 454.709 466.017 356.684 383.000 193.000 L290.000 254.000 Z"/><path d="M425.000 170.000 C433.325 187.316 444.967 205.810 455.765 223.000 C533.154 356.596 671.084 441.407 816.000 484.765 C836.523 491.915 856.986 499.223 877.000 507.706 C897.796 516.718 918.241 526.786 937.000 539.588 C960.903 556.257 981.598 577.851 996.412 603.000 C1009.897 626.411 1018.784 652.337 1023.000 679.000 C1026.668 705.231 1025.905 732.331 1019.059 758.000 C1012.980 780.132 1003.460 801.351 990.000 820.000 C978.054 836.793 963.343 851.389 948.000 865.059 C831.432 949.293 692.805 999.811 568.000 1068.000 L568.000 1134.000 C703.535 1066.165 848.062 1008.114 977.000 925.941 C993.062 914.079 1008.092 900.785 1021.529 886.000 C1040.975 864.157 1057.656 839.480 1068.000 812.000 C1078.937 784.083 1083.851 753.948 1083.000 724.000 C1082.049 696.275 1076.066 668.824 1066.000 643.000 C1050.881 604.319 1026.649 569.070 995.000 542.059 C976.526 526.146 955.609 513.398 934.000 502.235 C918.017 493.984 901.516 486.805 885.000 479.706 C739.010 425.017 609.370 318.638 551.353 171.000 C543.555 154.264 535.319 136.249 529.000 120.000 L425.000 170.000 Z"/></g></symbol>
+</svg>
 
-<div class="wrap">
-  <!-- ── HEADER ── -->
-  <header>
-    <div class="header-left">
-      <div class="header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-      <div>
-        <h1 class="h-title">Commodity Price Tracker</h1>
-        <p class="h-sub">Live Prices · India Import Landed · Customs Duty</p>
+<div id="app">
+  <!-- ── NAVIGATION BAR (translucent; large title collapses into it on scroll) ── -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="nav-title" aria-hidden="true">
+        <span class="app-tile app-tile-sm"><svg viewBox="0 0 1024 1024"><use href="#mc-symbol"/></svg></span>
+        <span class="nav-title-text">Commodity Price Tracker</span>
       </div>
-      <div class="logo-glow"></div>
-    </div>
-    <div class="h-right">
-      <div style="display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap">
-        <div class="status-pill" id="status-pill">
-          <div class="status-dot"></div>
+      <div class="nav-actions">
+        <div class="status-pill" id="status-pill" role="status" aria-live="polite" aria-atomic="true" title="Connecting">
+          <span class="status-dot" aria-hidden="true"></span>
           <span id="status-text">CONNECTING</span>
         </div>
-        <button class="hdr-btn" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark and light theme">
-          <span id="theme-icon" style="display:inline-flex;width:14px;height:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span> <span id="theme-label">Light</span>
+        <button type="button" class="icon-btn" id="theme-toggle" aria-label="Switch theme">
+          <span id="theme-icon" class="icon"></span>
         </button>
-        <button class="hdr-btn" id="refresh-btn" onclick="forceRefresh()" aria-label="Refresh prices now">
-          <span style="display:inline-flex;width:14px;height:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span> Refresh
+        <button type="button" class="icon-btn" id="refresh-btn" aria-label="Refresh prices now">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
         </button>
       </div>
     </div>
   </header>
 
-
-  <!-- ── CATEGORY TABS ── -->
-  <div class="category-tabs" id="category-tabs">
-    <button class="cat-tab active" data-cat="all" onclick="filterCategory('all')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> All</button>
-    <button class="cat-tab" data-cat="precious" onclick="filterCategory('precious')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg> Precious Metals</button>
-    <button class="cat-tab" data-cat="industrial" onclick="filterCategory('industrial')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Industrial Metals</button>
-    <button class="cat-tab" data-cat="energy" onclick="filterCategory('energy')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Energy</button>
-    <button class="cat-tab" data-cat="agri" onclick="filterCategory('agri')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg> Agri</button>
-  </div>
-
-  <!-- ── LIVE FX TICKER (the conversion rates the engine is applying) ── -->
-  <div class="currency-ticker" id="currency-ticker">
-    <div class="currency-ticker-label">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      Live FX
-    </div>
-    <div class="currency-rates" id="currency-rates">
-      <div class="currency-item"><span class="fx-pair">USD / INR</span><span class="fx-rate">—</span></div>
-    </div>
-  </div>
-
-  <!-- ── TOOLBAR: SEARCH + SORT ── -->
-  <div class="toolbar">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="commodity-search" type="search" placeholder="Search 30+ commodities — e.g. gold, copper, palm oil…" oninput="filterSearch(this.value)" aria-label="Search commodities">
-    </div>
-    <div class="sort-box">
-      <label class="sort-label" for="sort-select">Sort</label>
-      <select id="sort-select" onchange="setSortBy(this.value)" aria-label="Sort commodities">
-        <option value="default">Default</option>
-        <option value="az">A–Z</option>
-        <option value="gainers">Top gainers</option>
-        <option value="losers">Top losers</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- ── COMMODITY CARDS GRID ── -->
-  <div class="commodity-grid" id="commodity-grid">
-    <!-- Cards generated by JS -->
-  </div>
-
-<!-- ── CHART MODAL ── -->
-<div class="chart-modal-overlay" id="chart-modal" style="display:none" onclick="if(event.target===this)closeChart()">
-  <div class="chart-modal">
-    <div class="chart-modal-header">
-      <div>
-        <div class="chart-modal-title" id="chart-title">Gold — COMEX Historical</div>
-        <div class="chart-modal-sub" id="chart-sub">GC=F · COMEX Futures</div>
+  <main class="wrap" id="main">
+    <!-- ── LARGE TITLE ── -->
+    <div class="large-title">
+      <span class="app-tile"><svg viewBox="0 0 1024 1024" role="img" aria-label="Mr. Chartist"><use href="#mc-symbol"/></svg></span>
+      <div class="lt-text">
+        <h1 class="h-title">Commodity Price Tracker</h1>
+        <p class="h-sub">by <a href="https://mrchartist.com" target="_blank" rel="noopener">@MrChartist</a> · India import landed prices</p>
       </div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <div class="chart-timeframe-tabs" id="chart-timeframes">
-          <button class="tf-btn" data-range="1mo" onclick="changeRange('1mo')">1M</button>
-          <button class="tf-btn" data-range="3mo" onclick="changeRange('3mo')">3M</button>
-          <button class="tf-btn" data-range="6mo" onclick="changeRange('6mo')">6M</button>
-          <button class="tf-btn active" data-range="1y" onclick="changeRange('1y')">1Y</button>
-          <button class="tf-btn" data-range="5y" onclick="changeRange('5y')">5Y</button>
-          <button class="tf-btn" data-range="10y" onclick="changeRange('10y')">10Y</button>
-          <button class="tf-btn" data-range="max" onclick="changeRange('max')">Max</button>
-        </div>
-        <button class="chart-close-btn" onclick="closeChart()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </div>
+
+    <!-- ── MARKET SUMMARY + HONEST STATUS ── -->
+    <section class="summary" id="market-summary" aria-label="Market summary"></section>
+    <p class="status-line" id="status-line">Connecting to price feeds…</p>
+
+    <!-- ── CATEGORY SEGMENTED CONTROL ── -->
+    <div class="segmented seg-scroll" id="category-tabs" role="group" aria-label="Filter by category">
+      <span class="seg-thumb" aria-hidden="true"></span>
+      <button type="button" class="seg-btn active" data-cat="all" aria-pressed="true">All</button>
+      <button type="button" class="seg-btn" data-cat="precious" aria-pressed="false">Precious</button>
+      <button type="button" class="seg-btn" data-cat="industrial" aria-pressed="false">Industrial</button>
+      <button type="button" class="seg-btn" data-cat="energy" aria-pressed="false">Energy</button>
+      <button type="button" class="seg-btn" data-cat="agri" aria-pressed="false">Agri</button>
+      <button type="button" class="seg-btn" data-cat="watchlist" aria-pressed="false">Watchlist <span class="seg-count" data-watch-count>0</span></button>
+    </div>
+
+    <!-- ── LIVE FX ── -->
+    <section class="fx-strip" id="currency-ticker" aria-label="Live foreign exchange rates">
+      <div class="fx-label">Live FX</div>
+      <div class="fx-rates" id="currency-rates">
+        <div class="fx-item"><span class="fx-pair">USD / INR</span><span class="fx-rate">—</span></div>
+      </div>
+    </section>
+
+    <!-- ── SEARCH + SORT ── -->
+    <div class="toolbar">
+      <div class="search-field" id="search-field">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="commodity-search" type="search" placeholder="Search commodities" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Search commodities" aria-controls="commodity-grid">
+        <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" hidden>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm3.7 12.3a1 1 0 0 1-1.4 1.4L12 13.4l-2.3 2.3a1 1 0 0 1-1.4-1.4l2.3-2.3-2.3-2.3a1 1 0 0 1 1.4-1.4l2.3 2.3 2.3-2.3a1 1 0 0 1 1.4 1.4L13.4 12z"/></svg>
         </button>
+        <kbd class="kbd-hint" aria-hidden="true" title="Press / to search">/</kbd>
+      </div>
+      <div class="segmented" id="sort-seg" role="group" aria-label="Sort commodities">
+        <span class="seg-thumb" aria-hidden="true"></span>
+        <button type="button" class="seg-btn active" data-sort="default" aria-pressed="true">Default</button>
+        <button type="button" class="seg-btn" data-sort="az" aria-pressed="false">A–Z</button>
+        <button type="button" class="seg-btn" data-sort="gainers" aria-pressed="false">Gainers</button>
+        <button type="button" class="seg-btn" data-sort="losers" aria-pressed="false">Losers</button>
+      </div>
+    </div>
+    <p class="sr-only" id="result-count" aria-live="polite"></p>
+
+    <!-- ── COMMODITY CARDS ── -->
+    <div class="commodity-grid" id="commodity-grid">
+      <!-- Cards generated by JS -->
+    </div>
+    <noscript><p class="empty-state">JavaScript is required to load live prices.</p></noscript>
+
+    <p class="kbd-legend" aria-hidden="true"><kbd>/</kbd> search <span>·</span> <kbd>Esc</kbd> close or clear</p>
+
+    <!-- ── METHODOLOGY ── -->
+    <section class="group methodology-card" id="methodology-section">
+      <details>
+        <summary class="methodology-summary">
+          <span class="meth-title">Methodology</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+        </summary>
+        <div class="methodology-content">
+          <div class="methodology-grid">
+            <div class="inner-panel">
+              <h3>Core Formula</h3>
+              <code class="formula-code">India Landed Price = (Intl. Price ÷ Unit) × USD/INR × (1 + Duty%)</code>
+            </div>
+            <div class="inner-panel">
+              <h3>Gold &amp; Silver</h3>
+              <p class="methodology-text">Spot price via XAU/USD &amp; XAG/USD → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply 15% duty (10% BCD + 5% AIDC, effective May 13, 2026).</p>
+              <p class="methodology-text gap"><strong>Purity:</strong> 22K = 24K × (22/24), 18K = 24K × (18/24)</p>
+              <p class="methodology-text gap"><strong>10g Price:</strong> Per gram × 10</p>
+            </div>
+            <div class="inner-panel">
+              <h3>Industrial &amp; Battery Metals</h3>
+              <p class="methodology-text">Copper (HG=F, USD/lb), Aluminium (ALI=F) &amp; Steel HRC (HRC=F) stream live; Zinc, Nickel, Lead, Tin, Iron Ore, Lithium &amp; Cobalt use manually updated indicative levels (no free live feed) → Convert to ₹/kg or ₹/tonne → Apply duty incl. SWS. Copper 5.5%, Aluminium 8.25%, Zinc/Lead 5.5%, Nickel 0%, Steel ≈19.75% (incl. safeguard), Iron Ore 2.75%. Tin, Lithium &amp; Cobalt are <strong>duty-free critical minerals (0%)</strong>.</p>
+            </div>
+            <div class="inner-panel">
+              <h3>Energy</h3>
+              <p class="methodology-text">Crude Oil (WTI/Brent USD/barrel) → BCD Re 1/tonne ≈ 0% effective duty. Natural Gas (USD/MMBtu) → 2.75% (BCD 2.5% + SWS). No unit conversion needed for standard Indian quotes.</p>
+            </div>
+            <div class="inner-panel">
+              <h3>Platinum &amp; Palladium</h3>
+              <p class="methodology-text">Front-month futures (PL=F, PA=F) → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply ~15.4% duty (10% BCD + 5.4% AIDC, effective May 13, 2026).</p>
+            </div>
+            <div class="inner-panel">
+              <h3>Agri Commodities</h3>
+              <p class="methodology-text">CBOT grains (Wheat, Corn, Soybean, Rice, Soybean Meal) and ICE/CME softs &amp; livestock (Sugar, Cotton, Coffee, Orange Juice, Lumber, Lean Hogs) → normalize US-cents quotes to USD → convert to ₹/quintal, ₹/kg or ₹/cu ft → apply duty: Rice 70%, Sugar &amp; Coffee 100%, Corn 50%, Wheat 44%, OJ/Pork 33%, Soybean Meal &amp; Palm 16.5%, Canola 27.5%, Lumber 11%, Cotton duty-free till Oct 31 2026. Canola &amp; Palm oil use indicative levels (no free feed). <strong>Beef / live cattle import is prohibited in India</strong> — shown without a landed price.</p>
+            </div>
+          </div>
+          <div class="methodology-footer">
+            <p>Data sources: Yahoo Finance (international futures &amp; forex), gold-api.com (precious metals spot backup), and manually updated indicative levels for commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola &amp; Palm oil). The live USD/INR (and the full FX map used for non-USD contracts) is shown in the FX strip so the conversion is transparent. Chart history and the latest prices are cached in your browser — the dashboard paints instantly on reload and keeps showing the last known values (flagged CACHED/STALE) if a refresh fails. Prices are calculated mathematically and are for illustrative purposes only.</p>
+            <p class="important"><strong>IMPORTANT:</strong> This application does NOT display live data from NSE or MCX. All Indian quotes (including Standard Contract Equivalents) are mathematical approximations derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="app-footer">
+      <p class="footer-built">Built by <a href="https://mrchartist.com" target="_blank" rel="noopener">@MrChartist</a></p>
+      <nav class="footer-links" aria-label="Mr. Chartist links">
+        <a href="https://mrchartist.com" target="_blank" rel="noopener">mrchartist.com</a>
+        <a href="https://t.me/mrchartist" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Twitter @mr_chartist</a>
+        <a href="docs.html">Documentation</a>
+      </nav>
+      <p class="footer-note">Prices refresh about every 60 seconds while this tab is visible · For illustrative purposes only · Not financial advice</p>
+    </footer>
+  </main>
+
+  <!-- ── TAB BAR (stays in sync with the category control above) ── -->
+  <nav class="tabbar" id="tabbar" aria-label="Quick navigation">
+    <a href="#cat=all" class="tab active" data-cat="all" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="tab-txt">Home</span>
+    </a>
+    <a href="#cat=precious" class="tab" data-cat="precious">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg>
+      <span class="tab-txt">Precious</span>
+    </a>
+    <a href="#cat=industrial" class="tab" data-cat="industrial">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <span class="tab-txt">Industrial</span>
+    </a>
+    <a href="#cat=energy" class="tab" data-cat="energy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <span class="tab-txt">Energy</span>
+    </a>
+    <a href="#cat=agri" class="tab" data-cat="agri">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg>
+      <span class="tab-txt">Agri</span>
+    </a>
+    <a href="#cat=watchlist" class="tab" data-cat="watchlist">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="tab-txt">Saved</span>
+    </a>
+    <a href="docs.html" class="tab tab-docs">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span class="tab-txt">Docs</span>
+    </a>
+  </nav>
+</div>
+
+<!-- ── CHART SHEET (bottom sheet on phones, centred window on desktop) ── -->
+<div class="sheet-overlay" id="chart-modal" hidden>
+  <div class="sheet" id="chart-sheet" role="dialog" aria-modal="true" aria-labelledby="chart-title" aria-describedby="chart-sub" tabindex="-1">
+    <div class="sheet-grabber" id="sheet-grabber" aria-hidden="true"><span class="sheet-handle"></span></div>
+    <div class="sheet-header">
+      <div class="sheet-heading">
+        <h2 class="sheet-title" id="chart-title">Chart</h2>
+        <p class="sheet-sub" id="chart-sub"></p>
+      </div>
+      <button type="button" class="icon-btn sheet-close" id="chart-close" aria-label="Close chart">
+        <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+      </button>
+    </div>
+    <div class="sheet-tools">
+      <div class="segmented seg-scroll" id="chart-timeframes" role="group" aria-label="Chart time range">
+        <span class="seg-thumb" aria-hidden="true"></span>
+        <button type="button" class="seg-btn" data-range="1mo" aria-pressed="false">1M</button>
+        <button type="button" class="seg-btn" data-range="3mo" aria-pressed="false">3M</button>
+        <button type="button" class="seg-btn" data-range="6mo" aria-pressed="false">6M</button>
+        <button type="button" class="seg-btn active" data-range="1y" aria-pressed="true">1Y</button>
+        <button type="button" class="seg-btn" data-range="5y" aria-pressed="false">5Y</button>
+        <button type="button" class="seg-btn" data-range="10y" aria-pressed="false">10Y</button>
+        <button type="button" class="seg-btn" data-range="max" aria-pressed="false">Max</button>
       </div>
     </div>
     <div class="chart-container" id="chart-container"></div>
-    <div class="chart-footer">
-      <span>Data: Yahoo Finance (COMEX Futures) · For illustrative purposes only</span>
+    <div class="sheet-footer">
+      <span id="chart-source">Data: Yahoo Finance · For illustrative purposes only</span>
       <span id="chart-data-range"></span>
     </div>
   </div>
 </div>
 
-  <!-- ── METHODOLOGY ── -->
-  <div class="card methodology-card" id="methodology-section" style="margin-top:32px">
-    <details>
-      <summary class="methodology-summary">
-        <span class="c-title" style="font-size:14px;display:inline-flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:16px;height:16px" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8L3 8"/><path d="M21 16L3 16"/><path d="M21 4v16"/><path d="M3 4v16"/><path d="M12 4v16"/></svg> Methodology</span>
-        <span class="methodology-arrow">▸</span>
-      </summary>
-      <div class="methodology-content">
-        <div class="methodology-grid">
-          <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Core Formula</h3>
-            <code class="formula-code">India Landed Price = (Intl. Price ÷ Unit) × USD/INR × (1 + Duty%)</code>
-          </div>
-          <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Gold & Silver</h3>
-            <p class="methodology-text">Spot price via XAU/USD & XAG/USD → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply 15% duty (10% BCD + 5% AIDC, effective May 13, 2026).</p>
-            <p class="methodology-text" style="margin-top:6px"><strong>Purity:</strong> 22K = 24K × (22/24), 18K = 24K × (18/24)</p>
-            <p class="methodology-text" style="margin-top:6px"><strong>10g Price:</strong> Per gram × 10</p>
-          </div>
-          <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Industrial & Battery Metals</h3>
-            <p class="methodology-text">Copper (HG=F, USD/lb), Aluminium (ALI=F) & Steel HRC (HRC=F) stream live; Zinc, Nickel, Lead, Tin, Iron Ore, Lithium & Cobalt use manually updated indicative levels (no free live feed) → Convert to ₹/kg or ₹/tonne → Apply duty incl. SWS. Copper 5.5%, Aluminium 8.25%, Zinc/Lead 5.5%, Nickel 0%, Steel ≈19.75% (incl. safeguard), Iron Ore 2.75%. Tin, Lithium & Cobalt are <strong>duty-free critical minerals (0%)</strong>.</p>
-          </div>
-          <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Energy</h3>
-            <p class="methodology-text">Crude Oil (WTI/Brent USD/barrel) → BCD Re 1/tonne ≈ 0% effective duty. Natural Gas (USD/MMBtu) → 2.75% (BCD 2.5% + SWS). No unit conversion needed for standard Indian quotes.</p>
-          </div>
-          <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Platinum & Palladium</h3>
-            <p class="methodology-text">Front-month futures (PL=F, PA=F) → Convert troy oz to grams (÷ 31.1035) → Multiply by USD/INR → Apply ~15.4% duty (10% BCD + 5.4% AIDC, effective May 13, 2026).</p>
-          </div>
-          <div class="inner-panel">
-            <h3 style="font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--t1);margin-bottom:10px">Agri Commodities</h3>
-            <p class="methodology-text">CBOT grains (Wheat, Corn, Soybean, Rice, Soybean Meal) and ICE/CME softs & livestock (Sugar, Cotton, Coffee, Orange Juice, Lumber, Lean Hogs) → normalize US-cents quotes to USD → convert to ₹/quintal, ₹/kg or ₹/cu ft → apply duty: Rice 70%, Sugar & Coffee 100%, Corn 50%, Wheat 44%, OJ/Pork 33%, Soybean Meal & Palm 16.5%, Canola 27.5%, Lumber 11%, Cotton duty-free till Oct 31 2026. Canola & Palm oil use indicative levels (no free feed). <strong>Beef / live cattle import is prohibited in India</strong> — shown without a landed price.</p>
-          </div>
-        </div>
-        <div class="methodology-footer">
-          <p>Data sources: Yahoo Finance (international futures & forex), gold-api.com (precious metals spot backup), and manually updated indicative levels for commodities with no free live feed (Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil). The live USD/INR (and the full FX map used for non-USD contracts) is shown in the FX strip so the conversion is transparent. Chart history and the latest prices are cached in your browser — the dashboard paints instantly on reload and keeps showing the last known values (flagged CACHED/STALE) if a refresh fails. Prices are calculated mathematically and are for illustrative purposes only.</p>
-          <p style="margin-top:6px;color:var(--t2);font-weight:600">IMPORTANT: This application does NOT display live data from NSE or MCX. All Indian quotes (including Standard Contract Equivalents) are mathematical approximations derived from international COMEX/NYMEX/LME benchmarks converted to INR via live forex rates.</p>
-        </div>
-      </div>
-    </details>
-  </div>
-
-  <!-- ── FLOATING NAVBAR ── -->
-  <nav class="tabs-wrap">
-    <a href="#" onclick="filterCategory('all'); document.querySelectorAll('.tabs-wrap .tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); return false;" class="tab active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      <span class="tab-txt">Home</span>
-    </a>
-    <a href="#" onclick="filterCategory('precious'); document.querySelectorAll('.tabs-wrap .tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); return false;" class="tab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275z"/></svg>
-      <span class="tab-txt">Precious</span>
-    </a>
-    <a href="#" onclick="filterCategory('industrial'); document.querySelectorAll('.tabs-wrap .tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); return false;" class="tab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-      <span class="tab-txt">Industrial</span>
-    </a>
-    <a href="#" onclick="filterCategory('energy'); document.querySelectorAll('.tabs-wrap .tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); return false;" class="tab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      <span class="tab-txt">Energy</span>
-    </a>
-    <a href="#" onclick="filterCategory('agri'); document.querySelectorAll('.tabs-wrap .tab').forEach(t=>t.classList.remove('active')); this.classList.add('active'); return false;" class="tab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M7 20h10"/><path d="M12 20V10"/><path d="M12 10c0-4-3-7-8-7 0 5 3 8 8 7z"/><path d="M12 13c0-3.5 2.5-6 7-6 0 4.5-2.5 7-7 6z"/></svg>
-      <span class="tab-txt">Agri</span>
-    </a>
-    <a href="/docs.html" class="tab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-      <span class="tab-txt">Docs</span>
-    </a>
-  </nav>
-
-  <!-- ── FOOTER ── -->
-  <footer class="app-footer">
-    <p>Built by <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Mr. Chartist</a> · Data for illustrative purposes only</p>
-    <p style="margin-top:4px;font-size:10px;color:var(--t4)">Prices auto-refresh every ~60 seconds · Not financial advice</p>
-  </footer>
-</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="app.js"></script>
 </body>
