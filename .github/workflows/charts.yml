@@ -22,8 +22,11 @@ jobs:
         with:
           node-version: 22
       - name: Fetch chart history
+        continue-on-error: true
         run: node scripts/fetch-charts.js out
       - name: Fetch open interest (CFTC)
+        continue-on-error: true
         run: node scripts/fetch-oi.js out
       - name: Publish to data branch
+        if: ${{ !cancelled() }}
         run: scripts/publish-data.sh out

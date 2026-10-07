@@ -21,6 +21,15 @@ async function quote(sym) {
     const vols = r.indicators?.quote?.[0]?.volume || [];
     let prev = m.chartPreviousClose ?? m.previousClose ?? null;
     let prevVolume = null;
+    let price = m.regularMarketPrice;
+    // Contract rolls can make the live quote and the daily bars describe different contracts.
+    // If the quote disagrees with today's own bar by more than 5%, trust the bar series (it is
+    // what the chart shows) so the day change is not an artefact.
+    for (let i = ts.length - 1; i >= 0; i--) {
+      if (typeof closes[i] !== 'number') continue;
+      if (m.regularMarketTime && day(ts[i]) === day(m.regularMarketTime) && Math.abs(price / closes[i] - 1) > 0.05) price = closes[i];
+      break;
+    }
     for (let i = ts.length - 1; i >= 0; i--) {
       if (typeof closes[i] !== 'number') continue;
       if (m.regularMarketTime && day(ts[i]) === day(m.regularMarketTime)) continue;
@@ -29,7 +38,7 @@ async function quote(sym) {
       break;
     }
     const v = m.regularMarketVolume;
-    return [sym, { price: m.regularMarketPrice, prev, currency: m.currency || 'USD', marketTime: m.regularMarketTime || null, volume: typeof v === 'number' && v > 0 ? v : null, prevVolume }];
+    return [sym, { price, prev, currency: m.currency || 'USD', marketTime: m.regularMarketTime || null, volume: typeof v === 'number' && v > 0 ? v : null, prevVolume }];
   } catch (e) { return [sym, null]; }
 }
 

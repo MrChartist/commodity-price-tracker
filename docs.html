@@ -288,7 +288,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 
     <section class="dx-sec" id="sources">
       <h2>Data sources</h2>
-      <p>The site is fully static and hosted on GitHub Pages. There is no server of our own. A GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX rates on the Actions runner (so there is no browser CORS problem), and force-pushes a single file, <code>prices.json</code>, to an orphan branch named <code>data</code>. A second daily workflow publishes chart history to the same branch under <code>charts/</code>. Your browser reads <code>https://raw.githubusercontent.com/&lt;owner&gt;/&lt;repo&gt;/data/prices.json</code> (the location is set in <code>config.js</code> as <code>window.CPT_CONFIG.dataBase</code>) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. Precious metals spot is therefore about a minute old; everything else and USD/INR can be up to about 5 minutes old.</p>
+      <p>The site is fully static and hosted on GitHub Pages. There is no server of our own. A GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX rates on the Actions runner (so there is no browser CORS problem), and force-pushes a single file, <code>prices.json</code>, to an orphan branch named <code>data</code>. A second workflow that runs every 6 hours publishes chart history to the same branch under <code>charts/</code>. Your browser reads <code>https://raw.githubusercontent.com/&lt;owner&gt;/&lt;repo&gt;/data/prices.json</code> (the location is set in <code>config.js</code> as <code>window.CPT_CONFIG.dataBase</code>) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. Precious metals spot is therefore about a minute old; everything else and USD/INR can be up to about 5 minutes old.</p>
       <div class="grid2">
         <div class="card2"><span class="tag">Primary</span><h4>Yahoo Finance</h4><p>Futures prices for 24 commodities, the USD/INR rate and chart history. Fetched by GitHub Actions and published as <code>prices.json</code> and <code>charts/</code> on the <code>data</code> branch. The browser never calls Yahoo Finance directly.</p></div>
         <div class="card2"><span class="tag">FX</span><h4>ExchangeRate API</h4><p>open.er-api.com is called directly from the browser for the other currency rates used for non-USD quotes and the FX strip. It updates once a day, so it is the USD/INR fallback only.</p></div>
@@ -391,10 +391,10 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 <script>
 (function(){
   var root=document.documentElement;
-  function setTheme(t){root.setAttribute('data-theme',t);try{localStorage.setItem('commodity-theme',t)}catch(e){}var b=document.getElementById('theme-toggle');if(b)b.textContent=t==='dark'?'Light mode':'Dark mode'}
+  function setTheme(t,save){root.setAttribute('data-theme',t);if(save)try{localStorage.setItem('commodity-theme',t)}catch(e){}var b=document.getElementById('theme-toggle');if(b)b.textContent=t==='dark'?'Light mode':'Dark mode'}
   var saved=null;try{saved=localStorage.getItem('commodity-theme')}catch(e){}
-  setTheme(saved||root.getAttribute('data-theme')||'dark');
-  document.getElementById('theme-toggle').addEventListener('click',function(){setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark')});
+  setTheme(saved||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),false);
+  document.getElementById('theme-toggle').addEventListener('click',function(){setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark',true)});
 
   // TOC: open on desktop, collapsed on mobile
   var box=document.getElementById('toc-box'),mq=window.matchMedia('(min-width:1024px)');

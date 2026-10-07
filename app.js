@@ -784,12 +784,14 @@ function updateThemeButton(theme) {
 
 // Convert a foreign-currency amount to USD using the live FX rate map.
 function toUsd(amount, currency) {
-  const cur = (currency || 'USD').toUpperCase();
+  const raw = currency || 'USD';
+  if (raw === 'GBp') return state.fxRates && state.fxRates.GBP ? amount / 100 / state.fxRates.GBP : null; // pence
+  const cur = raw.toUpperCase();
   if (cur === 'USD') return amount;
   if (cur === 'USX' || cur === 'USDX') return amount / 100;          // US cents
   if (cur === 'GBX' || cur === 'GBP_PENCE') return amount / 100;
   const rate = state.fxRates && state.fxRates[cur];
-  return rate ? amount / rate : amount;
+  return rate ? amount / rate : null; // unknown currency: unavailable, never a wrong number
 }
 
 // ── PRICE PERSISTENCE CACHE ──
@@ -1155,8 +1157,9 @@ function statsHtml(config, p) {
     }
     rows.push(`<div class="stat-row"><span class="stat-label">Open interest · weekly</span><span class="stat-value">${fmtInt(o.oi)}${chg}</span></div>`);
     if (isNum(o.mmNet)) rows.push(`<div class="stat-row"><span class="stat-label">Managed money net · weekly</span><span class="stat-value">${o.mmNet > 0 ? '+' : ''}${fmtInt(o.mmNet)} <small>${o.mmNet >= 0 ? 'net long' : 'net short'}</small></span></div>`);
-    const d = new Date(`${o.date}T00:00:00Z`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-    rows.push(`<div class="stat-note">Open interest and positions: CFTC, as of ${d}. Weekly, not live.</div>`);
+    const dt = new Date(`${o.date}T00:00:00Z`);
+    const d = isNaN(dt) ? '' : dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    rows.push(`<div class="stat-note">Open interest and positions: CFTC${d ? `, as of ${d}` : ''}. Weekly, not live.</div>`);
   }
   return rows.length ? `<div class="stats">${rows.join('')}</div>` : '';
 }

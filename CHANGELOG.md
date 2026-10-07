@@ -4,6 +4,16 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## Unreleased
 
+### Fixed (final review)
+- Opening docs or About no longer overwrites your theme with dark. They follow the system theme and only save a choice you make.
+- The service worker serves the app shell network-first, so HTML, JS and CSS from different releases are never mixed. Local data files are never cached.
+- The charting library is self-hosted in `vendor/` (Apache-2.0, licence and notice included). The page no longer loads script from a third-party CDN, and charts work offline.
+- A contract-roll mismatch between Yahoo's quote and its daily bars (seen on Lean Hogs, showing a false -9.6%) is detected, and the bar series is used.
+- One failing data source (CFTC or Yahoo) no longer blocks the other from publishing.
+- Clear status when there is no data: OFFLINE with an explanation, and a specific message when the price snapshot is unreachable. Indicative levels no longer count as live prices.
+- Unknown quote currencies are treated as unavailable instead of being shown unconverted.
+- Local dev server binds to localhost only and serves site files only.
+
 ### Mobile (iOS)
 - Native SF Pro font on Apple devices, Inter elsewhere.
 - Touch targets and the 16px search field now follow the input type (`pointer: coarse`), so landscape phones and iPads get 44px targets and no focus zoom.
@@ -17,7 +27,7 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ### Changed
 - Moved hosting from Vercel to GitHub Pages. The site is now fully static and the project is open source for anyone to fork.
-- New data pipeline: a GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX on the runner, and force-pushes `prices.json` to an orphan `data` branch. A daily workflow publishes chart history under `charts/` on the same branch. The browser reads `raw.githubusercontent.com` (location set in `config.js`) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. The `/api` endpoints are removed.
+- New data pipeline: a GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX on the runner, and force-pushes `prices.json` to an orphan `data` branch. A workflow that runs every 6 hours publishes chart history under `charts/` on the same branch. The browser reads `raw.githubusercontent.com` (location set in `config.js`) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. The `/api` endpoints are removed.
 - Freshness wording corrected: precious metals spot is about a minute old; everything else and USD/INR can be up to about 5 minutes old, and more when GitHub delays or pauses scheduled runs.
 - All URLs, the service worker, the manifest and `404.html` are now relative, so the site works at the root of a domain or at a sub-path such as `owner.github.io/repo/`.
 - Screenshots moved from `docs/screenshots` to `assets/screenshots`, so `docs/` no longer clashes with `docs.html` on GitHub Pages.

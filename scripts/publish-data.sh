@@ -2,7 +2,8 @@
 # Publishes ./data/* to the orphan `data` branch as a single fresh commit (no history growth).
 # Usage: scripts/publish-data.sh <dir-with-files>   (run inside a checkout with push rights)
 set -euo pipefail
-SRC="$(cd "$1" && pwd)"
+SRC="$(cd "$1" 2>/dev/null && pwd || true)"
+if [ -z "$SRC" ] || [ -z "$(ls -A "$SRC" 2>/dev/null)" ]; then echo "Nothing to publish; keeping the last good snapshot."; exit 0; fi
 REPO_DIR="$(pwd)"
 PUB="$(mktemp -d)"
 git config user.name "github-actions[bot]"

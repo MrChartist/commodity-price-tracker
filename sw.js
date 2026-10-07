@@ -1,11 +1,11 @@
-/* Service worker: app shell cache + stale-while-revalidate. Live price data is never cached. */
-const VERSION = 'v4';
+/* Service worker: app shell cache, network-first so a new release is never mixed with old files. Live data is never cached. */
+const VERSION = 'v5';
 const CACHE = 'cpt-' + VERSION;
 // Relative URLs resolve against this file, so the same code works at / or at a sub-path such as /commodity-price-tracker/.
-const SHELL = ['./', 'index.html', 'docs.html', 'about.html', 'style.css', 'config.js', 'app.js', 'pwa-register.js', 'favicon.svg', 'favicon.ico', 'manifest.webmanifest',
+const SHELL = ['./', 'index.html', 'docs.html', 'about.html', 'vendor/lightweight-charts.standalone.production.js', 'style.css', 'config.js', 'app.js', 'pwa-register.js', 'favicon.svg', 'favicon.ico', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'];
-// Cross-origin static assets safe to cache (library + fonts). Everything else cross-origin (spot, FX and the raw.githubusercontent.com price snapshot) is network-only.
-const STATIC_HOSTS = ['unpkg.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
+// Cross-origin static assets safe to cache (fonts). Everything else cross-origin (spot, FX and the raw.githubusercontent.com price snapshot) is network-only.
+const STATIC_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => Promise.all(SHELL.map((u) => c.add(u).catch(() => {})))));
@@ -42,6 +42,7 @@ self.addEventListener('fetch', (e) => {
     if (STATIC_HOSTS.includes(url.hostname)) e.respondWith(swr(req).catch(() => Response.error()));
     return; // price APIs and proxies: browser network only, never cached
   }
+  if (/\/data\//.test(url.pathname)) return; // local dev data files: always network, never cached
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req).then((res) => {
@@ -53,5 +54,11 @@ self.addEventListener('fetch', (e) => {
     );
     return;
   }
-  e.respondWith(swr(req).catch(() => caches.match(req).then((h) => h || Response.error())));
+  // Same-origin shell files: network first, cache only as the offline fallback, so HTML, JS and CSS always match.
+  e.respondWith(
+    fetch(req).then((res) => {
+      if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
+      return res;
+    }).catch(() => caches.match(req).then((h) => h || Response.error()))
+  );
 });

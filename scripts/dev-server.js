@@ -38,12 +38,14 @@ http.createServer(async (req, res) => {
 
   // Static files, mirroring GitHub Pages: clean URLs and 404.html for unknown paths.
   const clean = u.pathname === '/' ? '/index.html' : u.pathname;
+  // Only serve site files: no dot-paths (.git), no scripts/, nothing outside the repo.
+  if (/\/\.|^\/(scripts|node_modules)\//.test(clean)) { res.statusCode = 404; return res.end('not found'); }
   let f = path.join(root, clean);
   if (!isFile(f) && isFile(f + '.html')) f += '.html';
-  if (!f.startsWith(root) || !isFile(f)) {
+  if (!f.startsWith(root + path.sep) || !isFile(f)) {
     res.statusCode = 404; res.setHeader('content-type', 'text/html');
     return res.end(fs.readFileSync(path.join(root, '404.html')));
   }
   res.setHeader('content-type', types[path.extname(f)] || 'application/octet-stream');
   res.end(fs.readFileSync(f));
-}).listen(process.env.PORT || 3000, () => console.log('Dev server: http://localhost:' + (process.env.PORT || 3000) + '  (static files + live data, like GitHub Pages + Actions)'));
+}).listen(process.env.PORT || 3000, '127.0.0.1', () => console.log('Dev server: http://localhost:' + (process.env.PORT || 3000) + '  (static files + live data, like GitHub Pages + Actions)'));

@@ -93,7 +93,7 @@ Open <http://localhost:3000>. The local server generates the same live data file
 
 1. **Fork** this repository.
 2. In **Settings → Actions → General**, allow workflows to run, with read and write permission.
-3. In **Actions**, run **Update prices** and **Update chart history** once (they also run on a schedule). This creates the `data` branch.
+3. In **Actions**, run **Update prices** and **Update chart history and open interest** once (they also run on a schedule). This creates the `data` branch.
 4. In **Settings → Pages**, set the source to **GitHub Actions**, then run **Deploy site**.
 5. Edit `config.js` and point `dataBase` at your fork:
    ```js
@@ -101,7 +101,8 @@ Open <http://localhost:3000>. The local server generates the same live data file
      dataBase: 'https://raw.githubusercontent.com/<you>/commodity-price-tracker/data',
    };
    ```
-6. Optional: change the `CNAME` file to your own domain, or delete it to use `<you>.github.io/commodity-price-tracker`.
+6. If you host the data anywhere other than `raw.githubusercontent.com`, also add that host to the `connect-src` list in the Content Security Policy `<meta>` tag of `index.html`.
+7. Optional: change the `CNAME` file to your own domain, or delete it to use `<you>.github.io/commodity-price-tracker`.
 
 ## Project structure
 
@@ -111,6 +112,7 @@ app.js            Commodity table, duty rules, pricing engine, UI logic
 style.css         Design system (light and dark)
 config.js         Where live data is read from
 sw.js             Offline support
+vendor/           Self-hosted charting library with its licence and notice
 scripts/          Data fetchers, publisher and local dev server (Node, no packages)
 .github/workflows Price updates, chart updates, site deploy
 assets/ · brand/ · icons/   Screenshots, Mr. Chartist logo, app icons
@@ -133,7 +135,7 @@ Good first contributions: a corrected duty rate with its source, a free live fee
 
 ## Credits
 
-Data: [CFTC](https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm), [Yahoo Finance](https://finance.yahoo.com), [gold-api.com](https://gold-api.com), [ExchangeRate-API](https://www.exchangerate-api.com). Charts: [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts) (Apache-2.0).
+Data: [CFTC](https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm), [Yahoo Finance](https://finance.yahoo.com), [gold-api.com](https://gold-api.com), [ExchangeRate-API](https://www.exchangerate-api.com). Charts: [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts) (Apache-2.0), self-hosted in `vendor/`.
 
 Built by [**@MrChartist**](https://mrchartist.com) · [Twitter](https://twitter.com/mr_chartist) · [GitHub](https://github.com/MrChartist) · [Buy me a coffee](https://buymeacoffee.com/mrchartist)
 
