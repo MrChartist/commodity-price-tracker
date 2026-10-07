@@ -727,6 +727,7 @@ let state = {
   searchQuery: '',
   sortBy: 'default',
   watchlist: [],
+  noSnapshot: false,  // true when the published price snapshot could not be loaded this cycle
   oi: null,           // { reportDate, items: { 'GC=F': { oi, prevOi, mmNet, date } } } from CFTC (weekly)
 };
 
@@ -943,6 +944,7 @@ async function fetchAllPrices() {
   const now = Date.now();
 
   batch = await fetchBatch();
+  state.noSnapshot = !batch;
   // Data time: when the snapshot was generated (not when we downloaded it), so
   // LIVE / STALE reflects the real age of the numbers.
   const dataTs = batch ? Math.min(batch.ts, now) : now;
@@ -1515,8 +1517,11 @@ function renderSummary() {
 }
 
 // ── STATUS (honest about CACHED / STALE) ──
+// Indicative levels are always present, so only count real quotes (live or cached).
+const hasLivePrices = () => Object.values(state.prices).some(p => p && !p.isApprox);
+
 function statusModel() {
-  const hasAny = Object.keys(state.prices).length > 0;
+  const hasAny = hasLivePrices();
   const age = state.lastSuccess ? Date.now() - state.lastSuccess : Infinity;
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
   const partial = state.notRefreshed.length + (state.fxFresh || state.fromCache ? 0 : 1);
@@ -1535,9 +1540,9 @@ function updateStatus() {
   pill.className = `status-pill ${m.cls}`;
   if (text.textContent !== m.k) text.textContent = m.k;
   const tips = {
-    LIVE: 'Live prices, refreshed within the last 10 minutes',
+    LIVE: 'Prices refreshed within the last 20 minutes (spot metals about every minute)',
     CACHED: 'Showing prices saved in your browser; a live refresh has not succeeded yet',
-    STALE: 'The last successful refresh was over 10 minutes ago',
+    STALE: 'The price data is more than 20 minutes old',
     OFFLINE: 'No network connection or no data available',
     LOADING: 'Loading prices',
   };
@@ -1548,13 +1553,13 @@ function updateStatusLine() {
   const el = $('status-line');
   if (!el) return;
   const m = statusModel();
-  const hasAny = Object.keys(state.prices).length > 0;
+  const hasAny = hasLivePrices();
   const next = state.nextPollAt ? Math.max(0, Math.ceil((state.nextPollAt - Date.now()) / 1000)) : null;
   const countdown = state.refreshing ? 'Refreshing now…' : (next != null && !document.hidden ? `Next refresh in ${next}s` : 'Auto-refresh paused while this tab is hidden');
   const when = state.lastUpdate ? `${fmtTime(state.lastUpdate)} (${fmtAge(Date.now() - state.lastUpdate.getTime())})` : '';
   let msg, cls = '';
   if (!hasAny) {
-    msg = state.isLoading ? 'Fetching live prices…' : `Unable to fetch prices. ${countdown}`;
+    msg = state.isLoading ? 'Fetching live prices…' : `Cannot reach the price feeds. Check your connection. ${countdown}`;
     cls = state.isLoading ? '' : 'bad';
   } else if (m.k === 'OFFLINE') {
     msg = `You appear to be offline. Showing saved prices from ${when}.`; cls = 'bad';
@@ -1562,6 +1567,8 @@ function updateStatusLine() {
     msg = `Showing cached prices from ${when}. ${state.refreshing ? 'Fetching live data…' : 'Live refresh has not succeeded yet. ' + countdown}`; cls = 'warn';
   } else if (m.k === 'STALE') {
     msg = `Prices are stale. Last successful update ${when}. ${countdown}`; cls = 'warn';
+  } else if (m.k.startsWith('PARTIAL') && state.noSnapshot) {
+    msg = `Price snapshot is not reachable. Spot metals are live; other prices appear when the feed is back. ${countdown}`; cls = 'warn';
   } else if (m.k.startsWith('PARTIAL')) {
     msg = `Last updated ${when} · ${state.notRefreshed.length ? state.notRefreshed.length + ' commodities could not refresh' : 'USD/INR is from cache'} · ${countdown}`; cls = 'warn';
   } else {
