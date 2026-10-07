@@ -97,7 +97,7 @@
 }
 
 /* ── BASE ── */
-html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 72px; }
+html { background: var(--bg); scroll-behavior: smooth; scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
 body {
   background: var(--bg); color: var(--t1); min-height: 100vh; min-height: 100dvh;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
@@ -105,7 +105,7 @@ body {
 }
 body.modal-open { overflow: hidden; }
 button, input { font: inherit; color: inherit; letter-spacing: inherit; }
-button { cursor: pointer; background: none; border: 0; -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; background: none; border: 0; }
 a { color: var(--accent); }
 [hidden] { display: none !important; }
 svg { display: block; }
@@ -237,7 +237,7 @@ button.summary-cell:hover { background: var(--fill); }
 .commodity-name { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; color: var(--t1); }
 .commodity-meta { display: flex; align-items: center; gap: 6px; margin-top: 3px; flex-wrap: wrap; }
 .commodity-symbol { font-size: 11px; font-weight: 600; color: var(--t4); letter-spacing: 0.03em; text-transform: uppercase; }
-.badge { display: inline-flex; align-items: center; padding: 1px 7px; border-radius: 9px; font-size: 10px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
+.badge { display: inline-flex; align-items: center; padding: 1px 7px; border-radius: 9px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
 .badge-precious { background: rgba(255,204,0,0.2); color: #7A5600; }
 .badge-industrial { background: rgba(0,122,255,0.12); color: #0A58B5; }
 .badge-energy { background: rgba(255,59,48,0.12); color: #B4231A; }
@@ -260,7 +260,7 @@ button.summary-cell:hover { background: var(--fill); }
 
 .intl-price-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; margin-bottom: 14px; }
 .intl-price { font-family: var(--font-display); font-size: 30px; font-weight: 700; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; line-height: 1.05; color: var(--t1); border-radius: 6px; }
-.intl-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.02em; margin-left: 6px; vertical-align: super; font-family: var(--font-body); }
+.intl-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.02em; margin-left: 6px; vertical-align: super; font-family: var(--font-body); }
 .intl-badge.indicative { color: var(--orange-t); }
 .intl-badge.spot { color: var(--accent); }
 .intl-unit { font-size: 12px; color: var(--t4); margin-top: 3px; }
@@ -458,7 +458,42 @@ details[open] .chev { transform: rotate(90deg); }
 .stat-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; font-size: 13px; }
 .stat-label { color: var(--t3); }
 .stat-value { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--t1); }
-.stat-value small { font-weight: 500; color: var(--t4); margin-left: 4px; }
+.stat-value small { font-size: 11px; font-weight: 500; color: var(--t4); margin-left: 4px; }
 .stat-value small.up { color: var(--green-t); }
 .stat-value small.down { color: var(--red-t); }
 .stat-note { font-size: 11px; color: var(--t4); padding: 2px 0 6px; }
+
+/* ── iOS-grade mobile finish ── */
+/* Native SF Pro on Apple devices, Inter elsewhere */
+@supports (font: -apple-system-body) {
+  :root {
+    --font-body: -apple-system, 'SF Pro Text', BlinkMacSystemFont, system-ui, sans-serif;
+    --font-display: -apple-system, 'SF Pro Display', BlinkMacSystemFont, system-ui, sans-serif;
+  }
+}
+body { overscroll-behavior-y: contain; -webkit-touch-callout: none; }
+a, button, summary, [role="switch"], select { touch-action: manipulation; }
+button, summary, .seg-btn, .chip-btn, .icon-btn, .switch { -webkit-user-select: none; user-select: none; }
+.h-sub a { position: relative; }
+.h-sub a::after { content: ''; position: absolute; inset: -14px -6px; }
+
+/* Sizes follow the input type, not the screen width (landscape phones and iPads count too) */
+@media (pointer: coarse) {
+  .icon-btn, .chip-btn, .seg-btn, .more > summary { min-height: 44px; }
+  .icon-btn { min-width: 44px; border-radius: 22px; }
+  .chip-btn { border-radius: 22px; padding: 0 14px; }
+  .search-field input { height: 44px; border-radius: 12px; font-size: 16px; }
+  .seg-btn { font-size: 14px; }
+}
+
+/* Pull to refresh */
+.ptr { position: fixed; z-index: 70; left: 50%; top: calc(var(--safe-t) + 12px); width: 36px; height: 36px; margin-left: 0; border-radius: 50%; background: var(--surface); color: var(--t3); box-shadow: var(--shadow-float); display: flex; align-items: center; justify-content: center; opacity: 0; transform: translate(-50%, -44px); pointer-events: none; transition: opacity 0.2s var(--ease); }
+.ptr svg { width: 18px; height: 18px; }
+.ptr.pulling { opacity: 1; transition: none; }
+.ptr.ready { color: var(--accent); }
+
+/* Installed app, light theme: black-translucent status bar text is white, so give it a dark strip to sit on */
+@media (display-mode: standalone) {
+  :root[data-theme="light"] body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: var(--safe-t); background: #000; z-index: 500; }
+}
+@media (prefers-reduced-motion: reduce) { .ptr { transition: none; } }

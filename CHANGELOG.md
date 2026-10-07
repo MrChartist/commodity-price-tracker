@@ -4,6 +4,13 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## Unreleased
 
+### Mobile (iOS)
+- Native SF Pro font on Apple devices, Inter elsewhere.
+- Touch targets and the 16px search field now follow the input type (`pointer: coarse`), so landscape phones and iPads get 44px targets and no focus zoom.
+- Pull to refresh on touch devices; the bottom chart sheet drags closed.
+- Phone-number auto-linking disabled so prices are not turned into links; no tap flash; no double-tap zoom delay.
+- `theme-color` follows the chosen theme, not only the system theme. In the installed app with the light theme, the status bar sits on a dark strip so its text stays legible (needs checking on a real device).
+
 ### Added
 - Volume (latest and previous session) in each card's Details, and a volume histogram under every chart.
 - Weekly open interest with week-on-week change and managed-money net positioning from the CFTC Commitments of Traders report, for the 23 commodities whose CFTC contract matches the instrument priced. Always dated and labelled weekly. Refreshed by the chart workflow.

@@ -753,13 +753,20 @@ function systemTheme() {
 function currentTheme() {
   return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
 }
+function syncThemeColor(theme) {
+  let m = document.querySelector('meta[name="theme-color"][data-runtime]');
+  if (!m) { m = document.createElement('meta'); m.name = 'theme-color'; m.setAttribute('data-runtime', ''); document.head.appendChild(m); }
+  m.content = theme === 'light' ? '#F2F2F7' : '#000000';
+}
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
+  syncThemeColor(theme);
   updateThemeButton(theme);
   if (chartInstance) chartInstance.applyOptions(chartOptions());
 }
 // Apply immediately (script sits at the end of <body>) to avoid a theme flash.
 document.documentElement.setAttribute('data-theme', store.get(THEME_KEY) || systemTheme());
+syncThemeColor(currentTheme());
 
 function toggleTheme() {
   const next = currentTheme() === 'dark' ? 'light' : 'dark';
@@ -2028,8 +2035,43 @@ document.addEventListener('keydown', e => {
   }
 });
 
+
+// ── PULL TO REFRESH (touch devices; standalone apps have no browser refresh) ──
+function initPullToRefresh() {
+  if (!window.matchMedia || !matchMedia('(pointer: coarse)').matches) return;
+  const el = document.createElement('div');
+  el.className = 'ptr'; el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+  document.body.appendChild(el);
+  const THRESHOLD = 76;
+  let startY = null, pull = 0;
+  const reset = () => { el.style.transform = ''; el.classList.remove('pulling', 'ready'); pull = 0; startY = null; };
+  window.addEventListener('touchstart', e => {
+    if (window.scrollY > 0 || document.body.classList.contains('modal-open') || e.touches.length !== 1) { startY = null; return; }
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchmove', e => {
+    if (startY == null) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy <= 0 || window.scrollY > 0) { if (pull) reset(); return; }
+    pull = Math.min(dy * 0.5, THRESHOLD + 24);
+    el.classList.add('pulling');
+    el.classList.toggle('ready', pull >= THRESHOLD);
+    el.style.transform = `translate(-50%, ${pull - 44}px) rotate(${pull * 4}deg)`;
+  }, { passive: true });
+  const end = () => {
+    if (startY == null) return;
+    const go = pull >= THRESHOLD;
+    reset();
+    if (go) { refreshPrices(); if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) { /* unsupported */ } }
+  };
+  window.addEventListener('touchend', end, { passive: true });
+  window.addEventListener('touchcancel', reset, { passive: true });
+}
+
 // ── EVENT WIRING ──
 function bindEvents() {
+  initPullToRefresh();
   $('theme-toggle').addEventListener('click', toggleTheme);
   $('refresh-btn').addEventListener('click', () => refreshPrices());
   $('chart-close').addEventListener('click', () => closeChart());
