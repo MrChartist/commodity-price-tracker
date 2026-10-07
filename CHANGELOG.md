@@ -4,6 +4,11 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## Unreleased
 
+### Changed
+- Minimal cards: one headline India landed price, with the full breakdown, notes and source behind a "Details" toggle.
+- Removed the duplicate bottom tab bar, the long methodology block, the keyboard legend and the long footer text. Methodology lives in the docs.
+- README screenshots retaken from the new design with live data.
+
 ### Fixed
 - Live data: the public CORS proxies the app depended on had stopped working (403/503/522), so most commodities fell back to stale values. Prices and chart history now come through our own `/api/quotes` and `/api/chart` endpoints, edge-cached for about 15 seconds.
 - USD/INR now uses the live Yahoo Finance rate. The previous source updates only once a day.

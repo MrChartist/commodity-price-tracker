@@ -1203,6 +1203,30 @@ function intlPriceInner(priceData, hasData) {
   return `<span class="intl-num">${hasData ? fmtUSD(priceData.price) : '—'}</span>${badge}`;
 }
 
+
+// One headline rupee figure per card; everything else sits behind "Details".
+function headlineHtml(key, config, landed, priceData) {
+  if (config.importProhibited) return '<span class="hl-value muted">Import prohibited</span>';
+  if (!landed || !priceData) return '<span class="hl-value muted">—</span>';
+  if (config.showPurity && config.purityLabels && landed.purities) {
+    const top = landed.purities.find(p => p.ratio === 1) || landed.purities[0];
+    return `<span class="hl-value">${fmtINR(top.perGram)}<small>/g</small></span><span class="hl-sub">${escapeHtml(top.label)}</span>`;
+  }
+  if (config.showPurity) return `<span class="hl-value">${fmtINR(landed.k24)}<small>/g</small></span><span class="hl-sub">24K</span>`;
+  return `<span class="hl-value">${fmtINR(landed.perUnit)}<small>/${escapeHtml(config.indiaUnit)}</small></span>`;
+}
+
+function dutyShort(config) {
+  const r = getDuty(config).rate;
+  return `Duty ${+(r * 100).toFixed(2)}%`;
+}
+
+function sourceShort(priceData, config) {
+  if (priceData?.isApprox) return `Indicative · ${INDICATIVE_AS_OF}`;
+  if (priceData?.isSpot || priceData?.isSpotBackup) return 'Spot · gold-api.com';
+  return `Yahoo Finance · ${config.yahooSymbol || 'N/A'}`;
+}
+
 function isWatched(key) { return state.watchlist.includes(key); }
 
 function buildCommodityCard(key, index) {
@@ -1213,10 +1237,6 @@ function buildCommodityCard(key, index) {
   const change = hasData && hasChange(priceData) ? fmtChange(priceData.change, priceData.changePct) : fmtChange(null);
   const tick = tickInfo(priceData);
   const watched = isWatched(key);
-  const source = priceData?.isApprox ? `Indicative (as of ${INDICATIVE_AS_OF})`
-    : priceData?.isSpot ? `Spot: gold-api.com · Change: Yahoo Finance (${config.yahooSymbol})`
-    : priceData?.isSpotBackup ? 'gold-api.com (spot)'
-    : `Yahoo Finance (${config.yahooSymbol || 'N/A'})`;
   const noChangeTitle = hasData && !hasChange(priceData) ? ' title="Daily change is not available for this source"' : '';
 
   return `
@@ -1243,18 +1263,20 @@ function buildCommodityCard(key, index) {
           </div>
         </div>
         <div class="india-landed">
-          <div class="india-landed-header">
-            <span class="india-landed-title">₹ / <span class="unit">${escapeHtml(config.indiaUnit)}</span> · India Import Landed
-              <a href="docs.html#meth-${config.category}" class="methodology-badge" title="View calculation methodology">Method</a>
-            </span>
-            <span class="india-duty-badge">${escapeHtml(getDuty(config).label)}</span>
+          <div class="headline">
+            <span class="hl-label">India landed</span>
+            <span class="hl-main" id="headline-${key}">${headlineHtml(key, config, landed, priceData)}</span>
+            <span class="india-duty-badge">${escapeHtml(dutyShort(config))}</span>
           </div>
-          <div id="landed-${key}">${landedBlock(key, config, landed, priceData)}</div>
-          ${config.note ? `<div class="card-note">${escapeHtml(config.note)}</div>` : ''}
+          <details class="more">
+            <summary>Details</summary>
+            <div id="landed-${key}">${landedBlock(key, config, landed, priceData)}</div>
+            ${config.note ? `<div class="card-note">${escapeHtml(config.note)}</div>` : ''}
+            <div class="source-text" id="source-${key}">${escapeHtml(sourceShort(priceData, config))}</div>
+          </details>
         </div>
       </div>
       <div class="data-source">
-        <span class="source-text">Source: ${escapeHtml(source)}</span>
         <div class="card-actions">
           ${config.yahooSymbol ? `<button type="button" class="chip-btn" data-action="chart" data-key="${key}" aria-label="Open ${escapeHtml(config.name)} price chart">${SVG_ICONS.chart} Chart</button>` : ''}
           <button type="button" class="chip-btn" data-action="share" data-key="${key}" aria-label="Share ${escapeHtml(config.name)} price">${ICON_SHARE} Share</button>
@@ -1414,6 +1436,10 @@ function updateCards() {
       const landed = calcIndiaLanded(key);
       const landedEl = $(`landed-${key}`);
       if (landedEl && landed) landedEl.innerHTML = buildLandedRowsHtml(config, landed);
+      const hl = $(`headline-${key}`);
+      if (hl && landed) hl.innerHTML = headlineHtml(key, config, landed, p);
+      const srcEl = $(`source-${key}`);
+      if (srcEl) srcEl.textContent = sourceShort(p, config);
     }
   });
   updateTickLabels();
@@ -1535,11 +1561,6 @@ function syncControls() {
   document.querySelectorAll('#category-tabs .seg-btn').forEach(b => {
     const on = b.dataset.cat === state.activeCategory;
     b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
-  });
-  document.querySelectorAll('#tabbar .tab[data-cat]').forEach(t => {
-    const on = t.dataset.cat === state.activeCategory;
-    t.classList.toggle('active', on);
-    if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
   });
   document.querySelectorAll('#sort-seg .seg-btn').forEach(b => {
     const on = b.dataset.sort === state.sortBy;
@@ -1998,13 +2019,6 @@ function bindEvents() {
   $('category-tabs').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (b) filterCategory(b.dataset.cat); });
   $('sort-seg').addEventListener('click', e => { const b = e.target.closest('[data-sort]'); if (b) setSortBy(b.dataset.sort); });
   $('chart-timeframes').addEventListener('click', e => { const b = e.target.closest('[data-range]'); if (b) changeRange(b.dataset.range); });
-  $('tabbar').addEventListener('click', e => {
-    const a = e.target.closest('a[data-cat]');
-    if (!a) return;
-    e.preventDefault();
-    filterCategory(a.dataset.cat);
-    window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
-  });
   const input = $('commodity-search');
   input.addEventListener('input', () => filterSearch(input.value));
   $('search-clear').addEventListener('click', () => clearSearch(true));

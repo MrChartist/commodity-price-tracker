@@ -19,10 +19,13 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/01_hero_dashboard.png" alt="India Commodity Price Tracker dashboard" width="100%">
+  <img src="docs/screenshots/dashboard-dark.png" alt="Dashboard in dark mode with live prices and India landed rupee prices" width="100%">
 </p>
 
-> The screenshots in `docs/screenshots/` will be refreshed after the latest redesign. They may not show the current interface.
+<p align="center">
+  <img src="docs/screenshots/mobile.png" alt="Mobile view" width="32%">
+  <img src="docs/screenshots/chart.png" alt="Futures chart" width="64%">
+</p>
 
 ## How it works
 
