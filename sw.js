@@ -1,5 +1,5 @@
 /* Service worker: app shell cache + stale-while-revalidate. Live price/proxy APIs are never cached. */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'cpt-' + VERSION;
 const SHELL = ['/', '/docs', '/style.css', '/app.js', '/pwa-register.js', '/favicon.svg', '/favicon.ico', '/manifest.webmanifest',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];

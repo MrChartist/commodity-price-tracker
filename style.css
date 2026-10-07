@@ -277,6 +277,7 @@ button.summary-cell:hover { background: var(--fill); }
 .india-landed { background: var(--surface-2); border-radius: var(--r-md); padding: 4px 14px 6px; }
 .india-landed-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px 10px; padding: 10px 0 8px; border-bottom: 0.5px solid var(--sep); }
 .india-landed-title { font-size: 11px; font-weight: 700; color: var(--t4); letter-spacing: 0.04em; text-transform: uppercase; }
+.india-landed-title .unit { text-transform: none; }
 .india-duty-badge { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--accent-tint); color: var(--accent); }
 .methodology-badge { display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; font-size: 10px; font-weight: 700; color: var(--accent); text-decoration: none; text-transform: none; letter-spacing: 0; vertical-align: middle; }
 .methodology-badge svg { width: 11px; height: 11px; }
