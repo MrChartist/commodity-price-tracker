@@ -27,7 +27,7 @@ jobs:
           mkdir _site
           cp -R *.html *.js *.css *.webmanifest *.txt *.ico *.svg *.png CNAME .nojekyll icons brand assets vendor .well-known _site/ 2>/dev/null || true
           rm -rf _site/scripts
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
