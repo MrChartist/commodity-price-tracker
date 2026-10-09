@@ -4,3 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    # One grouped PR per month instead of one per action.
+    groups:
+      github-actions:
+        patterns: ["*"]
+    # Major bumps are reviewed by hand. For example, newer actions/upload-pages-artifact
+    # versions leave hidden files (.well-known) out of the Pages artifact by default.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
