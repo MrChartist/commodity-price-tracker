@@ -28,7 +28,7 @@ jobs:
           cp -R *.html *.js *.css *.webmanifest *.txt *.ico *.svg *.png CNAME .nojekyll icons brand assets vendor .well-known _site/ 2>/dev/null || true
           rm -rf _site/scripts
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: deployment
