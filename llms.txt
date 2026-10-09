@@ -1,0 +1,10 @@
+# Commodity Price Tracker by @MrChartist
+
+> Static web app showing international commodity futures prices converted to INR with estimated India import landed prices and customs duty breakdowns (BCD, AIDC, SWS). Prices are mathematical approximations from international benchmarks, not live NSE or MCX quotes, and are for illustrative purposes only.
+
+- [Dashboard](https://commodity.mrchartist.com/): Prices for metals, energy and agri commodities.
+- [Documentation and glossary](https://commodity.mrchartist.com/docs.html): Pricing methodology, duty rates, data sources and glossary.
+
+Author: Mr. Chartist (https://twitter.com/mr_chartist). Part of https://mrchartist.com.
+
+Source code (MIT): https://github.com/MrChartist/commodity-price-tracker

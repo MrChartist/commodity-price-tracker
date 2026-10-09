@@ -1,0 +1,26 @@
+name: Bug report
+description: Something is not working as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Browser, device and screen width
+      placeholder: Chrome 130, Android, 360 px
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors or screenshots

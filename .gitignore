@@ -2,4 +2,7 @@ node_modules
 .env
 .DS_Store
 dist
-.vercel
+
+# local dev data
+data/
+out/

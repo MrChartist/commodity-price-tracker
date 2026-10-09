@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.gold-api.com https://open.er-api.com https://raw.githubusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<title>About | Commodity Price Tracker by @MrChartist</title>
+<meta name="description" content="About the India Commodity Price Tracker and its builder, Mr. Chartist, an India-focused stock market research analyst and educator.">
+<meta name="author" content="Mr. Chartist">
+<meta name="robots" content="index, follow">
+<meta name="color-scheme" content="dark light">
+<link rel="canonical" href="https://commodity.mrchartist.com/about.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About | Commodity Price Tracker by @MrChartist">
+<meta property="og:description" content="About the India Commodity Price Tracker and its builder, Mr. Chartist.">
+<meta property="og:url" content="https://commodity.mrchartist.com/about.html">
+<meta property="og:image" content="https://commodity.mrchartist.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@mr_chartist">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&display=swap">
+<script>try{var t=localStorage.getItem('commodity-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<style>
+*{box-sizing:border-box;margin:0}
+/* ── DOCS PAGE (Apple HIG-style: grouped surfaces, hairlines, translucent sidebar) ── */
+:root,[data-theme="light"]{--fillblue:#0062CC;--bg:#F2F2F7;--l1:#FFFFFF;--l2:#F2F2F7;--l3:#E9E9EE;--sep:rgba(60,60,67,.18);--sep2:rgba(60,60,67,.1);--t1:#000;--t2:#1C1C1E;--t3:#48484A;--t4:#5F5F66;--primary:#0062CC;--green:#248A3D;--red:#D70015;--card-shadow:none;--tile:#fff;--logo:#0D0D0D;--mat:rgba(255,255,255,.88)}
+[data-theme="dark"]{--fillblue:#0A6FD6;--bg:#000;--l1:#1C1C1E;--l2:#2C2C2E;--l3:#3A3A3C;--sep:rgba(84,84,88,.55);--sep2:rgba(84,84,88,.3);--t1:#fff;--t2:#EBEBF5;--t3:#A1A1A8;--t4:#9A9AA0;--primary:#0A84FF;--green:#30D158;--red:#FF453A;--card-shadow:none;--tile:#1C1C1E;--logo:#fff;--mat:rgba(28,28,30,.88)}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{overflow-x:hidden;background:var(--bg);color:var(--t1);font-family:'Inter','Plus Jakarta Sans',-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+.dx-top{position:sticky;top:0;z-index:50;background:var(--mat);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--sep);padding-top:env(safe-area-inset-top)}
+.dx-top-in{max-width:1180px;margin:0 auto;padding:0 16px;height:52px;display:flex;align-items:center;gap:12px}
+.dx-brand{display:flex;align-items:center;gap:10px;font:700 15px 'Plus Jakarta Sans','Inter',sans-serif;color:var(--t1);text-decoration:none;letter-spacing:-0.01em;white-space:nowrap}
+.app-icon{width:32px;height:32px;border-radius:8px;background:var(--tile);border:.5px solid var(--sep);display:flex;align-items:center;justify-content:center;color:var(--logo);flex:none}
+.app-icon svg{width:24px;height:24px;display:block}
+.dx-brand small{font-weight:500;color:var(--t4);font-size:13px}
+.dx-nav{display:flex;gap:2px;margin-left:auto;align-items:center}
+.dx-nav a,.dx-nav button{font:500 13px 'Inter',sans-serif;color:var(--t3);text-decoration:none;padding:7px 11px;border-radius:9px;border:0;background:none;cursor:pointer;white-space:nowrap;min-height:34px}
+.dx-nav a:hover,.dx-nav button:hover{color:var(--t1);background:var(--l3)}
+.dx-nav a.on{color:var(--primary);font-weight:600}
+@media(max-width:560px){.dx-brand small{display:none}.dx-nav a.hide-s{display:none}.dx-nav a,.dx-nav button{padding:7px 8px}}
+.dx-wrap{max-width:1180px;margin:0 auto;padding:20px 16px 64px;display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+@media(min-width:1024px){.dx-wrap{grid-template-columns:232px minmax(0,1fr);gap:32px;padding-top:28px}}
+.dx-toc{font-size:13px}
+.dx-toc-box{border:.5px solid var(--sep);background:var(--mat);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-radius:16px;padding:10px}
+.dx-toc summary{font:600 12px 'Inter',sans-serif;color:var(--t4);cursor:pointer;list-style:none;min-height:32px;display:flex;align-items:center;padding:0 8px}
+.dx-toc summary::-webkit-details-marker{display:none}
+.dx-toc nav{display:flex;flex-direction:column;gap:1px;margin-top:4px}
+.dx-toc a{color:var(--t2);text-decoration:none;padding:7px 10px;border-radius:8px;font-weight:500}
+.dx-toc a:hover{background:var(--l3)}
+.dx-toc a.active{background:var(--primary);color:#fff;font-weight:600}
+@media(min-width:1024px){.dx-toc{position:sticky;top:72px;align-self:start;max-height:calc(100vh - 92px);overflow:auto}.dx-toc summary{pointer-events:none}}
+.dx-main{min-width:0}
+.dx-hero{border-radius:20px;padding:28px 22px;background:var(--l1);border:.5px solid var(--sep);margin-bottom:28px}
+.dx-hero h1{font:400 clamp(30px,6vw,44px)/1.1 'DM Serif Display',Georgia,serif;letter-spacing:-0.01em;color:var(--t1);margin-bottom:10px}
+.dx-hero p{font-size:15px;line-height:1.65;color:var(--t3);max-width:720px}
+.dx-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.dx-chip{font:500 12px 'Inter',sans-serif;padding:5px 12px;border-radius:99px;background:var(--l2);color:var(--t2)}
+.dx-sec{margin-bottom:36px}
+.dx-sec h2{font:700 24px 'Plus Jakarta Sans','Inter',sans-serif;letter-spacing:-0.02em;color:var(--t1);margin:0 4px 12px}
+.dx-h3{font:600 13px 'Inter',sans-serif;letter-spacing:.02em;text-transform:uppercase;color:var(--t4);margin:22px 8px 4px}
+.dx-sec p,.dx-sec li{font-size:15px;line-height:1.65;color:var(--t2)}
+.dx-sec>p,.dx-sec>ul,.dx-sec>ol{margin-left:4px;margin-right:4px}
+.dx-sec p{margin-bottom:12px}
+.dx-sec ul,.dx-sec ol{margin:0 0 12px 24px}
+.dx-sec li{margin-bottom:6px}
+.dx-sec a{color:var(--primary);text-decoration:none}
+.dx-sec a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;background:var(--l2);border-radius:6px;padding:1px 6px;color:var(--t1);word-break:break-word}
+.formula{background:var(--l1);border:.5px solid var(--sep);border-radius:16px;padding:14px 16px;margin:12px 0}
+.formula b{display:block;font:600 12px 'Inter',sans-serif;color:var(--t4);margin-bottom:8px}
+.formula code{display:block;background:var(--l2);padding:12px 14px;border-radius:10px;font-size:13px;font-weight:600;line-height:1.7;white-space:normal}
+.steps{counter-reset:s;list-style:none;margin:16px 0!important;padding:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 18px 46px;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;font:700 14px/32px 'Inter',sans-serif;text-align:center}
+.steps li::after{content:'';position:absolute;left:15.5px;top:38px;bottom:4px;width:1px;background:var(--sep)}
+.steps li:last-child::after{display:none}
+.steps strong{color:var(--t1);display:block;margin-bottom:2px}
+.tbl-wrap{border:.5px solid var(--sep);border-radius:16px;overflow:hidden;margin:8px 0;background:var(--l1)}
+.dx-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.dx-table th{background:var(--l2);text-align:left;padding:10px 14px;font:600 12px 'Inter',sans-serif;color:var(--t4);border-bottom:.5px solid var(--sep)}
+.dx-table td{padding:11px 14px;color:var(--t2);border-bottom:.5px solid var(--sep);vertical-align:top;line-height:1.5}
+.dx-table tr:last-child td{border-bottom:0}
+.dx-table tbody tr:hover td{background:var(--l2)}
+.dx-table .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-weight:600;color:var(--primary)}
+@media(max-width:700px){
+ .dx-table,.dx-table tbody,.dx-table tr,.dx-table td{display:block;width:100%}
+ .dx-table thead{display:none}
+ .dx-table tr{padding:10px 16px;border-bottom:.5px solid var(--sep)}
+ .dx-table tr:last-child{border-bottom:0}
+ .dx-table td{border:0;padding:3px 0;display:flex;gap:12px;justify-content:space-between;text-align:right}
+ .dx-table td::before{content:attr(data-label);font:500 12px 'Inter',sans-serif;color:var(--t4);text-align:left;flex:0 0 38%}
+ .dx-table td>*{min-width:0}
+ .dx-table tbody tr:hover td{background:none}
+}
+.note{background:var(--l1);border:.5px solid var(--sep);border-radius:16px;padding:14px 16px;font-size:14px;line-height:1.65;color:var(--t2);margin:12px 0}
+.note.warn{border-color:color-mix(in srgb,var(--red) 40%,transparent)}
+.note.tbv{border-color:color-mix(in srgb,var(--primary) 40%,transparent)}
+.note p{font-size:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
+.card2{background:var(--l1);border:.5px solid var(--sep);border-radius:16px;padding:16px}
+.card2 h4{font:600 15px 'Inter',sans-serif;color:var(--t1);margin-bottom:4px}
+.card2 p{font-size:13px;line-height:1.55;color:var(--t3);margin:0}
+.tag{display:inline-block;font:600 11px 'Inter',sans-serif;padding:2px 9px;border-radius:99px;background:var(--l2);color:var(--t3);margin-bottom:8px}
+.seg{display:inline-flex;background:var(--l3);border-radius:10px;padding:2px;gap:2px;max-width:100%;overflow-x:auto;margin:8px 0}
+.seg button{font:500 13px 'Inter',sans-serif;color:var(--t2);background:none;border:0;border-radius:8px;padding:6px 14px;min-height:32px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--l1);color:var(--t1);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.gl-search input{width:100%;font:400 16px 'Inter',sans-serif;padding:11px 14px;border-radius:12px;border:0;background:var(--l3);color:var(--t1);min-height:44px}
+.gl-search input:focus{outline:2px solid var(--primary);outline-offset:1px}
+.gl-search{margin:8px 0 12px}
+.gl-count{font-size:12px;color:var(--t4);margin:0 8px 10px}
+.gl-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:760px){.gl-grid{grid-template-columns:repeat(2,1fr)}}
+.gl-card{border:.5px solid var(--sep);background:var(--l1);border-radius:16px;padding:14px 16px}
+.gl-card[hidden],.dg[hidden]{display:none}
+.gl-term{font:600 15px 'Inter',sans-serif;color:var(--t1);margin-bottom:4px}
+.gl-def{font-size:13px;color:var(--t3);line-height:1.6}
+.gl-empty{padding:20px;text-align:center;color:var(--t4);font-size:13px}
+.dx-foot{border-top:.5px solid var(--sep);background:var(--l1);padding-bottom:env(safe-area-inset-bottom)}
+.dx-foot-in{max-width:1180px;margin:0 auto;padding:28px 16px;display:flex;flex-direction:column;gap:14px;font-size:13px;color:var(--t3)}
+.dx-foot-links{display:flex;flex-wrap:wrap;gap:6px 16px}
+.dx-foot a{color:var(--t2);text-decoration:none;font-weight:500}
+.dx-foot a:hover{color:var(--primary)}
+.dx-foot .brand{display:flex;align-items:center;gap:10px;font:600 15px 'Plus Jakarta Sans','Inter',sans-serif;color:var(--t1)}
+#to-top{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:44px;height:44px;border-radius:50%;border:.5px solid var(--sep);background:var(--mat);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:var(--t1);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+#to-top.show{opacity:1;pointer-events:auto}
+#to-top svg{width:18px;height:18px}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@media(max-width:480px){.dx-brand .bt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}.dx-top-in{gap:8px}.dx-nav{margin-left:auto}}
+
+.dx-wrap.one{grid-template-columns:minmax(0,1fr);max-width:792px}
+.links{background:var(--l1);border:.5px solid var(--sep);border-radius:16px;overflow:hidden}
+.links a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-bottom:.5px solid var(--sep);color:var(--t1)!important;text-decoration:none!important;font-size:15px;min-height:48px}
+.links a:last-child{border-bottom:0}
+.links a span{color:var(--t4);font-size:13px;word-break:break-all;text-align:right}
+.links a:hover{background:var(--l2)}
+.dx-main p a,.dx-main li a,.dx-main .note a,.dx-main td a{text-decoration:underline;text-underline-offset:2px}
+@media(max-width:380px){.dx-nav a,.dx-nav button{padding:7px 5px;font-size:12px}.dx-top-in{gap:4px}}
+@media(pointer:coarse){.dx-nav a,.dx-nav button{min-height:44px}}
+</style>
+</head>
+<body>
+<header class="dx-top">
+  <div class="dx-top-in">
+    <a class="dx-brand" href="index.html"><span class="app-icon" aria-hidden="true"><svg viewBox="0 0 1024 1024" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g transform="translate(512.0,512.0) scale(0.9053045186640472) translate(-598.5,-627)"><path d="M113.000 419.000 C128.592 434.006 145.057 448.270 162.000 461.824 C299.947 577.880 486.231 594.815 659.000 599.706 C680.524 601.629 702.137 604.069 723.000 609.941 C739.114 614.722 756.237 621.994 765.294 637.000 C772.039 648.057 770.249 662.141 764.059 673.000 C757.496 684.792 747.292 693.980 737.000 702.471 C622.184 776.562 493.076 829.586 375.000 896.000 L375.000 963.000 C515.515 883.674 670.173 822.286 802.000 726.706 C813.556 716.290 824.300 704.439 830.529 690.000 C838.815 671.480 839.343 649.379 830.353 631.000 C820.580 611.223 801.894 597.282 782.000 588.706 C761.954 580.063 740.467 575.548 719.000 572.118 C554.209 556.993 381.998 531.255 246.000 428.882 C217.642 409.437 190.041 388.438 165.000 365.000 L113.000 419.000 Z"/><path d="M188.000 337.000 C316.846 468.242 496.277 534.615 677.000 549.412 C696.033 552.012 715.091 554.437 734.000 557.882 C755.462 561.939 776.867 567.125 797.000 575.765 C818.791 584.906 838.835 599.627 851.294 620.000 C862.243 638.513 866.051 660.948 861.588 682.000 C858.237 697.772 850.648 712.466 840.588 725.000 C831.364 736.435 820.525 746.457 809.000 755.529 C693.716 834.576 560.949 886.762 440.000 954.000 L440.000 1019.000 C574.338 944.999 718.397 882.423 848.000 798.000 C858.899 789.873 869.372 781.082 878.529 771.000 C894.178 753.831 906.631 733.452 912.941 711.000 C920.380 682.285 918.024 650.759 904.941 624.000 C893.907 601.346 875.568 582.806 854.000 570.000 C832.847 557.324 809.419 549.133 786.000 541.765 C766.238 535.785 746.114 531.161 726.000 526.529 C548.716 496.882 375.210 416.898 258.000 278.000 L188.000 337.000 Z"/><path d="M290.000 254.000 C308.447 274.155 327.161 295.512 348.000 314.000 C453.478 424.326 599.037 483.129 746.000 513.353 C763.758 517.829 781.437 522.609 799.000 527.824 C820.526 534.566 841.986 542.016 862.000 552.529 C886.185 565.229 907.447 583.869 922.118 607.000 C936.227 629.718 943.569 656.320 944.000 683.000 C943.512 706.016 937.438 728.767 926.471 749.000 C918.039 764.406 907.264 778.449 895.000 791.000 C883.493 802.227 871.026 812.419 858.000 821.824 C746.244 894.490 621.481 948.074 505.000 1010.000 L504.000 1076.000 C632.480 1005.064 770.972 946.800 897.000 869.294 C910.758 860.022 923.644 849.526 936.000 838.471 C949.658 825.478 962.100 811.081 972.000 795.000 C986.214 772.034 994.894 745.857 997.529 719.000 C999.937 688.692 995.002 657.792 982.588 630.000 C968.964 599.153 947.229 572.032 920.000 552.118 C902.365 539.381 883.111 528.960 863.000 520.706 C845.298 513.239 827.109 507.048 809.000 500.647 C636.074 454.709 466.017 356.684 383.000 193.000 L290.000 254.000 Z"/><path d="M425.000 170.000 C433.325 187.316 444.967 205.810 455.765 223.000 C533.154 356.596 671.084 441.407 816.000 484.765 C836.523 491.915 856.986 499.223 877.000 507.706 C897.796 516.718 918.241 526.786 937.000 539.588 C960.903 556.257 981.598 577.851 996.412 603.000 C1009.897 626.411 1018.784 652.337 1023.000 679.000 C1026.668 705.231 1025.905 732.331 1019.059 758.000 C1012.980 780.132 1003.460 801.351 990.000 820.000 C978.054 836.793 963.343 851.389 948.000 865.059 C831.432 949.293 692.805 999.811 568.000 1068.000 L568.000 1134.000 C703.535 1066.165 848.062 1008.114 977.000 925.941 C993.062 914.079 1008.092 900.785 1021.529 886.000 C1040.975 864.157 1057.656 839.480 1068.000 812.000 C1078.937 784.083 1083.851 753.948 1083.000 724.000 C1082.049 696.275 1076.066 668.824 1066.000 643.000 C1050.881 604.319 1026.649 569.070 995.000 542.059 C976.526 526.146 955.609 513.398 934.000 502.235 C918.017 493.984 901.516 486.805 885.000 479.706 C739.010 425.017 609.370 318.638 551.353 171.000 C543.555 154.264 535.319 136.249 529.000 120.000 L425.000 170.000 Z"/></g></svg></span><span class="bt">Commodity Tracker</span> <small>About</small></a>
+    <nav class="dx-nav" aria-label="Main">
+      <a href="index.html">Dashboard</a><a href="docs.html">Docs</a><a href="about.html" class="on" aria-current="page">About</a>
+      <a href="https://mrchartist.com" class="hide-s" target="_blank" rel="noopener">mrchartist.com</a>
+      <button type="button" id="theme-toggle">Theme</button>
+    </nav>
+  </div>
+</header>
+<div class="dx-wrap one"><main class="dx-main" id="main">
+  <section class="dx-hero"><h1>About this tool</h1>
+  <p>The India Commodity Price Tracker shows what commodities may cost to import into India. It takes international futures prices, converts them to Indian units, applies the live USD/INR rate and adds customs duty.</p></section>
+
+  <section class="dx-sec"><h2>What it does</h2>
+    <ul>
+      <li>Covers 33 commodities: precious metals, industrial and battery metals, energy and agri.</li>
+      <li>Shows import landed prices in rupees, in units used in India such as per gram, per kg, per quintal and per tonne.</li>
+      <li>Runs in your browser as a static site on GitHub Pages. A scheduled GitHub Actions job publishes a price snapshot about every 5 minutes, and precious metals spot is read about every minute. There is no login or database.</li>
+      <li>Explains every formula, duty rate and data source in the <a href="docs.html">documentation</a>.</li>
+    </ul>
+    <div class="note warn"><p style="margin:0">This is an educational tool. It is not financial advice and it does not use NSE or MCX data. Some commodities use manually updated indicative levels. Read the <a href="docs.html#disclaimer">disclaimer</a> and <a href="docs.html#freshness">data limitations</a>.</p></div>
+  </section>
+
+  <section class="dx-sec"><h2>Who builds it</h2>
+    <p>Mr. Chartist is an India-focused stock market research analyst and educator. This tracker is part of the <a href="https://mrchartist.com" target="_blank" rel="noopener">mrchartist.com</a> ecosystem of free tools for the Indian market community.</p>
+  </section>
+
+  <section class="dx-sec"><h2>Links</h2>
+    <div class="links">
+      <a href="https://mrchartist.com" target="_blank" rel="noopener">Ecosystem<span>mrchartist.com</span></a>
+      <a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Twitter<span>@mr_chartist</span></a>
+      <a href="https://github.com/MrChartist" target="_blank" rel="noopener">GitHub<span>github.com/MrChartist</span></a>
+      <a href="https://buymeacoffee.com/mrchartist" target="_blank" rel="noopener">Support the project<span>buymeacoffee.com/mrchartist</span></a>
+    </div>
+  </section>
+
+  <section class="dx-sec"><h2>Open source</h2>
+    <p>The code is released under the MIT licence. You can fork it and run your own copy with your own data branch (see the README). Suggestions and corrections are welcome through issues and pull requests on GitHub. Please report any wrong duty rate or unit conversion.</p>
+  </section>
+</main></div>
+<footer class="dx-foot"><div class="dx-foot-in">
+  <div class="brand"><span class="app-icon" aria-hidden="true"><svg viewBox="0 0 1024 1024" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g transform="translate(512.0,512.0) scale(0.9053045186640472) translate(-598.5,-627)"><path d="M113.000 419.000 C128.592 434.006 145.057 448.270 162.000 461.824 C299.947 577.880 486.231 594.815 659.000 599.706 C680.524 601.629 702.137 604.069 723.000 609.941 C739.114 614.722 756.237 621.994 765.294 637.000 C772.039 648.057 770.249 662.141 764.059 673.000 C757.496 684.792 747.292 693.980 737.000 702.471 C622.184 776.562 493.076 829.586 375.000 896.000 L375.000 963.000 C515.515 883.674 670.173 822.286 802.000 726.706 C813.556 716.290 824.300 704.439 830.529 690.000 C838.815 671.480 839.343 649.379 830.353 631.000 C820.580 611.223 801.894 597.282 782.000 588.706 C761.954 580.063 740.467 575.548 719.000 572.118 C554.209 556.993 381.998 531.255 246.000 428.882 C217.642 409.437 190.041 388.438 165.000 365.000 L113.000 419.000 Z"/><path d="M188.000 337.000 C316.846 468.242 496.277 534.615 677.000 549.412 C696.033 552.012 715.091 554.437 734.000 557.882 C755.462 561.939 776.867 567.125 797.000 575.765 C818.791 584.906 838.835 599.627 851.294 620.000 C862.243 638.513 866.051 660.948 861.588 682.000 C858.237 697.772 850.648 712.466 840.588 725.000 C831.364 736.435 820.525 746.457 809.000 755.529 C693.716 834.576 560.949 886.762 440.000 954.000 L440.000 1019.000 C574.338 944.999 718.397 882.423 848.000 798.000 C858.899 789.873 869.372 781.082 878.529 771.000 C894.178 753.831 906.631 733.452 912.941 711.000 C920.380 682.285 918.024 650.759 904.941 624.000 C893.907 601.346 875.568 582.806 854.000 570.000 C832.847 557.324 809.419 549.133 786.000 541.765 C766.238 535.785 746.114 531.161 726.000 526.529 C548.716 496.882 375.210 416.898 258.000 278.000 L188.000 337.000 Z"/><path d="M290.000 254.000 C308.447 274.155 327.161 295.512 348.000 314.000 C453.478 424.326 599.037 483.129 746.000 513.353 C763.758 517.829 781.437 522.609 799.000 527.824 C820.526 534.566 841.986 542.016 862.000 552.529 C886.185 565.229 907.447 583.869 922.118 607.000 C936.227 629.718 943.569 656.320 944.000 683.000 C943.512 706.016 937.438 728.767 926.471 749.000 C918.039 764.406 907.264 778.449 895.000 791.000 C883.493 802.227 871.026 812.419 858.000 821.824 C746.244 894.490 621.481 948.074 505.000 1010.000 L504.000 1076.000 C632.480 1005.064 770.972 946.800 897.000 869.294 C910.758 860.022 923.644 849.526 936.000 838.471 C949.658 825.478 962.100 811.081 972.000 795.000 C986.214 772.034 994.894 745.857 997.529 719.000 C999.937 688.692 995.002 657.792 982.588 630.000 C968.964 599.153 947.229 572.032 920.000 552.118 C902.365 539.381 883.111 528.960 863.000 520.706 C845.298 513.239 827.109 507.048 809.000 500.647 C636.074 454.709 466.017 356.684 383.000 193.000 L290.000 254.000 Z"/><path d="M425.000 170.000 C433.325 187.316 444.967 205.810 455.765 223.000 C533.154 356.596 671.084 441.407 816.000 484.765 C836.523 491.915 856.986 499.223 877.000 507.706 C897.796 516.718 918.241 526.786 937.000 539.588 C960.903 556.257 981.598 577.851 996.412 603.000 C1009.897 626.411 1018.784 652.337 1023.000 679.000 C1026.668 705.231 1025.905 732.331 1019.059 758.000 C1012.980 780.132 1003.460 801.351 990.000 820.000 C978.054 836.793 963.343 851.389 948.000 865.059 C831.432 949.293 692.805 999.811 568.000 1068.000 L568.000 1134.000 C703.535 1066.165 848.062 1008.114 977.000 925.941 C993.062 914.079 1008.092 900.785 1021.529 886.000 C1040.975 864.157 1057.656 839.480 1068.000 812.000 C1078.937 784.083 1083.851 753.948 1083.000 724.000 C1082.049 696.275 1076.066 668.824 1066.000 643.000 C1050.881 604.319 1026.649 569.070 995.000 542.059 C976.526 526.146 955.609 513.398 934.000 502.235 C918.017 493.984 901.516 486.805 885.000 479.706 C739.010 425.017 609.370 318.638 551.353 171.000 C543.555 154.264 535.319 136.249 529.000 120.000 L425.000 170.000 Z"/></g></svg></span>Built by @MrChartist</div>
+  <div class="dx-foot-links"><a href="index.html">Dashboard</a><a href="docs.html">Docs</a><a href="about.html">About</a><a href="https://mrchartist.com" target="_blank" rel="noopener">mrchartist.com</a><a href="https://twitter.com/mr_chartist" target="_blank" rel="noopener">Twitter</a><a href="https://github.com/MrChartist" target="_blank" rel="noopener">GitHub</a><a href="https://buymeacoffee.com/mrchartist" target="_blank" rel="noopener">Support</a></div>
+  <div>Part of the mrchartist.com ecosystem. For education only. Not financial advice. Not NSE or MCX data.</div>
+</div><p class="fine" style="margin-top:8px;font-size:12px">Charts: TradingView Lightweight Charts™, Copyright © TradingView, Inc. (Apache-2.0).</p></footer>
+<script>
+(function(){var r=document.documentElement;function s(t,save){r.setAttribute('data-theme',t);if(save)try{localStorage.setItem('commodity-theme',t)}catch(e){}document.getElementById('theme-toggle').textContent=t==='dark'?'Light mode':'Dark mode'}
+var sv=null;try{sv=localStorage.getItem('commodity-theme')}catch(e){}s(sv||(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),false);document.getElementById('theme-toggle').addEventListener('click',function(){s(r.getAttribute('data-theme')==='dark'?'light':'dark',true)})})();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+/* TEAM */
+Creator: Mr. Chartist
+Twitter: @mr_chartist
+Site: https://mrchartist.com
+
+/* SITE */
+App: Commodity Price Tracker by @MrChartist
+URL: https://commodity.mrchartist.com
+Stack: HTML, CSS, vanilla JavaScript, lightweight-charts, GitHub Pages, GitHub Actions

@@ -279,7 +279,7 @@ const COMMODITIES = {
     accentBg: 'hsl(215, 14%, 48%)',
     yahooSymbol: 'HRC=F',
     exchange: 'CME',
-    intlUnit: 'Metric Ton',
+    intlUnit: 'Short Ton',
     indiaUnit: 'tonne',
     // HRC=F quotes USD per US short ton (907.185 kg); 1 short ton = 0.907185 t
     conversionDivisor: 0.907185,
@@ -697,71 +697,144 @@ const COMMODITIES = {
 };
 
 // ── STATE ──
+const CATEGORIES = ['all', 'precious', 'industrial', 'energy', 'agri', 'watchlist'];
+const SORTS = ['default', 'az', 'gainers', 'losers'];
+const PRICE_CACHE_KEY = 'cpt_prices_v1';
+const WATCH_KEY = 'cpt_watchlist_v1';
+const THEME_KEY = 'commodity-theme';
+const PRICE_STALE_MS = 20 * 60 * 1000; // snapshots refresh ~5 min (GitHub schedules can lag); older than 20 min is flagged stale
+const POLL_INTERVAL_MS = 60000;
+const POLL_RETRY_MS = 30000;
+const SITE_URL = 'https://commodity.mrchartist.com/';
+
 let state = {
   usdInr: null,
   usdInrChange: null,
   usdInrChangePct: null,
-  fxRates: null,    // { INR: 88.1, CAD: 1.36, ... } per 1 USD — for non-USD quotes (e.g. canola in CAD)
-  prices: {},       // { gold: { price, change, changePct }, ... }
-  lastUpdate: null, // Date of the data currently shown (may be from cache)
-  lastSuccess: null,// epoch ms of the last successful live fetch
-  fromCache: false, // true while showing persisted prices before the first live refresh
+  fxRates: null,      // { INR: 88.1, CAD: 1.36, ... } per 1 USD
+  fxFresh: false,     // true once USD/INR was fetched live in this session
+  prices: {},         // { gold: { price, change, changePct, ts, isApprox?, isSpotBackup? } }
+  lastUpdate: null,   // Date of the data currently shown (may be from cache)
+  lastSuccess: null,  // epoch ms of the last successful live fetch
+  fromCache: false,   // showing persisted prices until the first live refresh lands
   isLoading: true,
+  refreshing: false,
+  failedCycles: 0,    // consecutive fully failed refresh cycles
+  notRefreshed: [],   // keys that did not refresh in the latest cycle
+  nextPollAt: null,
   errors: {},
   activeCategory: 'all',
   searchQuery: '',
   sortBy: 'default',
+  watchlist: [],
+  noSnapshot: false,  // true when the published price snapshot could not be loaded this cycle
+  oi: null,           // { reportDate, items: { 'GC=F': { oi, prevOi, mmNet, date } } } from CFTC (weekly)
 };
 
-// Escape user-supplied text before it touches innerHTML (search query echo)
+const $ = id => document.getElementById(id);
+const reduceMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode / quota */ } },
+};
+
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
 }
 
-// Convert a foreign-currency amount to USD using the live FX rate map
-// (rates are quoted per 1 USD, e.g. fxRates.CAD = CAD per USD).
-function toUsd(amount, currency) {
-  const cur = (currency || 'USD').toUpperCase();
-  if (cur === 'USD') return amount;
-  if (cur === 'USX' || cur === 'USDX') return amount / 100;          // US cents
-  if (cur === 'GBX' || cur === 'GBP_PENCE') return amount / 100;     // pence (then GBP below if needed)
-  const rate = state.fxRates && state.fxRates[cur];
-  return rate ? amount / rate : amount; // no rate → assume already USD-ish
+const isNum = v => typeof v === 'number' && Number.isFinite(v);
+
+// ── THEME (system preference on first load; explicit choice persists) ──
+function systemTheme() {
+  return window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function currentTheme() {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+}
+function syncThemeColor(theme) {
+  let m = document.querySelector('meta[name="theme-color"][data-runtime]');
+  if (!m) { m = document.createElement('meta'); m.name = 'theme-color'; m.setAttribute('data-runtime', ''); document.head.appendChild(m); }
+  m.content = theme === 'light' ? '#F2F2F7' : '#000000';
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  syncThemeColor(theme);
+  updateThemeButton(theme);
+  if (chartInstance) chartInstance.applyOptions(chartOptions());
+}
+// Apply immediately (script sits at the end of <body>) to avoid a theme flash.
+document.documentElement.setAttribute('data-theme', store.get(THEME_KEY) || systemTheme());
+syncThemeColor(currentTheme());
+
+function toggleTheme() {
+  const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  store.set(THEME_KEY, next);
+  applyTheme(next);
 }
 
-// ── PRICE PERSISTENCE CACHE (localStorage) ──
-// Mirrors the chart cache: persist the last good prices + FX so a reload paints
-// instantly, and a total network outage still shows the last known values
-// (clearly flagged) instead of an empty "Loading…" grid.
-const PRICE_CACHE_KEY = 'cpt_prices_v1';
-const PRICE_STALE_MS = 10 * 60 * 1000; // data older than 10 min is flagged stale
+function updateThemeButton(theme) {
+  const icon = $('theme-icon');
+  const btn = $('theme-toggle');
+  if (icon) icon.innerHTML = theme === 'dark' ? SVG_ICONS.sun : SVG_ICONS.moon;
+  if (btn) btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+}
 
+// Convert a foreign-currency amount to USD using the live FX rate map.
+function toUsd(amount, currency) {
+  const raw = currency || 'USD';
+  if (raw === 'GBp') return state.fxRates && state.fxRates.GBP ? amount / 100 / state.fxRates.GBP : null; // pence
+  const cur = raw.toUpperCase();
+  if (cur === 'USD') return amount;
+  if (cur === 'USX' || cur === 'USDX') return amount / 100;          // US cents
+  if (cur === 'GBX' || cur === 'GBP_PENCE') return amount / 100;
+  const rate = state.fxRates && state.fxRates[cur];
+  return rate ? amount / rate : null; // unknown currency: unavailable, never a wrong number
+}
+
+// ── PRICE PERSISTENCE CACHE ──
 function savePriceCache() {
-  try {
-    localStorage.setItem(PRICE_CACHE_KEY, JSON.stringify({
-      ts: Date.now(),
-      prices: state.prices,
-      usdInr: state.usdInr,
-      usdInrChange: state.usdInrChange,
-      usdInrChangePct: state.usdInrChangePct,
-      fxRates: state.fxRates,
-    }));
-  } catch (e) { /* quota / private mode — ignore */ }
+  store.set(PRICE_CACHE_KEY, JSON.stringify({
+    ts: Date.now(),
+    prices: state.prices,
+    usdInr: state.usdInr,
+    usdInrChange: state.usdInrChange,
+    usdInrChangePct: state.usdInrChangePct,
+    fxRates: state.fxRates,
+  }));
 }
 
 function hydrateFromCache() {
   try {
-    const raw = localStorage.getItem(PRICE_CACHE_KEY);
+    const raw = store.get(PRICE_CACHE_KEY);
     if (!raw) return false;
     const c = JSON.parse(raw);
-    if (!c || !c.prices || !Object.keys(c.prices).length) return false;
-    state.prices = c.prices;
-    state.usdInr = c.usdInr ?? null;
-    state.usdInrChange = c.usdInrChange ?? null;
-    state.usdInrChangePct = c.usdInrChangePct ?? null;
-    state.fxRates = c.fxRates ?? null;
+    if (!c || !c.prices || typeof c.prices !== 'object') return false;
+    const clean = {};
+    for (const key of Object.keys(c.prices)) {
+      const p = c.prices[key];
+      if (!COMMODITIES[key] || !p || !isNum(p.price)) continue;
+      clean[key] = {
+        price: p.price,
+        change: isNum(p.change) ? p.change : 0,
+        changePct: isNum(p.changePct) ? p.changePct : 0,
+        ts: isNum(p.ts) ? p.ts : (c.ts || 0),
+        isApprox: !!p.isApprox,
+        isSpotBackup: !!p.isSpotBackup,
+        isSpot: !!p.isSpot,
+        roll: !!p.roll,
+        volume: isNum(p.volume) ? p.volume : null,
+        prevVolume: isNum(p.prevVolume) ? p.prevVolume : null,
+      };
+    }
+    if (!Object.keys(clean).length || !isNum(c.usdInr)) return false;
+    state.prices = clean;
+    state.usdInr = c.usdInr;
+    state.usdInrChange = isNum(c.usdInrChange) ? c.usdInrChange : null;
+    state.usdInrChangePct = isNum(c.usdInrChangePct) ? c.usdInrChangePct : null;
+    state.fxRates = c.fxRates && typeof c.fxRates === 'object' ? c.fxRates : null;
     state.lastUpdate = c.ts ? new Date(c.ts) : null;
     state.fromCache = true;
     state.isLoading = false;
@@ -769,94 +842,78 @@ function hydrateFromCache() {
   } catch (e) { return false; }
 }
 
-// ── YAHOO FINANCE PROXY (multiple CORS proxies for reliability) ──
-const CORS_PROXIES = [
-  'https://api.allorigins.win/raw?url=',
-  'https://corsproxy.io/?url=',
-  'https://api.codetabs.com/v1/proxy?quest=',
-];
+// ── NETWORK ──
+// Live data comes from a static snapshot (prices.json) that a scheduled GitHub Action
+// publishes (Yahoo has no CORS headers, so browsers cannot call it directly).
+const DATA_BASE = (window.CPT_CONFIG && window.CPT_CONFIG.dataBase) || '';
+const IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+const dataSources = () => (IS_LOCAL ? ['data', DATA_BASE] : [DATA_BASE, 'data']).filter(Boolean);
 
-async function fetchWithProxy(url, timeout = 8000) {
-  for (const proxy of CORS_PROXIES) {
+// Per-cycle snapshot: { ts, quotes, spot, fxRates } or null if unavailable.
+let batch = null;
+
+async function fetchBatch() {
+  if (!/^https?:$/.test(location.protocol)) return null;
+  const bucket = Math.floor(Date.now() / 60000); // bypass CDN edge cache at most once a minute
+  for (const base of dataSources()) {
     try {
-      const proxyUrl = proxy + encodeURIComponent(url);
-      const resp = await fetch(proxyUrl, { signal: AbortSignal.timeout(timeout) });
-      if (resp.ok) {
-        const text = await resp.text();
-        return JSON.parse(text);
-      }
-    } catch (e) {
-      // Try next proxy
-    }
+      const resp = await fetch(`${base}/prices.json?t=${bucket}`, { signal: AbortSignal.timeout(10000), cache: 'no-store' });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      if (data && data.quotes && Object.keys(data.quotes).length && isNum(data.ts)) return data;
+    } catch (e) { /* try next source */ }
   }
   return null;
 }
 
 async function fetchYahooQuote(symbol) {
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
-    const data = await fetchWithProxy(url);
-    if (!data) throw new Error('All proxies failed');
-    const result = data?.chart?.result?.[0];
-    if (!result) throw new Error('No data in response');
-    const meta = result.meta;
-    // Normalize every quote to USD. Yahoo flags US-cents contracts (CBOT grains,
-    // ICE softs, livestock) as currency "USX"; canola (RS=F) is quoted in CAD.
-    const currency = meta.currency;
-    const price = toUsd(meta.regularMarketPrice, currency);
-    const prevCloseRaw = meta.chartPreviousClose || meta.previousClose;
-    const prevClose = prevCloseRaw ? toUsd(prevCloseRaw, currency) : null;
-    const change = prevClose ? price - prevClose : 0;
-    const changePct = prevClose ? (change / prevClose) * 100 : 0;
-    return { price, change, changePct };
-  } catch (e) {
-    console.warn(`Yahoo fetch failed for ${symbol}:`, e.message);
-    return null;
+  if (batch) {
+    const q = batch.quotes[symbol];
+    if (!q || !isNum(q.price)) return null;
+    const price = toUsd(q.price, q.currency);
+    if (!isNum(price) || price <= 0) return null;
+    const prevUsd = isNum(q.prev) && q.prev > 0 ? toUsd(q.prev, q.currency) : null;
+    const hasPrev = isNum(prevUsd) && prevUsd > 0;
+    const roll = !!q.roll;
+    const change = hasPrev && !roll ? price - prevUsd : 0;
+    return { price, change, roll, changePct: hasPrev && !roll ? (change / prevUsd) * 100 : 0, volume: isNum(q.volume) ? q.volume : null, prevVolume: isNum(q.prevVolume) ? q.prevVolume : null };
   }
+  return null; // no snapshot available: quote stays on its cached value
 }
 
-// Fetch with fallback symbols
 async function fetchWithFallbacks(primarySymbol, fallbackSymbols = []) {
-  const all = [primarySymbol, ...fallbackSymbols];
-  for (const sym of all) {
+  for (const sym of [primarySymbol, ...fallbackSymbols]) {
     const result = await fetchYahooQuote(sym);
     if (result) return result;
   }
   return null;
 }
 
-// ── ALTERNATIVE: ExchangeRate API for USD/INR ──
 async function fetchUsdInr() {
-  // Try exchangerate-api first (no key needed for open endpoint)
+  // Live rate first (Yahoo, via the published snapshot). open.er-api.com updates only once a day.
+  const live = batch?.quotes?.['USDINR=X'];
+  if (live && isNum(live.price) && live.price > 0) {
+    const change = isNum(live.prev) && live.prev > 0 ? live.price - live.prev : null;
+    return { rate: live.price, rates: batch.fxRates || undefined, change, changePct: change != null ? (change / live.prev) * 100 : null, source: 'Yahoo Finance (live)' };
+  }
   try {
     const resp = await fetch('https://open.er-api.com/v6/latest/USD', { signal: AbortSignal.timeout(6000) });
     if (resp.ok) {
       const data = await resp.json();
-      if (data?.rates?.INR) {
+      if (isNum(data?.rates?.INR) && data.rates.INR > 0) {
         return { rate: data.rates.INR, rates: data.rates, source: 'ExchangeRate API' };
       }
     }
   } catch (e) {
     console.warn('ExchangeRate API failed:', e.message);
   }
-
-  // Fallback: Yahoo Finance USD/INR
   const yahoo = await fetchYahooQuote('USDINR=X');
-  if (yahoo) {
-    return { rate: yahoo.price, change: yahoo.change, changePct: yahoo.changePct, source: 'Yahoo Finance' };
-  }
-
+  if (yahoo) return { rate: yahoo.price, change: yahoo.change, changePct: yahoo.changePct, source: 'Yahoo Finance' };
   return null;
 }
 
-// ── SPOT BACKUP: gold-api.com (free, no key, CORS-enabled — no proxy needed) ──
-// Used when Yahoo fails for precious metals. Returns spot only (no change data).
-const GOLD_API_SYMBOLS = {
-  gold: 'XAU',
-  silver: 'XAG',
-  platinum: 'XPT',
-  palladium: 'XPD',
-};
+// Spot backup: gold-api.com (CORS-enabled, no proxy). Spot only, no change data.
+const GOLD_API_SYMBOLS = { gold: 'XAU', silver: 'XAG', platinum: 'XPT', palladium: 'XPD' };
 
 async function fetchGoldApiSpot(commodityKey) {
   const sym = GOLD_API_SYMBOLS[commodityKey];
@@ -865,19 +922,14 @@ async function fetchGoldApiSpot(commodityKey) {
     const resp = await fetch(`https://api.gold-api.com/price/${sym}`, { signal: AbortSignal.timeout(6000) });
     if (!resp.ok) return null;
     const data = await resp.json();
-    if (data?.price) return { price: data.price, change: 0, changePct: 0, isSpotBackup: true };
+    if (isNum(data?.price) && data.price > 0) return { price: data.price, change: 0, changePct: 0, isSpotBackup: true };
   } catch (e) {
     console.warn(`gold-api.com failed for ${sym}:`, e.message);
   }
   return null;
 }
 
-// ── INDICATIVE PRICES (no free live feed exists) ──
-// metals.live shut down; Yahoo has no usable futures for LME base metals
-// (ZN=F is the 10-yr T-Note), tin, iron ore, lithium or cobalt; canola (RS=F)
-// and palm oil return empty arrays via the chart API. For these, each config
-// carries an `indicative: true` flag and an `indicativePrice` in USD (per the
-// commodity's intl unit), updated manually. Values are clearly badged in the UI.
+// Indicative levels (no free live feed) — see `indicative: true` in COMMODITIES.
 const INDICATIVE_AS_OF = '2026-06-12';
 
 function getIndicativePrices(keys) {
@@ -889,127 +941,123 @@ function getIndicativePrices(keys) {
   return result;
 }
 
-// ── FETCH ALL COMMODITY PRICES ──
 async function fetchAllPrices() {
-  // Separate indicative-only and live (Yahoo-fetchable) commodities
-  const commodityKeys = Object.keys(COMMODITIES);
-  const yahooKeys = commodityKeys.filter(k => !COMMODITIES[k].indicative);
-  const indicativeKeys = commodityKeys.filter(k => COMMODITIES[k].indicative);
+  const keys = Object.keys(COMMODITIES);
+  const yahooKeys = keys.filter(k => !COMMODITIES[k].indicative);
+  const indicativeKeys = keys.filter(k => COMMODITIES[k].indicative);
+  const now = Date.now();
 
-  // Fetch USD/INR, Yahoo commodities, and indicative prices concurrently
-  const promises = [
+  batch = await fetchBatch();
+  state.noSnapshot = !batch;
+  // Data time: when the snapshot was generated (not when we downloaded it), so
+  // LIVE / STALE reflects the real age of the numbers.
+  const dataTs = batch ? Math.min(batch.ts, now) : now;
+  if (batch?.fxRates) state.fxRates = batch.fxRates; // needed before toUsd() for non-USD contracts
+
+  const [fxRes, ...liveRes] = await Promise.allSettled([
     fetchUsdInr(),
-    ...yahooKeys.map(async (key) => {
+    ...yahooKeys.map(async key => {
       const config = COMMODITIES[key];
       let data = await fetchWithFallbacks(config.yahooSymbol, config.yahooFallbacks || []);
-      // Last resort for precious metals: gold-api.com spot (CORS-friendly, no proxy)
-      if (!data) data = await fetchGoldApiSpot(key);
+      if (GOLD_API_SYMBOLS[key]) {
+        // India's bullion price follows SPOT, not the futures curve. Use live spot for the
+        // price and the COMEX/NYMEX futures only for the daily % change.
+        const live = await fetchGoldApiSpot(key);
+        const bs = batch?.spot?.[GOLD_API_SYMBOLS[key]];
+        const spot = live || (bs && isNum(bs.price) ? { price: bs.price } : null);
+        if (spot && data) {
+          const pct = data.changePct;
+          data = { price: spot.price, change: spot.price - spot.price / (1 + pct / 100), changePct: pct, isSpot: true, roll: data.roll, volume: data.volume, prevVolume: data.prevVolume };
+        } else if (spot) {
+          data = { price: spot.price, change: 0, changePct: 0, isSpotBackup: true };
+        }
+      }
       return [key, data];
     }),
-    indicativeKeys.length > 0 ? Promise.resolve(getIndicativePrices(indicativeKeys)) : Promise.resolve({}),
-  ];
+  ]);
 
-  const results = await Promise.allSettled(promises);
-
-  // USD/INR (+ full FX rate map for non-USD quotes like canola in CAD)
-  const usdInrResult = results[0];
-  if (usdInrResult.status === 'fulfilled' && usdInrResult.value) {
-    state.usdInr = usdInrResult.value.rate;
-    state.usdInrChange = usdInrResult.value.change || null;
-    state.usdInrChangePct = usdInrResult.value.changePct || null;
-    if (usdInrResult.value.rates) state.fxRates = usdInrResult.value.rates;
+  const fx = fxRes.status === 'fulfilled' ? fxRes.value : null;
+  state.fxFresh = !!fx;
+  if (fx) {
+    state.usdInr = fx.rate;
+    state.usdInrChange = isNum(fx.change) && fx.change !== 0 ? fx.change : null;
+    state.usdInrChangePct = isNum(fx.changePct) && fx.changePct !== 0 ? fx.changePct : null;
+    if (fx.rates) state.fxRates = fx.rates;
   }
 
-  // Yahoo commodities
-  for (let i = 1; i <= yahooKeys.length; i++) {
-    const result = results[i];
-    if (result.status === 'fulfilled' && result.value) {
-      const [key, data] = result.value;
-      if (data) {
-        state.prices[key] = data;
-        delete state.errors[key];
-      } else if (!state.prices[key]) {
-        state.errors[key] = 'No data';
-      }
+  let freshLive = 0;
+  const notRefreshed = [];
+  liveRes.forEach((res, i) => {
+    const key = yahooKeys[i];
+    const data = res.status === 'fulfilled' && res.value ? res.value[1] : null;
+    if (data) {
+      state.prices[key] = { ...data, ts: data.isSpot || data.isSpotBackup ? now : dataTs };
+      delete state.errors[key];
+      freshLive++;
+    } else {
+      notRefreshed.push(key);
+      if (!state.prices[key]) state.errors[key] = 'No data';
     }
+  });
+
+  const ind = getIndicativePrices(indicativeKeys);
+  for (const key of indicativeKeys) {
+    if (ind[key]) { state.prices[key] = { ...ind[key], ts: now }; delete state.errors[key]; }
+    else if (!state.prices[key]) state.errors[key] = 'Unavailable';
   }
 
-  // Indicative-only commodities
-  const indicativeResult = results[1 + yahooKeys.length];
-  if (indicativeResult && indicativeResult.status === 'fulfilled' && indicativeResult.value) {
-    const indData = indicativeResult.value;
-    for (const key of indicativeKeys) {
-      if (indData[key]) {
-        state.prices[key] = indData[key];
-        delete state.errors[key];
-      } else if (!state.prices[key]) {
-        state.errors[key] = 'Unavailable';
-      }
-    }
-  }
-
-  // Only treat this cycle as "fresh" if we actually got the forex rate and at
-  // least one price. A fully failed cycle keeps the previous (cached) data and
-  // its timestamp so the UI can flag it as stale rather than pretend it's live.
-  const gotData = state.usdInr != null && Object.keys(state.prices).length > 0;
-  if (gotData) {
+  state.notRefreshed = notRefreshed;
+  // A cycle only counts as fresh if something live actually came back. Cached
+  // values alone must never be reported as LIVE.
+  if (freshLive > 0 && isNum(state.usdInr)) {
     state.fromCache = false;
-    state.lastSuccess = Date.now();
-    state.lastUpdate = new Date();
+    state.failedCycles = 0;
+    state.lastSuccess = dataTs;
+    state.lastUpdate = new Date(dataTs);
     savePriceCache();
+  } else {
+    state.failedCycles++;
   }
   state.isLoading = false;
 }
 
-// ── DUTY RESOLVER (supports date-conditional duty schedules, e.g. cotton) ──
+// ── DUTY + CALCULATION ENGINE ──
 function getDuty(config) {
   if (config.dutySchedule) {
     const today = new Date().toISOString().slice(0, 10);
     for (const entry of config.dutySchedule) {
-      if (!entry.until || today <= entry.until) {
-        return { rate: entry.rate, label: entry.label };
-      }
+      if (!entry.until || today <= entry.until) return { rate: entry.rate, label: entry.label };
     }
   }
   return { rate: config.dutyRate, label: config.dutyLabel };
 }
 
-// ── CALCULATION ENGINE ──
 function calcIndiaLanded(commodityKey) {
   const config = COMMODITIES[commodityKey];
   const priceData = state.prices[commodityKey];
-  if (!priceData || !state.usdInr) return null;
-  // No landed price for goods India prohibits importing (e.g. beef/live cattle)
+  if (!priceData || !isNum(state.usdInr) || !isNum(priceData.price)) return null;
   if (config.importProhibited) return null;
 
-  const intlPrice = priceData.price;
-  const usdInr = state.usdInr;
-  // conversionDivisor = number of intl units per India unit
-  // (oz→g: 31.1035, lb→kg: 0.453592, MT→kg: 1000, bushel→quintal: 0.2722, …)
-  const pricePerIndiaUnit = (intlPrice / config.conversionDivisor) * usdInr * (1 + getDuty(config).rate);
-
+  const pricePerIndiaUnit = (priceData.price / config.conversionDivisor) * state.usdInr * (1 + getDuty(config).rate);
+  if (!isNum(pricePerIndiaUnit)) return null;
   const result = { perUnit: pricePerIndiaUnit };
 
-  // For precious metals: purity variants
   if (config.showPurity) {
     if (config.purityLabels) {
-      // Custom purity labels (e.g., Silver: 999/925/900)
       result.purities = config.purityLabels.map(p => ({
         label: p.label,
+        ratio: p.ratio,
         perGram: pricePerIndiaUnit * p.ratio,
         per10g: pricePerIndiaUnit * p.ratio * 10,
         perKg: pricePerIndiaUnit * p.ratio * 1000,
       }));
-      result.k24 = pricePerIndiaUnit; // primary for backward compat
+      result.k24 = pricePerIndiaUnit;
     } else {
-      // Default Gold karat system
       result.k24 = pricePerIndiaUnit;
       result.k22 = pricePerIndiaUnit * (22 / 24);
       result.k18 = pricePerIndiaUnit * (18 / 24);
     }
   }
-
-  // 10g price
   if (config.show10g) {
     result.per10g = pricePerIndiaUnit * 10;
     if (config.showPurity && !config.purityLabels) {
@@ -1017,793 +1065,1106 @@ function calcIndiaLanded(commodityKey) {
       result.per10g_18k = result.k18 * 10;
     }
   }
-
-  // Per-kg price (for Gold & Silver — standard Indian market quote)
   if (config.showKg) {
     result.perKg = pricePerIndiaUnit * 1000;
-    if (config.showPurity && !config.purityLabels) {
-      result.perKg_22k = result.k22 * 1000;
-    }
+    if (config.showPurity && !config.purityLabels) result.perKg_22k = result.k22 * 1000;
   }
-
-  // MCX Mini contract prices
   if (config.miniContracts) {
-    result.minis = config.miniContracts.map(mc => ({
-      name: mc.name,
-      lot: mc.lot,
-      price: pricePerIndiaUnit * mc.multiplier,
-    }));
+    result.minis = config.miniContracts.map(mc => ({ name: mc.name, lot: mc.lot, price: pricePerIndiaUnit * mc.multiplier }));
   }
-
   return result;
 }
 
 // ── FORMATTING ──
 function fmtINR(val, decimals = 2) {
-  if (val == null || isNaN(val)) return '—';
+  if (!isNum(val)) return '—';
   return '₹' + val.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 }
 
-function fmtUSD(val, decimals = 2) {
-  if (val == null || isNaN(val)) return '—';
-  return '$' + val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+function fmtUSD(val, decimals) {
+  if (!isNum(val)) return '—';
+  const d = decimals != null ? decimals : (Math.abs(val) < 1 ? 4 : 2);
+  return '$' + val.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
 
 function fmtChange(change, changePct) {
-  if (change == null) return { text: '—', cls: 'neutral' };
-  const sign = change >= 0 ? '+' : '';
+  if (!isNum(change) || !isNum(changePct)) return { text: '—', cls: 'neutral' };
+  const sign = change > 0 ? '+' : '';
   const cls = change > 0 ? 'up' : change < 0 ? 'down' : 'neutral';
-  const text = `${sign}${change.toFixed(2)} · ${sign}${changePct.toFixed(2)}%`;
-  return { text, cls };
+  const arrow = change > 0 ? '▲ ' : change < 0 ? '▼ ' : '';
+  return { text: `${arrow}${sign}${change.toFixed(2)} · ${sign}${changePct.toFixed(2)}%`, cls };
 }
 
 function fmtTime(date) {
-  if (!date) return '—';
-  return date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+  if (!date || isNaN(date)) return '—';
+  const sameDay = new Date().toDateString() === date.toDateString();
+  const t = date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+  return sameDay ? t : `${date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}, ${t}`;
 }
 
-// ── CATEGORY BADGE STYLE ──
-function getCategoryStyle(category) {
-  switch (category) {
-    case 'precious':
-      return 'background:hsl(45 93% 47% / 0.1);color:hsl(45,80%,40%);border:1px solid hsl(45 93% 47% / 0.2)';
-    case 'industrial':
-      return 'background:hsl(200 50% 50% / 0.1);color:hsl(200,50%,40%);border:1px solid hsl(200 50% 50% / 0.2)';
-    case 'energy':
-      return 'background:hsl(0 60% 50% / 0.1);color:hsl(0,60%,45%);border:1px solid hsl(0 60% 50% / 0.2)';
-    case 'agri':
-      return 'background:hsl(100 50% 40% / 0.1);color:hsl(100,50%,35%);border:1px solid hsl(100 50% 40% / 0.2)';
-    default:
-      return 'background:var(--l3);color:var(--t3);border:1px solid var(--sep2)';
+function fmtAge(ms) {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 5) return 'just now';
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} min ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} h ago`;
+  return `${Math.floor(h / 24)} d ago`;
+}
+
+// Daily change is only meaningful for live futures quotes.
+const hasChange = p => !!p && !p.isApprox && !p.isSpotBackup && !p.roll && isNum(p.changePct);
+const isPriceStale = p => !!p && !p.isApprox && isNum(p.ts) && (Date.now() - p.ts) > PRICE_STALE_MS;
+
+function tickInfo(p) {
+  if (!p || !isNum(p.ts)) return { text: state.lastUpdate ? fmtTime(state.lastUpdate) : '—', flag: false };
+  if (p.isApprox) return { text: 'Indicative', flag: false };
+  const t = fmtTime(new Date(p.ts));
+  if (state.fromCache) return { text: `Cached · ${t}`, flag: true };
+  if (isPriceStale(p)) return { text: `Stale · ${t}`, flag: true };
+  return { text: t, flag: false };
+}
+
+
+// ── VOLUME + OPEN INTEREST ──
+async function fetchOi() {
+  if (!/^https?:$/.test(location.protocol)) return;
+  for (const base of dataSources()) {
+    try {
+      const resp = await fetch(`${base}/oi.json?t=${Math.floor(Date.now() / 3600000)}`, { signal: AbortSignal.timeout(10000) });
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      if (data && data.items) { state.oi = data; return; }
+    } catch (e) { /* try next source */ }
   }
 }
 
-// ── SHARED: INDIA LANDED PRICE ROWS HTML ──
+const fmtInt = n => isNum(n) ? Math.round(n).toLocaleString('en-IN') : '—';
+
+function statsHtml(config, p) {
+  const sym = config.yahooSymbol;
+  const o = state.oi && sym ? state.oi.items[sym] : null;
+  const rows = [];
+  if (p && !p.isApprox && isNum(p.volume)) {
+    const prev = isNum(p.prevVolume) ? ` <small>previous ${fmtInt(p.prevVolume)}</small>` : '';
+    rows.push(`<div class="stat-row"><span class="stat-label">Volume · latest session</span><span class="stat-value">${fmtInt(p.volume)}${prev}</span></div>`);
+  }
+  if (o) {
+    let chg = '';
+    if (isNum(o.prevOi) && o.prevOi > 0) {
+      const pct = ((o.oi - o.prevOi) / o.prevOi) * 100;
+      const flat = Math.abs(pct) < 0.05;
+      chg = ` <small class="${flat ? '' : pct > 0 ? 'up' : 'down'}">${flat ? '0.0' : (pct > 0 ? '+' : '') + pct.toFixed(1)}% w/w</small>`;
+    }
+    rows.push(`<div class="stat-row"><span class="stat-label">Open interest · weekly</span><span class="stat-value">${fmtInt(o.oi)}${chg}</span></div>`);
+    if (isNum(o.mmNet)) rows.push(`<div class="stat-row"><span class="stat-label">Managed money net · weekly</span><span class="stat-value">${o.mmNet > 0 ? '+' : ''}${fmtInt(o.mmNet)} <small>${o.mmNet >= 0 ? 'net long' : 'net short'}</small></span></div>`);
+    const dt = new Date(`${o.date}T00:00:00Z`);
+    const d = isNaN(dt) ? '' : dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+    rows.push(`<div class="stat-note">Open interest and positions: CFTC${d ? `, as of ${d}` : ''}. Weekly, not live.</div>`);
+  }
+  return rows.length ? `<div class="stats">${rows.join('')}</div>` : '';
+}
+
+// ── CARD HTML ──
+const ICON_STAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+const ICON_SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+
 function buildLandedRowsHtml(config, landed) {
   let html = '';
   if (config.showPurity) {
     if (config.purityLabels && landed.purities) {
       for (const p of landed.purities) {
-        html += `
-          <div class="price-row">
-            <span class="price-label">${p.label} per gram</span>
-            <span class="price-value ${p.ratio === 1 ? 'highlight' : ''}">${fmtINR(p.perGram)}/g</span>
-          </div>`;
+        html += `<div class="price-row"><span class="price-label">${p.label} per gram</span><span class="price-value ${p.ratio === 1 ? 'highlight' : ''}">${fmtINR(p.perGram)}/g</span></div>`;
       }
       if (config.showKg) {
-        html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">`;
+        html += '<div class="price-group">';
         for (const p of landed.purities) {
-          html += `
-            <div class="price-row ${p.ratio === 1 ? 'ten-gram-row' : ''}" style="${p.ratio !== 1 ? 'padding-left:10px' : ''}">
-              <span class="price-label" style="${p.ratio === 1 ? 'font-weight:700' : ''}">Per kg · ${p.label}</span>
-              <span class="price-value" style="${p.ratio === 1 ? 'font-weight:800' : ''}">${fmtINR(p.perKg, 0)}/kg</span>
-            </div>`;
+          html += `<div class="price-row ${p.ratio === 1 ? 'strong' : 'sub'}"><span class="price-label">Per kg · ${p.label}</span><span class="price-value">${fmtINR(p.perKg, 0)}/kg</span></div>`;
         }
-        html += `</div>`;
+        html += '</div>';
       }
     } else {
-      html += `
-        <div class="price-row">
-          <span class="price-label">24K per gram</span>
-          <span class="price-value highlight">${fmtINR(landed.k24)}/g</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">22K per gram</span>
-          <span class="price-value">${fmtINR(landed.k22)}/g</span>
-        </div>
-        <div class="price-row">
-          <span class="price-label">18K per gram</span>
-          <span class="price-value">${fmtINR(landed.k18)}/g</span>
-        </div>`;
+      html += `<div class="price-row"><span class="price-label">24K per gram</span><span class="price-value highlight">${fmtINR(landed.k24)}/g</span></div>`;
+      html += `<div class="price-row"><span class="price-label">22K per gram</span><span class="price-value">${fmtINR(landed.k22)}/g</span></div>`;
+      html += `<div class="price-row"><span class="price-label">18K per gram</span><span class="price-value">${fmtINR(landed.k18)}/g</span></div>`;
       if (config.show10g) {
-        html += `
-          <div class="price-row ten-gram-row">
-            <span class="price-label">10g · 24K</span>
-            <span class="price-value">${fmtINR(landed.per10g, 0)}</span>
-          </div>
-          <div class="price-row ten-gram-row" style="margin-top:4px;background:linear-gradient(135deg, hsl(210 10% 62% / 0.06), hsl(215 18% 52% / 0.06));border-color:hsl(210 10% 62% / 0.12)">
-            <span class="price-label" style="color:var(--t3)">10g · 22K</span>
-            <span class="price-value" style="color:var(--t2);font-size:14px">${fmtINR(landed.per10g_22k, 0)}</span>
-          </div>`;
+        html += `<div class="price-row strong"><span class="price-label">10g · 24K</span><span class="price-value">${fmtINR(landed.per10g, 0)}</span></div>`;
+        html += `<div class="price-row"><span class="price-label">10g · 22K</span><span class="price-value">${fmtINR(landed.per10g_22k, 0)}</span></div>`;
       }
-      // Per-KG pricing
       if (config.showKg && landed.perKg) {
-        html += `
-          <div class="price-row" style="margin-top:6px;padding-top:8px;border-top:1px dashed var(--sep2)">
-            <span class="price-label" style="font-weight:700">Per kg · 24K</span>
-            <span class="price-value" style="font-weight:800">${fmtINR(landed.perKg, 0)}/kg</span>
-          </div>`;
-        if (landed.perKg_22k) {
-          html += `
-            <div class="price-row">
-              <span class="price-label">Per kg · 22K</span>
-              <span class="price-value">${fmtINR(landed.perKg_22k, 0)}/kg</span>
-            </div>`;
-        }
+        html += `<div class="price-row strong"><span class="price-label">Per kg · 24K</span><span class="price-value">${fmtINR(landed.perKg, 0)}/kg</span></div>`;
+        if (landed.perKg_22k) html += `<div class="price-row"><span class="price-label">Per kg · 22K</span><span class="price-value">${fmtINR(landed.perKg_22k, 0)}/kg</span></div>`;
       }
     }
   } else {
-    html += `
-      <div class="price-row">
-        <span class="price-label">Per ${config.indiaUnit}</span>
-        <span class="price-value highlight">${fmtINR(landed.perUnit)}/${config.indiaUnit}</span>
-      </div>`;
+    html += `<div class="price-row"><span class="price-label">Per ${config.indiaUnit}</span><span class="price-value highlight">${fmtINR(landed.perUnit)}/${config.indiaUnit}</span></div>`;
     if (config.secondaryUnit) {
-      // e.g. grains shown per quintal also get a per-kg reference row
-      html += `
-        <div class="price-row">
-          <span class="price-label">Per ${config.secondaryUnit.label}</span>
-          <span class="price-value">${fmtINR(landed.perUnit * config.secondaryUnit.multiplier)}/${config.secondaryUnit.label}</span>
-        </div>`;
+      html += `<div class="price-row"><span class="price-label">Per ${config.secondaryUnit.label}</span><span class="price-value">${fmtINR(landed.perUnit * config.secondaryUnit.multiplier)}/${config.secondaryUnit.label}</span></div>`;
+    }
+    if (config.show10g && landed.per10g != null) {
+      html += `<div class="price-row strong"><span class="price-label">Per 10 g</span><span class="price-value">${fmtINR(landed.per10g, 0)}</span></div>`;
     }
   }
-  // Standard Indian Contract Equivalents
-  if (landed.minis && landed.minis.length > 0) {
-    html += `
-      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--sep2)">
-        <div style="font-family:var(--font-body);font-size:9px;font-weight:700;color:var(--t4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px">Retail Contract Equivalents</div>`;
+  if (landed.minis && landed.minis.length) {
+    html += '<div class="price-group"><div class="price-group-title">Retail Contract Equivalents</div>';
     for (const mc of landed.minis) {
-      html += `
-        <div class="price-row" style="padding:3px 0">
-          <span class="price-label" style="font-size:11px">${mc.name} <span style="color:var(--t4);font-size:9px">(${mc.lot})</span></span>
-          <span class="price-value" style="font-size:13px;color:var(--primary)">${fmtINR(mc.price, 0)}</span>
-        </div>`;
+      html += `<div class="price-row contract"><span class="price-label">${mc.name} <small>(${mc.lot})</small></span><span class="price-value">${fmtINR(mc.price, 0)}</span></div>`;
     }
-    html += `</div>`;
+    html += '</div>';
   }
   return html;
 }
 
-// ── BUILD COMMODITY CARD HTML ──
-function buildCommodityCard(key) {
-  const config = COMMODITIES[key];
-  const priceData = state.prices[key];
-  const landed = calcIndiaLanded(key);
-  const hasData = priceData && state.usdInr;
-  const isApprox = priceData?.isApprox || false;
-  const change = hasData ? fmtChange(priceData.change, priceData.changePct) : fmtChange(null);
-
-  // International price display
-  const intlPriceStr = hasData ? fmtUSD(priceData.price) : '—';
-  const intlUnit = `/ ${config.intlUnit.toLowerCase()}`;
-  const approxBadge = isApprox
-    ? ' <span style="font-size:9px;color:var(--orange);font-family:var(--font-body);font-weight:600;vertical-align:super">~INDICATIVE</span>'
-    : (priceData?.isSpotBackup ? ' <span style="font-size:9px;color:var(--teal);font-family:var(--font-body);font-weight:600;vertical-align:super">SPOT</span>' : '');
-
-  // India landed price rows
-  let landedRows = '';
+function landedBlock(key, config, landed, priceData) {
   if (config.importProhibited) {
-    landedRows = `
-      <div class="price-row">
-        <span class="price-label" style="color:var(--red);font-weight:700">Import prohibited in India</span>
-        <span class="price-value" style="color:var(--red);font-size:12px">DGFT</span>
-      </div>`;
-  } else if (hasData && landed) {
-    landedRows = buildLandedRowsHtml(config, landed);
-  } else {
-    landedRows = `
-      <div class="price-row">
-        <span class="price-label">Loading...</span>
-        <span class="price-value"><div class="skeleton skeleton-text"></div></span>
-      </div>`;
+    return '<div class="price-row prohibited"><span class="price-label">Import prohibited in India</span><span class="price-value">DGFT</span></div>';
   }
-
-  // Optional caveat note (e.g. US-benchmark premium, live-weight livestock)
-  const noteHtml = config.note
-    ? `<div style="font-size:9.5px;color:var(--t4);font-style:italic;line-height:1.4;margin-top:8px;padding-top:6px;border-top:1px dashed var(--sep2)">${config.note}</div>`
-    : '';
-
-  return `
-    <div class="commodity-card" data-commodity="${key}" data-category="${config.category}" style="--commodity-accent:${config.accentColor}">
-      <div class="commodity-card-inner">
-        <div class="commodity-header">
-          <div style="display:flex;align-items:center">
-            <div class="commodity-icon" style="background:linear-gradient(135deg, ${config.accentBg}, ${config.accentColor})">${config.icon}</div>
-            <div class="commodity-info">
-              <div class="commodity-name">${config.name}</div>
-              <div class="commodity-symbol">${config.symbol}</div>
-            </div>
-          </div>
-          <span class="commodity-category-badge" style="${getCategoryStyle(config.category)}">${config.categoryLabel}</span>
-        </div>
-
-        <!-- International Price -->
-        <div class="intl-price-row">
-          <div>
-            <div class="intl-price" id="intl-${key}">${intlPriceStr}${approxBadge}</div>
-            <div class="intl-unit">${intlUnit}</div>
-          </div>
-          <div class="intl-change">
-            <span class="change-pill ${change.cls}" id="change-${key}">${change.text}</span>
-          </div>
-        </div>
-
-        <!-- India Import Landed -->
-        <div class="india-landed">
-          <div class="india-landed-header">
-            <span class="india-landed-title">₹ / ${config.indiaUnit} · India Import Landed 
-              <a href="docs.html#meth-${config.category}" class="methodology-badge" title="View Calculation Methodology">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg> Engine Method
-              </a>
-            </span>
-            <span class="india-duty-badge">${getDuty(config).label}</span>
-          </div>
-          <div id="landed-${key}">
-            ${landedRows}
-          </div>
-          ${noteHtml}
-        </div>
-      </div>
-
-      <div class="data-source">
-        <span>Source: ${isApprox ? `Indicative (as of ${INDICATIVE_AS_OF})` : priceData?.isSpotBackup ? 'gold-api.com (spot)' : 'Yahoo Finance (' + (config.yahooSymbol || 'N/A') + ')'}</span>
-        ${config.yahooSymbol ? `<button class="chart-btn" onclick="event.stopPropagation();openChart('${key}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Chart</button>` : ''}
-        <span id="tick-${key}">${state.lastUpdate ? fmtTime(state.lastUpdate) : '—'}</span>
-      </div>
-    </div>`;
+  if (landed && priceData) return buildLandedRowsHtml(config, landed);
+  if (state.errors[key] && !priceData) {
+    return '<div class="price-row unavailable"><span class="price-label">Price unavailable right now. Will retry automatically.</span></div>';
+  }
+  return '<div class="price-row"><span class="price-label">Loading…</span><span class="price-value"><span class="skeleton"></span></span></div>';
 }
 
-// ── LIVE FX TICKER ──
-// The engine converts every quote to ₹ via USD/INR (and a full FX map for the
-// handful of non-USD contracts). Surface those rates so the conversion the user
-// is looking at is transparent rather than a hidden constant.
+function intlPriceInner(priceData, hasData) {
+  const badge = priceData?.isApprox ? '<span class="intl-badge indicative">~INDICATIVE</span>'
+    : priceData?.isSpotBackup ? '<span class="intl-badge spot">SPOT</span>' : '';
+  return `<span class="intl-num">${hasData ? fmtUSD(priceData.price) : '—'}</span>${badge}`;
+}
+
+
+// One headline rupee figure per card; everything else sits behind "Details".
+function headlineHtml(key, config, landed, priceData) {
+  if (config.importProhibited) return '<span class="hl-value muted">Import prohibited</span>';
+  if (!landed || !priceData) return '<span class="hl-value muted">—</span>';
+  if (config.showPurity && config.purityLabels && landed.purities) {
+    const top = landed.purities.find(p => p.ratio === 1) || landed.purities[0];
+    return `<span class="hl-value">${fmtINR(top.perGram)}<small>/g</small></span><span class="hl-sub">${escapeHtml(top.label)}</span>`;
+  }
+  if (config.showPurity) return `<span class="hl-value">${fmtINR(landed.k24)}<small>/g</small></span><span class="hl-sub">24K</span>`;
+  return `<span class="hl-value">${fmtINR(landed.perUnit)}<small>/${escapeHtml(config.indiaUnit)}</small></span>`;
+}
+
+function dutyShort(config) {
+  const r = getDuty(config).rate;
+  return `Duty ${+(r * 100).toFixed(2)}%`;
+}
+
+function sourceShort(priceData, config) {
+  if (priceData?.isApprox) return `Indicative · ${INDICATIVE_AS_OF}`;
+  if (priceData?.isSpot || priceData?.isSpotBackup) return 'Spot · gold-api.com';
+  return `Yahoo Finance · ${config.yahooSymbol || 'N/A'}`;
+}
+
+function isWatched(key) { return state.watchlist.includes(key); }
+
+function buildCommodityCard(key, index) {
+  const config = COMMODITIES[key];
+  const priceData = state.prices[key];
+  const hasData = !!priceData && isNum(state.usdInr) && isNum(priceData.price);
+  const landed = calcIndiaLanded(key);
+  const change = hasData && hasChange(priceData) ? fmtChange(priceData.change, priceData.changePct) : fmtChange(null);
+  const tick = tickInfo(priceData);
+  const watched = isWatched(key);
+  const noChangeTitle = hasData && !hasChange(priceData) ? ` title="${priceData.roll ? 'The front-month contract rolled, so the day change is not meaningful' : 'Daily change is not available for this source'}"` : '';
+
+  return `
+    <article class="commodity-card" data-commodity="${key}" data-category="${config.category}" style="--commodity-accent:${config.accentColor};--i:${index}" aria-label="${escapeHtml(config.name)}">
+      <div class="commodity-card-inner">
+        <div class="commodity-header">
+          <div class="commodity-icon" aria-hidden="true">${config.icon}</div>
+          <div class="commodity-info">
+            <h2 class="commodity-name">${escapeHtml(config.name)}</h2>
+            <div class="commodity-meta">
+              <span class="commodity-symbol">${escapeHtml(config.symbol)}</span>
+              <span class="badge badge-${config.category}">${escapeHtml(config.categoryLabel)}</span>
+            </div>
+          </div>
+          <button type="button" class="switch" role="switch" aria-checked="${watched}" data-action="watch" data-key="${key}" aria-label="Watchlist: ${escapeHtml(config.name)}"><span class="switch-knob">${ICON_STAR}</span></button>
+        </div>
+        <div class="intl-price-row">
+          <div>
+            <div class="intl-price" id="intl-${key}">${intlPriceInner(priceData, hasData)}</div>
+            <div class="intl-unit">/ ${escapeHtml(config.intlUnit.toLowerCase())}</div>
+          </div>
+          <div class="intl-change">
+            <span class="change-pill ${change.cls}" id="change-${key}"${noChangeTitle}><span class="sr-only">Day change: </span>${change.text}</span>
+          </div>
+        </div>
+        <div class="india-landed">
+          <div class="headline">
+            <span class="hl-label">India landed</span>
+            <span class="hl-main" id="headline-${key}">${headlineHtml(key, config, landed, priceData)}</span>
+            <span class="india-duty-badge">${escapeHtml(dutyShort(config))}</span>
+          </div>
+          <details class="more">
+            <summary>Details</summary>
+            <div id="landed-${key}">${landedBlock(key, config, landed, priceData)}</div>
+            <div id="stats-${key}">${statsHtml(config, priceData)}</div>
+            ${config.note ? `<div class="card-note">${escapeHtml(config.note)}</div>` : ''}
+            <div class="source-text" id="source-${key}">${escapeHtml(sourceShort(priceData, config))}</div>
+          </details>
+        </div>
+      </div>
+      <div class="data-source">
+        <div class="card-actions">
+          ${config.yahooSymbol ? `<button type="button" class="chip-btn" data-action="chart" data-key="${key}" aria-label="Open ${escapeHtml(config.name)} price chart">${SVG_ICONS.chart} Chart</button>` : ''}
+          <button type="button" class="chip-btn" data-action="share" data-key="${key}" aria-label="Share ${escapeHtml(config.name)} price">${ICON_SHARE} Share</button>
+        </div>
+        <span class="tick ${tick.flag ? 'flag' : ''}" id="tick-${key}">${tick.text}</span>
+      </div>
+    </article>`;
+}
+
+// ── FX STRIP ──
 const FX_TICKER_PAIRS = ['EUR', 'GBP', 'JPY', 'CNY', 'AED'];
 
 function renderFxTicker() {
-  const el = document.getElementById('currency-rates');
+  const el = $('currency-rates');
   if (!el) return;
-  if (!state.usdInr) {
-    el.innerHTML = '<div class="currency-item"><span class="fx-pair">USD / INR</span><span class="fx-rate">—</span></div>';
+  if (!isNum(state.usdInr)) {
+    el.innerHTML = '<div class="fx-item"><span class="fx-pair">USD / INR</span><span class="fx-rate">—</span></div>';
     return;
   }
   const pct = state.usdInrChangePct;
-  const cls = pct == null ? '' : (pct > 0 ? 'up' : pct < 0 ? 'down' : '');
-  const changeStr = pct == null ? '' :
-    `<span class="fx-change ${cls}">${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%</span>`;
-  let html = `
-    <div class="currency-item" style="border-color:hsl(24 90% 52% / 0.25)">
-      <span class="fx-pair">USD / INR</span>
-      <span class="fx-rate" style="color:var(--primary)">₹${state.usdInr.toFixed(2)}</span>
-      ${changeStr}
-    </div>`;
+  const cls = !isNum(pct) ? '' : (pct > 0 ? 'up' : pct < 0 ? 'down' : '');
+  const changeStr = !isNum(pct) ? '' : `<span class="fx-change ${cls}">${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%</span>`;
+  const stale = state.fxFresh ? '' : ' stale';
+  let html = `<div class="fx-item primary${stale}"><span class="fx-pair">USD / INR</span><span class="fx-rate">₹${state.usdInr.toFixed(2)}</span>${changeStr}</div>`;
   if (state.fxRates) {
     for (const cur of FX_TICKER_PAIRS) {
       const r = state.fxRates[cur];
-      if (r == null) continue;
-      const val = cur === 'JPY' ? r.toFixed(2) : r.toFixed(3);
-      html += `
-        <div class="currency-item">
-          <span class="fx-pair">USD / ${cur}</span>
-          <span class="fx-rate">${val}</span>
-        </div>`;
+      if (!isNum(r)) continue;
+      html += `<div class="fx-item${stale}"><span class="fx-pair">USD / ${cur}</span><span class="fx-rate">${cur === 'JPY' ? r.toFixed(2) : r.toFixed(3)}</span></div>`;
     }
   }
   el.innerHTML = html;
 }
 
-// ── VISIBLE KEYS (category filter + text search + sort) ──
+// ── WATCHLIST ──
+function loadWatchlist() {
+  try {
+    const arr = JSON.parse(store.get(WATCH_KEY) || '[]');
+    state.watchlist = Array.isArray(arr) ? arr.filter(k => COMMODITIES[k]) : [];
+  } catch (e) { state.watchlist = []; }
+}
+function saveWatchlist() { store.set(WATCH_KEY, JSON.stringify(state.watchlist)); }
+
+function updateWatchCount() {
+  document.querySelectorAll('[data-watch-count]').forEach(el => {
+    el.textContent = state.watchlist.length;
+    el.classList.toggle('zero', state.watchlist.length === 0);
+  });
+}
+
+function toggleWatch(key) {
+  if (!COMMODITIES[key]) return;
+  const name = COMMODITIES[key].name;
+  const on = !isWatched(key);
+  state.watchlist = on ? [...state.watchlist, key] : state.watchlist.filter(k => k !== key);
+  saveWatchlist();
+  updateWatchCount();
+  if (!on && state.activeCategory === 'watchlist') renderAllCards();
+  else {
+    const sw = document.querySelector(`.switch[data-key="${key}"]`);
+    if (sw) sw.setAttribute('aria-checked', String(on));
+  }
+  showToast(on ? `${name} added to your watchlist` : `${name} removed from your watchlist`);
+}
+
+// ── VISIBLE KEYS ──
 function getVisibleKeys() {
   const q = (state.searchQuery || '').trim().toLowerCase();
   const keys = Object.keys(COMMODITIES).filter(key => {
     const c = COMMODITIES[key];
-    if (state.activeCategory !== 'all' && c.category !== state.activeCategory) return false;
-    if (q) {
-      const hay = `${c.name} ${c.symbol} ${c.categoryLabel} ${key}`.toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
+    if (state.activeCategory === 'watchlist') { if (!isWatched(key)) return false; }
+    else if (state.activeCategory !== 'all' && c.category !== state.activeCategory) return false;
+    // Match name, symbol, id and category. The generic word "Commodity" in labels is left out so "co" or "com" does not match every agri card.
+    if (q && !`${c.name} ${c.symbol} ${key} ${c.category} ${String(c.categoryLabel).replace(/commodity/i, '')}`.toLowerCase().includes(q)) return false;
     return true;
   });
-  const pctOf = k => {
-    const p = state.prices[k];
-    return p && typeof p.changePct === 'number' ? p.changePct : 0;
+  const pct = k => (hasChange(state.prices[k]) ? state.prices[k].changePct : null);
+  const cmp = dir => (a, b) => {
+    const pa = pct(a), pb = pct(b);
+    if (pa == null && pb == null) return 0;
+    if (pa == null) return 1;      // items without a daily change always sort last
+    if (pb == null) return -1;
+    return dir * (pb - pa);
   };
-  if (state.sortBy === 'az') keys.sort((a, b) => COMMODITIES[a].name.localeCompare(COMMODITIES[b].name));
-  else if (state.sortBy === 'gainers') keys.sort((a, b) => pctOf(b) - pctOf(a));
-  else if (state.sortBy === 'losers') keys.sort((a, b) => pctOf(a) - pctOf(b));
+  if (state.sortBy === 'az') keys.sort((a, b) => COMMODITIES[a].name.localeCompare(COMMODITIES[b].name, 'en'));
+  else if (state.sortBy === 'gainers') keys.sort(cmp(1));
+  else if (state.sortBy === 'losers') keys.sort(cmp(-1));
   return keys;
 }
 
-// ── RENDER ALL CARDS ──
+function viewSignature(keys) {
+  return keys.map(k => {
+    const p = state.prices[k];
+    return `${k}:${p ? (p.isApprox ? 'a' : p.isSpotBackup ? 's' : 'l') : state.errors[k] ? 'e' : 'n'}`;
+  }).join(',') + `|${state.fromCache}|${isNum(state.usdInr)}`;
+}
+
+// ── RENDER ──
 let cardsAnimatedOnce = false;
+let renderedSig = '';
+
 function renderAllCards() {
-  const grid = document.getElementById('commodity-grid');
+  const grid = $('commodity-grid');
   if (!grid) return;
   const keys = getVisibleKeys();
+  renderedSig = viewSignature(keys);
+
+  // Preserve keyboard focus across re-renders
+  const ae = document.activeElement;
+  const focusSel = ae && grid.contains(ae) && ae.dataset && ae.dataset.action ? `[data-action="${ae.dataset.action}"][data-key="${ae.dataset.key}"]` : null;
 
   if (!keys.length) {
-    grid.classList.add('ready');
-    grid.innerHTML = `<div class="empty-state">No commodities match “<strong>${escapeHtml(state.searchQuery)}</strong>”. <button class="link-btn" onclick="clearSearch()">Clear search</button></div>`;
+    const q = escapeHtml(state.searchQuery.trim());
+    let body;
+    if (state.activeCategory === 'watchlist' && !q) {
+      body = `<h2>Your watchlist is empty</h2><p>Turn on the switch at the top of any commodity card to keep it here for quick access. Your list is saved on this device.</p><button type="button" class="pill-btn" data-action="show-all">Browse all commodities</button>`;
+    } else {
+      body = `<h2>No matches</h2><p>No commodities match “<strong>${q}</strong>”${state.activeCategory !== 'all' ? ' in this view' : ''}.</p><button type="button" class="pill-btn" data-action="clear-search">Clear search</button>`;
+    }
+    grid.classList.remove('animate');
+    grid.innerHTML = `<div class="empty-state">${body}</div>`;
+    const rc = $('result-count'); if (rc) rc.textContent = 'No commodities found';
     return;
   }
 
-  grid.innerHTML = keys.map(key => buildCommodityCard(key)).join('');
-
-  // Play the staggered entry animation only on the first paint; later re-renders
-  // (search keystrokes, category/sort changes) snap in to avoid flicker.
-  if (cardsAnimatedOnce) grid.classList.add('ready');
-  else cardsAnimatedOnce = true;
-}
-
-// ── SEARCH / SORT CONTROLS ──
-function filterSearch(value) {
-  state.searchQuery = value || '';
-  renderAllCards();
-}
-window.filterSearch = filterSearch;
-
-function clearSearch() {
-  state.searchQuery = '';
-  const input = document.getElementById('commodity-search');
-  if (input) input.value = '';
-  renderAllCards();
-}
-window.clearSearch = clearSearch;
-
-function setSortBy(value) {
-  state.sortBy = value || 'default';
-  renderAllCards();
-}
-window.setSortBy = setSortBy;
-
-// ── UPDATE EXISTING CARDS (efficient partial update) ──
-function updateCards() {
-  // Last tick
-  const tickEl = document.getElementById('last-tick');
-  if (tickEl && state.lastUpdate) {
-    tickEl.textContent = fmtTime(state.lastUpdate);
+  if (!cardsAnimatedOnce) {
+    cardsAnimatedOnce = true;
+    grid.classList.add('animate');
+    setTimeout(() => grid.classList.remove('animate'), 1400);
   }
+  grid.innerHTML = keys.map((k, i) => buildCommodityCard(k, i)).join('');
+  const rc = $('result-count'); if (rc) rc.textContent = `${keys.length} ${keys.length === 1 ? 'commodity' : 'commodities'} shown`;
+  if (focusSel) { const el = grid.querySelector(focusSel); if (el) el.focus({ preventScroll: true }); }
+}
 
-  // Update each commodity card
+function updateCards() {
   Object.keys(COMMODITIES).forEach(key => {
     const config = COMMODITIES[key];
-    const priceData = state.prices[key];
-    const landed = calcIndiaLanded(key);
-
-    // International price
-    const intlEl = document.getElementById(`intl-${key}`);
-    if (intlEl && priceData) {
-      const newPrice = fmtUSD(priceData.price);
-      if (intlEl.textContent !== newPrice) {
-        intlEl.textContent = newPrice;
-        intlEl.classList.add('price-flash');
-        setTimeout(() => intlEl.classList.remove('price-flash'), 1000);
+    const p = state.prices[key];
+    const intlEl = $(`intl-${key}`);
+    if (!intlEl) return;
+    if (p && isNum(p.price)) {
+      const num = intlEl.querySelector('.intl-num');
+      const newPrice = fmtUSD(p.price);
+      if (num && num.textContent !== newPrice) {
+        num.textContent = newPrice;
+        if (!reduceMotion()) {
+          intlEl.classList.remove('price-flash'); void intlEl.offsetWidth;
+          intlEl.classList.add('price-flash');
+        }
       }
-    }
-
-    // Change pill
-    const changeEl = document.getElementById(`change-${key}`);
-    if (changeEl && priceData) {
-      const c = fmtChange(priceData.change, priceData.changePct);
-      changeEl.textContent = c.text;
-      changeEl.className = `change-pill ${c.cls}`;
-    }
-
-    // India landed prices
-    const landedEl = document.getElementById(`landed-${key}`);
-    if (landedEl && landed && priceData) {
-      landedEl.innerHTML = buildLandedRowsHtml(config, landed);
-    }
-
-    // Tick time
-    const tickTimeEl = document.getElementById(`tick-${key}`);
-    if (tickTimeEl && state.lastUpdate) {
-      tickTimeEl.textContent = fmtTime(state.lastUpdate);
+      const changeEl = $(`change-${key}`);
+      if (changeEl) {
+        const c = hasChange(p) ? fmtChange(p.change, p.changePct) : fmtChange(null);
+        changeEl.className = `change-pill ${c.cls}`;
+        changeEl.innerHTML = `<span class="sr-only">Day change: </span>${c.text}`;
+      }
+      const landed = calcIndiaLanded(key);
+      const landedEl = $(`landed-${key}`);
+      if (landedEl && landed) landedEl.innerHTML = buildLandedRowsHtml(config, landed);
+      const hl = $(`headline-${key}`);
+      if (hl && landed) hl.innerHTML = headlineHtml(key, config, landed, p);
+      const statsEl = $(`stats-${key}`);
+      if (statsEl) statsEl.innerHTML = statsHtml(config, p);
+      const srcEl = $(`source-${key}`);
+      if (srcEl) srcEl.textContent = sourceShort(p, config);
     }
   });
-
-  // Live FX ticker + status pill
-  renderFxTicker();
-  updateStatus();
+  updateTickLabels();
 }
 
-// ── STATUS ──
-function updateStatus() {
-  const pill = document.getElementById('status-pill');
-  const text = document.getElementById('status-text');
-  if (!pill || !text) return;
+function updateTickLabels() {
+  Object.keys(COMMODITIES).forEach(key => {
+    const el = $(`tick-${key}`);
+    if (!el) return;
+    const t = tickInfo(state.prices[key]);
+    el.textContent = t.text;
+    el.classList.toggle('flag', t.flag);
+  });
+}
 
-  const hasAnyData = Object.keys(state.prices).length > 0;
-  const errCount = Object.keys(state.errors).length;
+// ── MARKET SUMMARY ──
+function renderSummary() {
+  const el = $('market-summary');
+  if (!el) return;
+  let up = 0, down = 0, flat = 0, best = null, worst = null;
+  for (const key of Object.keys(COMMODITIES)) {
+    const p = state.prices[key];
+    if (!hasChange(p) || !isNum(state.usdInr)) continue;
+    if (p.changePct > 0) up++; else if (p.changePct < 0) down++; else flat++;
+    if (!best || p.changePct > state.prices[best].changePct) best = key;
+    if (!worst || p.changePct < state.prices[worst].changePct) worst = key;
+  }
+  const total = up + down + flat;
+  const mover = (label, key, cls) => {
+    if (!key) return `<div class="summary-cell"><span class="s-label">${label}</span><span class="s-val">—</span></div>`;
+    const p = state.prices[key];
+    const sign = p.changePct > 0 ? '+' : '';
+    const chartable = !!COMMODITIES[key].yahooSymbol;
+    const inner = `<span class="s-label">${label}</span><span class="s-val ${cls}">${sign}${p.changePct.toFixed(2)}%</span><span class="s-name">${escapeHtml(COMMODITIES[key].name)}</span>`;
+    return chartable ? `<button type="button" class="summary-cell pressable" data-action="chart" data-key="${key}" >${inner}<span class="sr-only">, open chart</span></button>`
+      : `<div class="summary-cell">${inner}</div>`;
+  };
+  el.innerHTML = `
+    <div class="summary-cell"><span class="s-label">Advancing</span><span class="s-val up">${total ? up : '—'}</span><span class="s-sub">${total ? `of ${total} live quotes` : 'awaiting data'}</span></div>
+    <div class="summary-cell"><span class="s-label">Declining</span><span class="s-val down">${total ? down : '—'}</span><span class="s-sub">${total && flat ? `${flat} unchanged` : (total ? 'daily change' : 'awaiting data')}</span></div>
+    ${mover('Top gainer', best && state.prices[best].changePct > 0 ? best : null, 'up')}
+    ${mover('Top loser', worst && state.prices[worst].changePct < 0 ? worst : null, 'down')}`;
+}
+
+// ── STATUS (honest about CACHED / STALE) ──
+// Indicative levels are always present, so only count real quotes (live or cached).
+const hasLivePrices = () => Object.values(state.prices).some(p => p && !p.isApprox);
+
+function statusModel() {
+  const hasAny = hasLivePrices();
   const age = state.lastSuccess ? Date.now() - state.lastSuccess : Infinity;
+  const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+  const partial = state.notRefreshed.length + (state.fxFresh || state.fromCache ? 0 : 1);
+  if (!hasAny) return state.isLoading ? { k: 'LOADING', cls: 'warn' } : { k: 'OFFLINE', cls: 'bad' };
+  if (offline) return { k: 'OFFLINE', cls: 'bad' };
+  if (state.fromCache) return { k: 'CACHED', cls: 'warn' };
+  if (age > PRICE_STALE_MS) return { k: 'STALE', cls: 'warn' };
+  if (partial > 0) return { k: `PARTIAL · ${partial}`, cls: 'warn' };
+  return { k: 'LIVE', cls: '' };
+}
 
-  if (state.isLoading && !hasAnyData) {
-    pill.className = 'status-pill err';
-    text.textContent = 'LOADING';
-  } else if (!hasAnyData) {
-    pill.className = 'status-pill err';
-    text.textContent = 'OFFLINE';
+function updateStatus() {
+  const pill = $('status-pill'), text = $('status-text');
+  if (!pill || !text) return;
+  const m = statusModel();
+  pill.className = `status-pill ${m.cls}`;
+  if (text.textContent !== m.k) text.textContent = m.k;
+  const tips = {
+    LIVE: 'Prices refreshed within the last 20 minutes (spot metals about every minute)',
+    CACHED: 'Showing prices saved in your browser; a live refresh has not succeeded yet',
+    STALE: 'The price data is more than 20 minutes old',
+    OFFLINE: 'No network connection or no data available',
+    LOADING: 'Loading prices',
+  };
+  pill.title = tips[m.k] || (m.k.startsWith('PARTIAL') ? 'Some commodities could not be refreshed in the latest cycle' : '');
+}
+
+function updateStatusLine() {
+  const el = $('status-line');
+  if (!el) return;
+  const m = statusModel();
+  const hasAny = hasLivePrices();
+  const next = state.nextPollAt ? Math.max(0, Math.ceil((state.nextPollAt - Date.now()) / 1000)) : null;
+  const countdown = state.refreshing ? 'Refreshing now…' : (next != null && !document.hidden ? `Next refresh in ${next}s` : 'Auto-refresh paused while this tab is hidden');
+  const when = state.lastUpdate ? `${fmtTime(state.lastUpdate)} (${fmtAge(Date.now() - state.lastUpdate.getTime())})` : '';
+  let msg, cls = '';
+  if (!hasAny) {
+    msg = state.isLoading ? 'Fetching live prices…' : `Cannot reach the price feeds. Check your connection. ${countdown}`;
+    cls = state.isLoading ? '' : 'bad';
+  } else if (m.k === 'OFFLINE') {
+    msg = `You appear to be offline. Showing saved prices from ${when}.`; cls = 'bad';
   } else if (state.fromCache) {
-    pill.className = 'status-pill err';
-    text.textContent = 'CACHED';
-  } else if (age > PRICE_STALE_MS) {
-    pill.className = 'status-pill err';
-    text.textContent = 'STALE';
-  } else if (errCount > 0) {
-    pill.className = 'status-pill err';
-    text.textContent = `PARTIAL (${errCount} ERR)`;
+    msg = `Showing cached prices from ${when}. ${state.refreshing ? 'Fetching live data…' : 'Live refresh has not succeeded yet. ' + countdown}`; cls = 'warn';
+  } else if (m.k === 'STALE') {
+    msg = `Prices are stale. Last successful update ${when}. ${countdown}`; cls = 'warn';
+  } else if (m.k.startsWith('PARTIAL') && state.noSnapshot) {
+    msg = `Price snapshot is not reachable. Spot metals are live; other prices appear when the feed is back. ${countdown}`; cls = 'warn';
+  } else if (m.k.startsWith('PARTIAL')) {
+    msg = `Last updated ${when} · ${state.notRefreshed.length ? state.notRefreshed.length + ' commodities could not refresh' : 'USD/INR is from cache'} · ${countdown}`; cls = 'warn';
   } else {
-    pill.className = 'status-pill';
-    text.textContent = 'LIVE';
+    msg = `Last updated ${when} · ${countdown}`;
   }
+  if (el.textContent !== msg) el.textContent = msg;
+  el.className = `status-line ${cls}`;
 }
 
-// ── CATEGORY FILTER ──
-function filterCategory(cat) {
-  state.activeCategory = cat;
+// ── CONTROLS: segmented, category, search, sort ──
+function layoutSegmented(seg) {
+  if (!seg) return;
+  const act = seg.querySelector('.seg-btn.active');
+  const thumb = seg.querySelector('.seg-thumb');
+  if (!act || !thumb || !act.offsetWidth) { seg.classList.remove('has-thumb'); return; }
+  thumb.style.width = act.offsetWidth + 'px';
+  thumb.style.transform = `translateX(${act.offsetLeft}px)`;
+  seg.classList.add('has-thumb');
+  if (!seg.classList.contains('seg-ready')) requestAnimationFrame(() => requestAnimationFrame(() => seg.classList.add('seg-ready')));
+  if (seg.scrollWidth > seg.clientWidth + 1) {
+    seg.scrollTo({ left: act.offsetLeft - (seg.clientWidth - act.offsetWidth) / 2, behavior: reduceMotion() ? 'auto' : 'smooth' });
+  }
+}
+function layoutAllSegmented() { ['category-tabs', 'sort-seg', 'chart-timeframes'].forEach(id => layoutSegmented($(id))); }
 
-  // Update tab active state
-  document.querySelectorAll('.cat-tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.cat === cat);
+function syncControls() {
+  document.querySelectorAll('#category-tabs .seg-btn').forEach(b => {
+    const on = b.dataset.cat === state.activeCategory;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
   });
-
-  renderAllCards();
+  document.querySelectorAll('#sort-seg .seg-btn').forEach(b => {
+    const on = b.dataset.sort === state.sortBy;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+  });
+  const input = $('commodity-search');
+  if (input && input.value !== state.searchQuery) input.value = state.searchQuery;
+  const has = !!state.searchQuery;
+  const clr = $('search-clear'); if (clr) clr.hidden = !has;
+  const field = $('search-field'); if (field) field.classList.toggle('has-value', has);
+  updateWatchCount();
+  layoutSegmented($('category-tabs'));
+  layoutSegmented($('sort-seg'));
 }
 
-// Make available globally
-window.filterCategory = filterCategory;
-
-// ── THEME TOGGLE ──
-function toggleTheme() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('commodity-theme', next);
-  updateThemeButton(next);
+function filterCategory(cat) {
+  if (!CATEGORIES.includes(cat)) cat = 'all';
+  state.activeCategory = cat;
+  syncControls(); renderAllCards(); urlWrite('replace');
+}
+function setSortBy(value) {
+  state.sortBy = SORTS.includes(value) ? value : 'default';
+  syncControls(); renderAllCards(); urlWrite('replace');
+}
+let searchUrlTimer = null;
+function filterSearch(value) {
+  state.searchQuery = value || '';
+  syncControls(); renderAllCards();
+  clearTimeout(searchUrlTimer);
+  searchUrlTimer = setTimeout(() => urlWrite('replace'), 300);
+}
+function clearSearch(focus) {
+  state.searchQuery = '';
+  syncControls(); renderAllCards(); urlWrite('replace');
+  if (focus) { const i = $('commodity-search'); if (i) i.focus(); }
 }
 
-function updateThemeButton(theme) {
-  const icon = document.getElementById('theme-icon');
-  const label = document.getElementById('theme-label');
-  if (icon) icon.innerHTML = theme === 'dark' ? SVG_ICONS.sun : SVG_ICONS.moon;
-  if (label) label.textContent = theme === 'dark' ? 'Light' : 'Dark';
+// ── DEEP LINKS (#cat=energy&q=oil&sort=gainers&chart=gold) ──
+function parseUrl() {
+  const hash = new URLSearchParams(location.hash.replace(/^#/, ''));
+  const query = new URLSearchParams(location.search); // legacy ?cat= from docs links
+  const cat = hash.get('cat') || query.get('cat');
+  const sort = hash.get('sort');
+  const chart = hash.get('chart');
+  return {
+    cat: CATEGORIES.includes(cat) ? cat : 'all',
+    q: (hash.get('q') || '').slice(0, 80),
+    sort: SORTS.includes(sort) ? sort : 'default',
+    chart: chart && COMMODITIES[chart] && COMMODITIES[chart].yahooSymbol ? chart : null,
+  };
 }
 
-window.toggleTheme = toggleTheme;
+function buildUrl(withChart) {
+  const p = new URLSearchParams();
+  if (state.activeCategory !== 'all') p.set('cat', state.activeCategory);
+  if (state.searchQuery.trim()) p.set('q', state.searchQuery.trim());
+  if (state.sortBy !== 'default') p.set('sort', state.sortBy);
+  if (withChart && currentChartKey) p.set('chart', currentChartKey);
+  const s = p.toString();
+  const search = new URLSearchParams(location.search); search.delete('cat');
+  const qs = search.toString();
+  return location.pathname + (qs ? '?' + qs : '') + (s ? '#' + s : '');
+}
 
-// ── FORCE REFRESH ──
-const refreshSvg = `<span style="display:inline-flex;width:14px;height:14px">${SVG_ICONS.refresh}</span>`;
-async function forceRefresh() {
-  const btn = document.getElementById('refresh-btn');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = `${refreshSvg} Loading...`;
+let chartPushed = false;
+function urlWrite(mode) {
+  try {
+    const url = buildUrl(isChartOpen());
+    if (mode === 'push') history.pushState({ cpt: 1 }, '', url);
+    else history.replaceState(history.state, '', url);
+    lastAppliedSig = JSON.stringify(parseUrlFrom(url));
+  } catch (e) { /* file:// or sandboxed — ignore */ }
+}
+
+let lastAppliedSig = '';
+function applyUrlState() {
+  const u = parseUrl();
+  const sig = JSON.stringify(u);
+  if (sig === lastAppliedSig) return;
+  lastAppliedSig = sig;
+  const changed = state.activeCategory !== u.cat || state.searchQuery !== u.q || state.sortBy !== u.sort;
+  state.activeCategory = u.cat; state.searchQuery = u.q; state.sortBy = u.sort;
+  if (changed) { syncControls(); renderAllCards(); }
+  if (u.chart) { if (currentChartKey !== u.chart || !isChartOpen()) openChart(u.chart, { fromUrl: true }); }
+  else if (isChartOpen()) closeChart({ fromPop: true });
+}
+
+// ── TOAST + SHARE ──
+let toastTimer = null;
+function showToast(msg) {
+  const t = $('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+function buildShare(key) {
+  const config = COMMODITIES[key];
+  const p = state.prices[key];
+  const lines = [];
+  const exch = config.exchange ? ` (${config.exchange})` : '';
+  if (!p || !isNum(p.price)) {
+    lines.push(`${config.name}: price currently unavailable`);
+  } else {
+    const chg = hasChange(p) ? ` (${p.changePct > 0 ? '+' : ''}${p.changePct.toFixed(2)}%)` : '';
+    lines.push(`${config.name}${exch}: ${fmtUSD(p.price)} per ${config.intlUnit.toLowerCase()}${chg}`);
+    const landed = calcIndiaLanded(key);
+    const duty = getDuty(config);
+    if (config.importProhibited) lines.push('Import prohibited in India (DGFT).');
+    else if (landed) {
+      const v = config.show10g ? `${fmtINR(landed.per10g, 0)}/10g` : `${fmtINR(landed.perUnit)}/${config.indiaUnit}`;
+      lines.push(`India import landed: ${v} incl. duty (${duty.label})`);
+    }
+    if (p.isApprox) lines.push(`Indicative level as of ${INDICATIVE_AS_OF}.`);
+    else if (state.fromCache || isPriceStale(p)) lines.push(`Note: saved price from ${fmtTime(new Date(p.ts || Date.now()))}, not live.`);
   }
-  await fetchAllPrices();
-  updateCards();
-  if (btn) {
-    btn.disabled = false;
-    btn.innerHTML = `${refreshSvg} Refresh`;
-  }
+  lines.push('For illustrative purposes only. Not NSE/MCX data.');
+  lines.push('via @MrChartist');
+  const p2 = new URLSearchParams({ q: config.name });
+  return { title: `${config.name} price — Commodity Price Tracker`, text: lines.join('\n'), url: `${SITE_URL}#${p2.toString()}` };
 }
 
-window.forceRefresh = forceRefresh;
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* fall through */ }
+  }
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand('copy');
+    ta.remove();
+    return ok;
+  } catch (e) { return false; }
+}
 
-// ── AUTO-POLL (visibility-aware) ──
-// Yahoo rate-limits aggressive polling and each cycle fetches ~21 live symbols
-// through shared CORS proxies, so we poll every 60s — and only while the tab is
-// visible. Hidden tabs pause; returning to the tab refreshes immediately.
-const POLL_INTERVAL_MS = 60000;
+async function shareCommodity(key) {
+  const d = buildShare(key);
+  if (navigator.share) {
+    try { await navigator.share({ title: d.title, text: d.text, url: d.url }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  const ok = await copyText(`${d.text}\n${d.url}`);
+  showToast(ok ? 'Price copied to clipboard' : 'Unable to copy. Please copy manually.');
+}
+
+// ── REFRESH + POLLING ──
+let inflight = null;
 let pollTimer = null;
 
-function startPolling() {
-  if (pollTimer) return;
-  pollTimer = setInterval(async () => {
-    await fetchAllPrices();
-    updateCards();
-  }, POLL_INTERVAL_MS);
+function setRefreshUi(busy) {
+  const btn = $('refresh-btn');
+  if (!btn) return;
+  btn.disabled = busy;
+  btn.setAttribute('aria-busy', String(busy));
 }
 
-function stopPolling() {
-  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-}
-
-document.addEventListener('visibilitychange', async () => {
-  if (document.hidden) {
-    stopPolling();
-  } else {
-    await fetchAllPrices();
-    updateCards();
-    startPolling();
-  }
-});
-
-// ── INITIALIZE ──
-async function init() {
-  // Load theme preference
-  const savedTheme = localStorage.getItem('commodity-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeButton(savedTheme);
-
-  // Parse URL for categories (deep linking from docs)
-  const params = new URLSearchParams(window.location.search);
-  const cat = params.get('cat');
-  if (cat && ['precious', 'industrial', 'energy', 'agri', 'all'].includes(cat)) {
-    state.activeCategory = cat;
-    document.querySelectorAll('.cat-tab').forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.cat === cat);
-    });
-  }
-
-  // Paint last-known prices from cache immediately (instant load, no "Loading…"
-  // flash, and a working view even if the network is down), then refresh live.
-  hydrateFromCache();
-  renderAllCards();
+function onDataChanged() {
+  const sig = viewSignature(getVisibleKeys());
+  if (sig !== renderedSig) renderAllCards(); else updateCards();
   renderFxTicker();
-
-  await fetchAllPrices();
-  renderAllCards();
-  updateCards();
-
-  // Don't spin the poll loop in a background tab; the visibility handler starts
-  // it (and refreshes) the moment the user actually looks at the page.
-  if (!document.hidden) startPolling();
+  renderSummary();
+  updateStatus();
+  updateStatusLine();
 }
 
-// Start!
-document.addEventListener('DOMContentLoaded', init);
+function scheduleNextPoll(delay) {
+  clearTimeout(pollTimer);
+  if (document.hidden) { state.nextPollAt = null; return; }
+  const ms = delay != null ? delay : (state.failedCycles > 0 ? POLL_RETRY_MS : POLL_INTERVAL_MS);
+  state.nextPollAt = Date.now() + ms;
+  pollTimer = setTimeout(refreshPrices, ms);
+}
 
-// ═══════════════════════════════════════════════════════════════════════
-//  TRADINGVIEW LIGHTWEIGHT CHARTS — COMEX HISTORICAL
-// ═══════════════════════════════════════════════════════════════════════
+function refreshPrices() {
+  if (inflight) return inflight;
+  clearTimeout(pollTimer);
+  state.refreshing = true; state.nextPollAt = null;
+  setRefreshUi(true); updateStatusLine();
+  inflight = (async () => {
+    try {
+      // Open interest is weekly: load once, then at most hourly. Never blocks prices.
+      const oiStale = !state.oi || Date.now() - (state.oiAt || 0) > 3600000;
+      await Promise.all([fetchAllPrices(), oiStale ? fetchOi().then(() => { state.oiAt = Date.now(); }) : null]);
+    }
+    catch (e) { console.warn('Refresh failed:', e && e.message); state.failedCycles++; state.isLoading = false; }
+    finally {
+      state.refreshing = false; inflight = null;
+      setRefreshUi(false);
+      onDataChanged();
+      scheduleNextPoll();
+    }
+  })();
+  return inflight;
+}
 
+// ── CHART SHEET ──
 let chartInstance = null;
 let chartSeries = null;
 let chartResizeObserver = null;
 let currentChartKey = null;
-let currentRange = '1y';
+let chartToken = 0;
+let lastFocus = null;
+let closeTimer = null;
 
-function getChartSymbol(key) {
-  // LME-only metals (zinc/nickel/lead) have no valid Yahoo futures symbol —
-  // ZN=F is the 10-yr T-Note, NOT zinc — so no chart fallback for them.
-  return COMMODITIES[key]?.yahooSymbol || null;
-}
+const isChartOpen = () => { const m = $('chart-modal'); return !!m && !m.hidden && m.classList.contains('open'); };
 
-// ── CHART DATA CACHE (localStorage) ──
-// Yahoo's chart endpoint is flaky through CORS proxies and rate-limits hard.
-// Cache each symbol+range series so charts open instantly and survive a failed
-// refetch by falling back to the last good (stale) copy.
-const CHART_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+function getChartSymbol(key) { return COMMODITIES[key]?.yahooSymbol || null; }
+
+const CHART_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
 function readChartCache(symbol, range) {
   try {
-    const raw = localStorage.getItem(`cpt_chart_${symbol}_${range}`);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
+    const parsed = JSON.parse(store.get(`cpt_chart2_${symbol}_${range}`) || 'null');
     if (!parsed || !Array.isArray(parsed.data) || !parsed.data.length) return null;
     return { data: parsed.data, fresh: (Date.now() - parsed.ts) < CHART_CACHE_TTL_MS };
   } catch (e) { return null; }
 }
-
-function writeChartCache(symbol, range, data) {
-  try {
-    localStorage.setItem(`cpt_chart_${symbol}_${range}`, JSON.stringify({ ts: Date.now(), data }));
-  } catch (e) { /* quota / private mode — ignore */ }
-}
+function writeChartCache(symbol, range, data) { store.set(`cpt_chart2_${symbol}_${range}`, JSON.stringify({ ts: Date.now(), data })); }
 
 async function fetchHistoricalData(symbol, range) {
-  // Serve a fresh cached series immediately if we have one
   const cached = readChartCache(symbol, range);
-  if (cached && cached.fresh) return cached.data;
-
-  const interval = ['1mo', '3mo', '6mo'].includes(range) ? '1d' : (['1y', '2y'].includes(range) ? '1d' : '1wk');
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=${range}&interval=${interval}`;
-
-  const proxies = [
-    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-  ];
-
-  for (const proxy of proxies) {
-    try {
-      const resp = await fetch(proxy(url));
-      const data = await resp.json();
-      const result = data?.chart?.result?.[0];
-      if (!result) continue;
-
-      const timestamps = result.timestamp;
-      const quote = result.indicators.quote[0];
-      const ohlcData = [];
-
-      for (let i = 0; i < timestamps.length; i++) {
-        if (quote.open[i] == null || quote.close[i] == null) continue;
-        ohlcData.push({
-          time: timestamps[i],
-          open: +quote.open[i].toFixed(2),
-          high: +quote.high[i].toFixed(2),
-          low: +quote.low[i].toFixed(2),
-          close: +quote.close[i].toFixed(2),
-        });
-      }
-
-      if (ohlcData.length) {
-        writeChartCache(symbol, range, ohlcData);
-        return ohlcData;
-      }
-    } catch (e) { /* try next proxy */ }
+  if (cached && cached.fresh) return { data: cached.data, stale: false };
+  const slice = (rows, cutoff) => rows.filter(r => r[0] >= cutoff).map(r => ({ time: r[0], open: +r[1].toFixed(2), high: +r[2].toFixed(2), low: +r[3].toFixed(2), close: +r[4].toFixed(2), volume: isNum(r[5]) ? r[5] : 0 }));
+  const DAYS = { '1mo': 31, '3mo': 92, '6mo': 183, '1y': 366, '2y': 731, '5y': 1827, '10y': 3653, max: 36500 };
+  if (/^https?:$/.test(location.protocol)) {
+    for (const base of dataSources()) {
+      try {
+        const resp = await fetch(`${base}/charts/${encodeURIComponent(symbol)}.json?t=${Math.floor(Date.now() / 3600000)}`, { signal: AbortSignal.timeout(12000) });
+        if (!resp.ok) continue;
+        const body = await resp.json();
+        const cutoff = Date.now() / 1000 - (DAYS[range] || 366) * 86400;
+        const rows = slice(['1mo', '3mo', '6mo', '1y', '2y'].includes(range) ? body.daily : range === 'max' ? body.monthly : body.weekly, cutoff).filter(r => [r.open, r.high, r.low, r.close].every(isNum));
+        if (rows.length) { writeChartCache(symbol, range, rows); return { data: rows, stale: false }; }
+      } catch (e) { /* try next source */ }
+    }
   }
-  // All proxies failed — fall back to stale cache if we have any
-  return cached ? cached.data : null;
+  return cached ? { data: cached.data, stale: true } : { data: null, stale: false };
 }
 
-function getChartThemeColors() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  return isDark ? {
-    bg: '#0a0f1c',
-    text: '#8a9ab5',
-    grid: 'rgba(40,48,64,0.3)',
-    border: 'rgba(40,48,64,0.5)',
-    upColor: '#30b86a',
-    downColor: '#d94848',
-    wickUp: '#30b86a',
-    wickDown: '#d94848',
-    crosshairColor: 'rgba(232,128,64,0.4)',
-  } : {
-    bg: '#ffffff',
-    text: '#6b6158',
-    grid: 'rgba(226,223,219,0.5)',
-    border: 'rgba(226,223,219,0.8)',
-    upColor: '#25a05a',
-    downColor: '#d93636',
-    wickUp: '#25a05a',
-    wickDown: '#d93636',
-    crosshairColor: 'rgba(240,112,32,0.4)',
+function chartColors() {
+  return currentTheme() === 'dark'
+    ? { bg: '#1C1C1E', text: '#98989D', grid: 'rgba(84,84,88,0.35)', border: 'rgba(84,84,88,0.65)', up: '#30D158', down: '#FF453A', cross: 'rgba(142,140,255,0.5)' }
+    : { bg: '#FFFFFF', text: '#636366', grid: 'rgba(60,60,67,0.1)', border: 'rgba(60,60,67,0.2)', up: '#34C759', down: '#FF3B30', cross: 'rgba(79,70,229,0.45)' };
+}
+function chartOptions() {
+  const c = chartColors();
+  return {
+    localization: { locale: 'en-IN' },
+    layout: { background: { type: 'solid', color: c.bg }, textColor: c.text, fontFamily: "'Inter', -apple-system, system-ui, sans-serif", fontSize: 12 },
+    grid: { vertLines: { color: c.grid }, horzLines: { color: c.grid } },
+    crosshair: { mode: 0, vertLine: { color: c.cross, width: 1, style: 2 }, horzLine: { color: c.cross, width: 1, style: 2 } },
+    rightPriceScale: { borderColor: c.border, scaleMargins: { top: 0.1, bottom: 0.1 } },
+    timeScale: { borderColor: c.border, timeVisible: false },
   };
 }
 
-async function openChart(key) {
-  currentChartKey = key;
-  currentRange = '1y';
+function destroyChart() {
+  if (chartResizeObserver) { chartResizeObserver.disconnect(); chartResizeObserver = null; }
+  if (chartInstance) { try { chartInstance.remove(); } catch (e) { /* already disposed */ } chartInstance = null; }
+  chartSeries = null;
+}
+
+function setRangeButtons(range) {
+  document.querySelectorAll('#chart-timeframes .seg-btn').forEach(b => {
+    const on = b.dataset.range === range;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on));
+  });
+  layoutSegmented($('chart-timeframes'));
+}
+
+function lockScroll(lock) {
+  document.body.classList.toggle('modal-open', lock);
+  document.body.style.paddingRight = lock ? Math.max(0, window.innerWidth - document.documentElement.clientWidth) + 'px' : '';
+  const app = $('app');
+  if (app) { if (lock) app.setAttribute('inert', ''); else app.removeAttribute('inert'); }
+}
+
+async function openChart(key, opts = {}) {
   const config = COMMODITIES[key];
-
-  // Update modal title
+  if (!config || !config.yahooSymbol) return;
+  const modal = $('chart-modal');
+  const wasOpen = isChartOpen();
+  clearTimeout(closeTimer);
+  currentChartKey = key;
   const exchange = config.exchange || 'Futures';
-  document.getElementById('chart-title').textContent = `${config.name} — ${exchange} Historical`;
-  document.getElementById('chart-sub').textContent = `${config.yahooSymbol || key.toUpperCase()} · ${exchange} Futures`;
+  $('chart-title').textContent = `${config.name}`;
+  $('chart-sub').textContent = `${config.yahooSymbol} · ${exchange} futures · USD`;
+  $('chart-source').textContent = `Data: Yahoo Finance (${exchange} futures) · For illustrative purposes only`;
+  setRangeButtons('1y');
 
-  // Reset timeframe buttons
-  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.tf-btn[data-range="1y"]').classList.add('active');
-
-  // Show modal
-  document.getElementById('chart-modal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-
+  if (!wasOpen) {
+    lastFocus = opts.trigger || document.activeElement;
+    modal.hidden = false;
+    void modal.offsetWidth;
+    modal.classList.add('open');
+    lockScroll(true);
+    $('chart-close').focus({ preventScroll: true });
+    layoutSegmented($('chart-timeframes'));
+  }
+  if (!opts.fromUrl) {
+    urlWrite('push'); chartPushed = true;
+  }
   await renderChart(key, '1y');
 }
-window.openChart = openChart;
+
+function parseUrlFrom(url) {
+  const h = new URLSearchParams((url.split('#')[1] || ''));
+  const cat = h.get('cat'), sort = h.get('sort'), chart = h.get('chart');
+  return { cat: CATEGORIES.includes(cat) ? cat : 'all', q: (h.get('q') || '').slice(0, 80), sort: SORTS.includes(sort) ? sort : 'default', chart: chart && COMMODITIES[chart] && COMMODITIES[chart].yahooSymbol ? chart : null };
+}
 
 async function renderChart(key, range) {
-  const container = document.getElementById('chart-container');
-  container.innerHTML = '<div class="chart-loading">Loading chart data...</div>';
+  const token = ++chartToken;
+  const container = $('chart-container');
+  destroyChart();
+  container.innerHTML = '<div class="chart-loading" role="status">Loading chart data…</div>';
+  $('chart-data-range').textContent = '';
 
-  // Destroy previous chart + its resize observer (otherwise observers stack up
-  // on the reused container every time the range changes — a slow leak).
-  if (chartResizeObserver) {
-    chartResizeObserver.disconnect();
-    chartResizeObserver = null;
+  if (typeof LightweightCharts === 'undefined') {
+    container.innerHTML = '<div class="chart-loading">The charting library could not be loaded. Please check your connection and try again.</div>';
+    return;
   }
-  if (chartInstance) {
-    chartInstance.remove();
-    chartInstance = null;
-  }
-
   const symbol = getChartSymbol(key);
-  if (!symbol) {
-    container.innerHTML = '<div class="chart-loading">Live chart is unavailable for indicative-priced commodities</div>';
+  if (!symbol) { container.innerHTML = '<div class="chart-loading">A chart is unavailable for indicative-priced commodities.</div>'; return; }
+
+  const { data, stale } = await fetchHistoricalData(symbol, range);
+  if (token !== chartToken || !isChartOpen()) return; // superseded or closed while loading
+  if (!data || !data.length) {
+    container.innerHTML = '<div class="chart-loading">Unable to load chart data. Please try another range or try again shortly.</div>';
     return;
   }
-
-  const data = await fetchHistoricalData(symbol, range);
-  if (!data || data.length === 0) {
-    container.innerHTML = '<div class="chart-loading">Unable to load chart data</div>';
-    return;
-  }
-
   container.innerHTML = '';
-  const colors = getChartThemeColors();
-
+  const c = chartColors();
   chartInstance = LightweightCharts.createChart(container, {
-    width: container.clientWidth,
-    height: container.clientHeight,
-    layout: {
-      background: { type: 'solid', color: colors.bg },
-      textColor: colors.text,
-      fontFamily: "'Inter', 'Plus Jakarta Sans', system-ui, sans-serif",
-      fontSize: 12,
-    },
-    grid: {
-      vertLines: { color: colors.grid },
-      horzLines: { color: colors.grid },
-    },
-    crosshair: {
-      mode: 0,
-      vertLine: { color: colors.crosshairColor, width: 1, style: 2 },
-      horzLine: { color: colors.crosshairColor, width: 1, style: 2 },
-    },
-    rightPriceScale: {
-      borderColor: colors.border,
-      scaleMargins: { top: 0.1, bottom: 0.1 },
-    },
-    timeScale: {
-      borderColor: colors.border,
-      timeVisible: false,
-    },
-    handleScroll: true,
-    handleScale: true,
+    ...chartOptions(),
+    width: container.clientWidth || 320,
+    height: container.clientHeight || 320,
+    handleScroll: true, handleScale: true,
   });
-
   chartSeries = chartInstance.addCandlestickSeries({
-    upColor: colors.upColor,
-    downColor: colors.downColor,
-    borderDownColor: colors.downColor,
-    borderUpColor: colors.upColor,
-    wickDownColor: colors.wickDown,
-    wickUpColor: colors.wickUp,
+    upColor: c.up, downColor: c.down, borderUpColor: c.up, borderDownColor: c.down, wickUpColor: c.up, wickDownColor: c.down,
   });
-
   chartSeries.setData(data);
+  if (data.some(d => d.volume > 0)) {
+    const tint = hex => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},0.35)`; };
+    const vol = chartInstance.addHistogramSeries({ priceFormat: { type: 'volume' }, priceScaleId: '', lastValueVisible: false, priceLineVisible: false });
+    vol.priceScale().applyOptions({ scaleMargins: { top: 0.82, bottom: 0 } });
+    vol.setData(data.map(d => ({ time: d.time, value: d.volume, color: tint(d.close >= d.open ? c.up : c.down) })));
+  }
   chartInstance.timeScale().fitContent();
 
-  // Data range label
-  const first = new Date(data[0].time * 1000).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-  const last = new Date(data[data.length-1].time * 1000).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-  const rangeLabel = document.getElementById('chart-data-range');
-  if (rangeLabel) rangeLabel.textContent = `${first} — ${last} · ${data.length} candles`;
+  const fmt = t => new Date(t * 1000).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+  $('chart-data-range').textContent = `${fmt(data[0].time)} – ${fmt(data[data.length - 1].time)} · ${data.length} candles${stale ? ' · cached copy' : ''}`;
 
-  // Resize handler (tracked at module scope so it can be disconnected on the
-  // next render / close instead of leaking a new observer each time).
   chartResizeObserver = new ResizeObserver(() => {
-    if (chartInstance) {
-      chartInstance.applyOptions({ width: container.clientWidth, height: container.clientHeight });
-    }
+    if (chartInstance && container.clientWidth > 0) chartInstance.applyOptions({ width: container.clientWidth, height: container.clientHeight });
   });
   chartResizeObserver.observe(container);
 }
 
 async function changeRange(range) {
-  currentRange = range;
-  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.tf-btn[data-range="${range}"]`).classList.add('active');
+  setRangeButtons(range);
   if (currentChartKey) await renderChart(currentChartKey, range);
 }
-window.changeRange = changeRange;
 
-function closeChart() {
-  document.getElementById('chart-modal').style.display = 'none';
-  document.body.style.overflow = '';
-  if (chartResizeObserver) {
-    chartResizeObserver.disconnect();
-    chartResizeObserver = null;
-  }
-  if (chartInstance) {
-    chartInstance.remove();
-    chartInstance = null;
-  }
+function closeChart(opts = {}) {
+  const modal = $('chart-modal');
+  if (!modal || modal.hidden) return;
+  chartToken++; // cancel in-flight loads
+  modal.classList.remove('open');
+  lockScroll(false);
+  destroyChart();
+  const sheet = $('chart-sheet'); if (sheet) { sheet.style.transform = ''; sheet.classList.remove('dragging'); }
+  clearTimeout(closeTimer);
+  closeTimer = setTimeout(() => { if (!modal.classList.contains('open')) modal.hidden = true; }, reduceMotion() ? 0 : 320);
+  if (!opts.fromPop) {
+    if (chartPushed) { chartPushed = false; try { history.back(); } catch (e) { /* ignore */ } }
+    else { currentChartKey = null; urlWrite('replace'); }
+  } else chartPushed = false;
+  currentChartKey = null;
+  if (lastFocus && document.contains(lastFocus) && typeof lastFocus.focus === 'function') lastFocus.focus({ preventScroll: true });
+  lastFocus = null;
 }
-window.closeChart = closeChart;
 
-// ESC key to close chart
+// Drag-to-dismiss for the mobile bottom sheet
+function initSheetDrag() {
+  const grab = $('sheet-grabber'), sheet = $('chart-sheet');
+  if (!grab || !sheet) return;
+  let startY = null, dy = 0, t0 = 0;
+  grab.addEventListener('pointerdown', e => {
+    if (getComputedStyle(grab).display === 'none') return;
+    startY = e.clientY; dy = 0; t0 = Date.now();
+    grab.setPointerCapture(e.pointerId); sheet.classList.add('dragging');
+  });
+  grab.addEventListener('pointermove', e => {
+    if (startY == null) return;
+    dy = Math.max(0, e.clientY - startY);
+    sheet.style.transform = `translateY(${dy}px)`;
+  });
+  const end = () => {
+    if (startY == null) return;
+    const velocity = dy / Math.max(1, Date.now() - t0);
+    startY = null; sheet.classList.remove('dragging');
+    if (dy > 110 || velocity > 0.6) closeChart(); else sheet.style.transform = '';
+  };
+  grab.addEventListener('pointerup', end);
+  grab.addEventListener('pointercancel', end);
+}
+
+// ── KEYBOARD ──
+function focusables(root) {
+  return [...root.querySelectorAll('button, [href], input, select, [tabindex]:not([tabindex="-1"])')].filter(el => !el.disabled && !el.hidden && el.offsetParent !== null);
+}
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeChart();
+  if (isChartOpen()) {
+    if (e.key === 'Escape') { e.preventDefault(); closeChart(); return; }
+    if (e.key === 'Tab') {
+      const sheet = $('chart-sheet');
+      const f = focusables(sheet);
+      if (!f.length) { e.preventDefault(); sheet.focus(); return; }
+      const first = f[0], last = f[f.length - 1];
+      if (!sheet.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+      else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+    return;
+  }
+  const t = e.target;
+  const editing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+  if (e.key === '/' && !editing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    const i = $('commodity-search');
+    if (i) { e.preventDefault(); i.focus(); i.select(); }
+  } else if (e.key === 'Escape') {
+    if (state.searchQuery) { clearSearch(false); }
+    else if (t && t.id === 'commodity-search') t.blur();
+  }
 });
+
+
+// ── PULL TO REFRESH (touch devices; standalone apps have no browser refresh) ──
+function initPullToRefresh() {
+  if (!window.matchMedia || !matchMedia('(pointer: coarse)').matches) return;
+  const el = document.createElement('div');
+  el.className = 'ptr'; el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+  document.body.appendChild(el);
+  const THRESHOLD = 76;
+  let startY = null, pull = 0;
+  const reset = () => { el.style.transform = ''; el.classList.remove('pulling', 'ready'); pull = 0; startY = null; };
+  window.addEventListener('touchstart', e => {
+    if (window.scrollY > 0 || document.body.classList.contains('modal-open') || e.touches.length !== 1) { startY = null; return; }
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchmove', e => {
+    if (startY == null) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy <= 0 || window.scrollY > 0) { if (pull) reset(); return; }
+    pull = Math.min(dy * 0.5, THRESHOLD + 24);
+    el.classList.add('pulling');
+    el.classList.toggle('ready', pull >= THRESHOLD);
+    el.style.transform = `translate(-50%, ${pull - 44}px) rotate(${pull * 4}deg)`;
+  }, { passive: true });
+  const end = () => {
+    if (startY == null) return;
+    const go = pull >= THRESHOLD;
+    reset();
+    if (go) { refreshPrices(); if (navigator.vibrate) try { navigator.vibrate(8); } catch (e) { /* unsupported */ } }
+  };
+  window.addEventListener('touchend', end, { passive: true });
+  window.addEventListener('touchcancel', reset, { passive: true });
+}
+
+// ── EVENT WIRING ──
+function bindEvents() {
+  initPullToRefresh();
+  $('theme-toggle').addEventListener('click', toggleTheme);
+  $('refresh-btn').addEventListener('click', () => refreshPrices());
+  $('chart-close').addEventListener('click', () => closeChart());
+  $('chart-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeChart(); });
+  $('category-tabs').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (b) filterCategory(b.dataset.cat); });
+  $('sort-seg').addEventListener('click', e => { const b = e.target.closest('[data-sort]'); if (b) setSortBy(b.dataset.sort); });
+  $('chart-timeframes').addEventListener('click', e => { const b = e.target.closest('[data-range]'); if (b) changeRange(b.dataset.range); });
+  const input = $('commodity-search');
+  input.addEventListener('input', () => filterSearch(input.value));
+  $('search-clear').addEventListener('click', () => clearSearch(true));
+  const onAction = e => {
+    const b = e.target.closest('[data-action]');
+    if (!b) return;
+    const key = b.dataset.key;
+    switch (b.dataset.action) {
+      case 'chart': openChart(key, { trigger: b }); break;
+      case 'share': shareCommodity(key); break;
+      case 'watch': toggleWatch(key); break;
+      case 'clear-search': clearSearch(true); break;
+      case 'show-all': filterCategory('all'); break;
+    }
+  };
+  $('commodity-grid').addEventListener('click', onAction);
+  $('market-summary').addEventListener('click', onAction);
+
+  window.addEventListener('popstate', applyUrlState);
+  window.addEventListener('hashchange', applyUrlState);
+  window.addEventListener('storage', e => { if (e.key === WATCH_KEY) { loadWatchlist(); updateWatchCount(); renderAllCards(); } });
+  window.addEventListener('online', () => refreshPrices());
+  window.addEventListener('offline', () => { updateStatus(); updateStatusLine(); });
+  let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layoutAllSegmented, 120); });
+
+  // Collapse the large title into the navigation bar on scroll
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => { document.body.classList.toggle('scrolled', window.scrollY > 48); ticking = false; });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Follow system theme changes until the user picks one explicitly
+  if (window.matchMedia) {
+    const mq = matchMedia('(prefers-color-scheme: light)');
+    const onSys = () => { if (!store.get(THEME_KEY)) applyTheme(systemTheme()); };
+    if (mq.addEventListener) mq.addEventListener('change', onSys); else if (mq.addListener) mq.addListener(onSys);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { clearTimeout(pollTimer); state.nextPollAt = null; }
+    else {
+      const age = state.lastSuccess ? Date.now() - state.lastSuccess : Infinity;
+      if (age > 15000) refreshPrices(); else scheduleNextPoll();
+      updateStatus(); updateStatusLine();
+    }
+  });
+
+  // 1 s heartbeat for the countdown; cheaper housekeeping every 30 s
+  let beat = 0;
+  setInterval(() => {
+    if (document.hidden) return;
+    updateStatusLine();
+    if (++beat % 30 === 0) { updateStatus(); updateTickLabels(); }
+  }, 1000);
+  initSheetDrag();
+}
+
+// ── INITIALIZE ──
+function init() {
+  updateThemeButton(currentTheme());
+  loadWatchlist();
+  const u = parseUrl();
+  state.activeCategory = u.cat; state.searchQuery = u.q; state.sortBy = u.sort;
+  lastAppliedSig = JSON.stringify(u);
+
+  hydrateFromCache();
+  bindEvents();
+  syncControls();
+  renderAllCards();
+  renderFxTicker();
+  renderSummary();
+  updateStatus();
+  updateStatusLine();
+  if (u.chart) openChart(u.chart, { fromUrl: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutAllSegmented);
+  requestAnimationFrame(layoutAllSegmented);
+  refreshPrices();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

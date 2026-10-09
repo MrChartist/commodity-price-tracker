@@ -1,244 +1,142 @@
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:6366f1&height=180&section=header&text=Commodity%20Price%20Tracker&fontSize=42&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Live%20India%20Import%20Landed%20Price%20Engine&descSize=16&descAlignY=55&descColor=8b5cf6" width="100%" />
-
 <p align="center">
-  <img src="docs/screenshots/01_hero_dashboard.png" alt="India Commodity Price Tracker — Live Dashboard" width="100%">
+  <img src="brand/mrchartist-symbol.svg" alt="Mr. Chartist symbol" width="72" height="72">
 </p>
 
-> **Live Dashboard** that computes real-time India Import Landed Prices for 30+ commodities — precious metals (Gold, Silver, Platinum, Palladium), industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt), energy (Crude Oil, Natural Gas) and agri (Wheat, Corn, Soybean, Rice, Soybean Meal, Soybean Oil, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs) -- purely from international benchmarks + live forex + customs duty math.
->
-> Built by [**Mr. Chartist**](https://github.com/MrChartist) | Part of the [Mr. Chartist Ecosystem](https://mrchartist.com)
+<h1 align="center">India Commodity Price Tracker</h1>
 
 <p align="center">
-  <a href="https://commodity.mrchartist.com/"><img src="https://img.shields.io/badge/Live_Dashboard-commodity.mrchartist.com-6366f1?style=for-the-badge" alt="Live Dashboard"></a>
-  <a href="https://twitter.com/mr_chartist"><img src="https://img.shields.io/badge/Follow-@mr__chartist-0d1117?style=for-the-badge&logo=x&logoColor=white" alt="Twitter"></a>
-  <a href="https://buymeacoffee.com/mrchartist"><img src="https://img.shields.io/badge/Sponsor-Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
-  <img src="https://img.shields.io/badge/Backend-Zero_Server-8b5cf6?style=for-the-badge" alt="No Backend">
+  <b>What does it actually cost to bring it into India?</b><br>
+  Live import landed prices in rupees for 33 commodities, calculated from international benchmarks,<br>
+  the live USD/INR rate and Indian customs duty. Free, open source, no login, no tracking.
+</p>
+
+<p align="center">
+  <a href="https://commodity.mrchartist.com/"><img src="https://img.shields.io/badge/Live-commodity.mrchartist.com-007AFF?style=flat-square" alt="Live dashboard"></a>
+  <img src="https://img.shields.io/badge/Commodities-33-30D158?style=flat-square" alt="33 commodities">
+  <img src="https://img.shields.io/badge/Dependencies-0-8E8E93?style=flat-square" alt="Zero dependencies">
+  <img src="https://img.shields.io/badge/Hosting-GitHub_Pages-8E8E93?style=flat-square" alt="GitHub Pages">
+  <img src="https://img.shields.io/badge/PWA-offline_ready-0A84FF?style=flat-square" alt="PWA">
+  <img src="https://img.shields.io/badge/License-MIT-30D158?style=flat-square" alt="MIT licence">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/dashboard-dark.png" alt="Dashboard in dark mode with live international prices and India landed rupee prices" width="100%">
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/mobile.png" alt="Mobile view" width="32%">
+  <img src="assets/screenshots/chart.png" alt="Futures price chart" width="64%">
 </p>
 
 ---
 
-## ✨ Features
+## What it does
 
-| Feature | Description |
-|---------|-------------|
-| **30+ Commodities** | Precious (Gold, Silver, Platinum, Palladium) · Industrial & battery metals (Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt) · Energy (WTI, Brent, Natural Gas) · Agri (Wheat, Corn, Soybean, Rice, Soybean Meal, Soybean Oil, Sugar, Cotton, Coffee, Cocoa, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs) |
-| **Live Auto-Refresh** | Pulls fresh data every ~60 seconds from COMEX, NYMEX, CBOT, ICE, CME & Yahoo Finance |
-| **India Import Landed ₹** | Applies BCD + AIDC + SWS customs duties (verified June 2026 rates, incl. the May 2026 bullion duty hike to 15% and the critical-minerals 0% exemption) with live USD/INR forex conversion |
-| **Multi-Currency Normalization** | Auto-converts US-cents (USX) and foreign-currency (e.g. CAD) quotes to USD via live FX rates before the INR conversion |
-| **Live FX Ticker** | Surfaces the USD/INR rate (with daily change) plus the EUR/GBP/JPY/CNY/AED reference rates the engine actually applies — the conversion is transparent, not a hidden constant |
-| **Instant Search & Sort** | Filter 30+ commodities by name or symbol and sort by Top Gainers / Top Losers / A–Z, layered on top of the category tabs |
-| **Offline-Resilient Cache** | Last-known prices + FX persist to localStorage, so the dashboard paints instantly on reload and keeps working (flagged CACHED / STALE) through a network outage |
-| **Battery-Friendly Polling** | Auto-refresh pauses when the browser tab is hidden and refreshes immediately on return, sparing Yahoo's rate limits |
-| **Date-Aware Duty Engine** | Handles time-bound duty notifications automatically (e.g. cotton duty-free Jun–Oct 2026, reverts to 11% after) |
-| **Compliance-Aware** | Beef / live cattle (prohibited import in India) is shown with the international price only — no fabricated landed price |
-| **Purity Variants** | 24K / 22K / 18K Gold, 999 / 925 / 900 Silver — auto-calculated |
-| **Retail Contract Equivalents** | MCX-style lot values: Gold Mini (100g), Gold Guinea (8g), Gold Petal (1g), Silver (30kg/5kg/1kg) |
-| **Indian Market Units** | Grains/rice/meal in ₹/quintal, oils & softs in ₹/kg, gold in ₹/10g, lumber in ₹/cu ft |
-| **Interactive Futures Charts** | TradingView Lightweight Charts with 1M to Max timeframes, cached in-browser (localStorage) for instant, resilient loading |
-| **Category Filtering** | One-click filter: Precious Metals · Industrial Metals · Energy · Agri |
-| **Documentation Hub** | Full methodology engine docs, duty rate matrices & 23-term financial glossary |
-| **Dark / Light Mode** | Premium glassmorphic UI with OLED-optimized dark theme |
-| **Zero Backend** | 100% client-side — no server, no database, no login required |
-| **SEO Optimized** | JSON-LD structured data, Open Graph meta, AI discoverability tags |
-
----
-
-## 📸 Section-by-Section Walkthrough
-
-### 1. Live Dashboard — Precious Metals & Energy
-
-The default landing view showing **real-time COMEX/NYMEX prices** with:
-
-- **Price Cards** — International spot price + percentage change badge
-- **India Landed Breakdown** — Per-gram prices across 24K/22K/18K Gold, 999/925/900 Silver
-- **10g & Per-kg Aggregates** — Direct comparison with Indian retail benchmarks
-- **Retail Contract Equivalents** — Gold Mini, Guinea, Petal lot values
-- **Duty Badges** — Visual BCD + AIDC breakdowns on each card
-
-![Live Dashboard](docs/screenshots/01_hero_dashboard.png)
-
----
-
-### 2. Energy & Industrial Metals
-
-Scrolling reveals the full commodity spectrum:
-
-- **Brent Crude & Natural Gas** — NYMEX/ICE futures with effective duty overlay
-- **Industrial & Battery Metals** — Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel, Iron Ore, Lithium, Cobalt
-- **Agri Commodities** — Wheat, Corn, Soybean, Rice, Soybean Meal (₹/quintal), oils & softs (₹/kg), Lumber (₹/cu ft)
-- **Source Attribution** — Each card shows its data origin (Yahoo Finance / gold-api.com / Indicative)
-
-![Energy & Industrial](docs/screenshots/02_energy_industrial.png)
-
----
-
-### 3. Interactive COMEX Charts
-
-Click any **"Chart"** button to launch a full-screen historical chart:
-
-- **TradingView Lightweight Charts** — Professional candlestick rendering
-- **7 Timeframes** — 1M, 3M, 6M, 1Y, 5Y, 10Y, Max
-- **COMEX Futures Data** — Real historical data from Yahoo Finance
-
-![Chart Modal](docs/screenshots/03_chart_modal.png)
-
----
-
-### 4. Methodology Engine
-
-The expandable methodology panel explains the entire pricing pipeline:
-
-- **Core Formula** — `India Landed ₹ = (Intl. Price ÷ Unit) × USD/INR × (1 + Duty%)`
-- **Metal-Specific Breakdowns** — Gold/Silver, Base Metals, Energy, Platinum
-- **Compliance Notice** — No NSE/MCX data disclaimer
-
-![Methodology](docs/screenshots/04_methodology.png)
-
----
-
-### 5. Documentation Hub
-
-A dedicated `/docs.html` page with comprehensive technical documentation:
-
-- **4-Step Visual Pipeline** — Step-by-step pricing engine walkthrough
-- **Duty Rate Matrix** — Complete BCD/AIDC table for all metals
-- **Purity Formulas** — 24K→22K→18K conversion table with examples
-- **Data Source Cards** — Yahoo Finance, Metals.live, CORS Proxies, Lightweight Charts
-
-![Documentation Hub](docs/screenshots/05_docs_hub.png)
-
----
-
-### 6. Financial Glossary
-
-A 23-term glossary covering essential commodity trading terminology:
-
-- **Landed Price, BCD, AIDC, SWS, Safeguard Duty** — Import cost concepts
-- **Critical Minerals Exemption** — India's 0% BCD on lithium, cobalt, tin
-- **COMEX, NYMEX, LME, CBOT, ICE, CME** — Exchange definitions
-- **Troy Ounce, Karat, Fineness, Bushel, Quintal, Hundredweight** — Measurement units
-- **CAD, Windfall Tax, MMBtu** — Macro concepts
-
-![Financial Glossary](docs/screenshots/06_glossary.png)
-
----
-
-## 🛠️ Tech Stack
-
-| Technology | Usage |
-|-----------|-------|
-| **HTML5** | Single-file dashboard with semantic structure |
-| **CSS3** | Custom properties, OLED dark mode, glassmorphism, ambient orbs |
-| **Vanilla JavaScript** | Core pricing engine — `app.js` (zero dependencies) |
-| **Lightweight Charts** | TradingView's open-source charting library v4.1.3 |
-| **Yahoo Finance** | Precious metals, energy, copper/aluminium/steel, agri & livestock futures, forex (USDINR=X) |
-| **gold-api.com** | Free no-key CORS-friendly spot backup for Gold, Silver, Platinum, Palladium |
-| **Indicative Levels** | Manually updated USD/tonne for Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil (no free live feed exists) |
-| **CORS Proxies** | allorigins.win + corsproxy.io for client-side API access |
-| **localStorage** | Caches chart history (6h TTL) for instant, offline-resilient charts |
-
-## 📂 Project Structure
+International prices are quoted in dollars, per ounce, barrel or bushel. Indian buyers think in rupees, per gram, kilogram or quintal, after duty. This tracker does that conversion in the open:
 
 ```
-Commodity Price Tracker/
-├── index.html             # Main dashboard (category tabs, cards, chart modal)
-├── docs.html              # Documentation Hub (methodology, glossary)
-├── app.js                 # Core pricing engine (45KB, zero dependencies)
-├── style.css              # Premium dark/light theme (30KB)
-├── vercel.json            # Vercel deployment config
-├── package.json           # npm scripts (dev server)
-├── .gitignore             # Node.js gitignore
-├── docs/
-│   └── screenshots/       # README screenshots
-│       ├── 01_hero_dashboard.png
-│       ├── 02_energy_industrial.png
-│       ├── 03_chart_modal.png
-│       ├── 04_methodology.png
-│       ├── 05_docs_hub.png
-│       └── 06_glossary.png
-└── README.md              # This file
+India landed price = (international price ÷ unit conversion) × USD/INR × (1 + duty)
 ```
 
-## 🚀 Quick Start
+Each card shows one headline rupee price. Open **Details** for the full breakdown (purities, per-kg and per-10g values, contract-lot equivalents), the duty applied and the data source.
+
+| | |
+|---|---|
+| **33 commodities** | Precious metals, industrial and battery metals, energy, and agri: gold, silver, platinum, palladium, copper, aluminium, steel, crude oil, natural gas, wheat, cotton, coffee, palm oil and more |
+| **Indian units** | Gold in ₹/g and ₹/10g (24K, 22K, 18K), grains in ₹/quintal, oils and softs in ₹/kg, lumber in ₹/cu ft |
+| **Duty aware** | BCD, AIDC and SWS per commodity, including date-based changes (for example cotton) |
+| **Volume and open interest** | Latest and previous session volume, weekly open interest with week-on-week change, and managed-money net positioning (CFTC), with a volume histogram on every chart |
+| **Honest status** | Every price is labelled Live, Cached, Stale or Indicative, with its real age |
+| **Charts** | Candlestick history from 1 month to the full available range |
+| **Watchlist and share** | Star your commodities, copy or share a price, link straight to a category or chart |
+| **Works offline** | Installable as an app; shows the last known prices when you are offline |
+| **Clean by design** | Light and dark themes, keyboard friendly (`/` to search, `Esc` to close), accessible, fast on a phone |
+
+## How the data stays live
+
+Yahoo Finance does not allow direct requests from a browser, so a scheduled GitHub Action fetches it and publishes a small static file. Gold, silver, platinum and palladium spot prices are read directly by the browser.
+
+```mermaid
+flowchart LR
+  A[GitHub Action<br/>every 5 min] -->|Yahoo Finance, FX| B[(data branch<br/>prices.json)]
+  C[GitHub Action<br/>every 6 h] -->|chart history| B
+  B -->|raw.githubusercontent.com| D[Your browser]
+  E[gold-api.com spot] -->|every 60 s| D
+  D --> F[Landed price in ₹<br/>calculated on your device]
+```
+
+| Data | Source | How fresh |
+|---|---|---|
+| Gold, silver, platinum, palladium | gold-api.com spot, read by the browser | About every minute |
+| Futures, USD/INR, FX strip | Yahoo Finance via the `data` branch | Up to about 5 minutes |
+| Chart history and volume bars | Yahoo Finance via the `data` branch | Refreshed every 6 hours |
+| Open interest, managed-money net | CFTC Commitments of Traders via the `data` branch | Weekly (as of Tuesday, published Friday) |
+| Nine commodities with no free live feed | Typed-in indicative levels in `app.js` | As of 2026-06-12. **Needs verification** |
+
+The nine indicative commodities (zinc, nickel, lead, tin, iron ore, lithium, cobalt, canola oil, palm oil) are always badged **Indicative**. Their feeds are not freely available, and a stale feed shown as live would be worse than an honest label.
+
+Notes on freshness: GitHub can delay scheduled runs at busy times, and it pauses schedules in a repository with no activity for 60 days. The app flags any price older than 20 minutes as Stale.
+
+## Run it locally
+
+Needs Node.js 18 or later. No packages to install.
 
 ```bash
-# Clone the repository
 git clone https://github.com/MrChartist/commodity-price-tracker.git
 cd commodity-price-tracker
-
-# Serve locally (no build step needed!)
-npx serve .
-# → Open http://localhost:3000
+npm run dev
 ```
 
-That's it. No `npm install`, no build tools, no environment variables. The entire app runs client-side.
+Open <http://localhost:3000>. The local server generates the same live data files the GitHub Action publishes, so it works without any setup.
 
-## 📊 Data Flow
+## Fork it and run your own
+
+1. **Fork** this repository.
+2. In **Settings → Actions → General**, allow workflows to run, with read and write permission.
+3. In **Actions**, run **Update prices** and **Update chart history and open interest** once (they also run on a schedule). This creates the `data` branch.
+4. In **Settings → Pages**, set the source to **GitHub Actions**, then run **Deploy site**.
+5. Edit `config.js` and point `dataBase` at your fork:
+   ```js
+   window.CPT_CONFIG = {
+     dataBase: 'https://raw.githubusercontent.com/<you>/commodity-price-tracker/data',
+   };
+   ```
+6. If you host the data anywhere other than `raw.githubusercontent.com`, also add that host to the `connect-src` list in the Content Security Policy `<meta>` tag of `index.html`.
+7. Optional: change the `CNAME` file to your own domain, or delete it to use `<you>.github.io/commodity-price-tracker`.
+
+## Project structure
 
 ```
-Yahoo Finance CDN ──→ CORS Proxy ──→ app.js (browser)
-  · GC=F SI=F PL=F PA=F (Precious)       │
-  · CL=F BZ=F NG=F (Energy)              ├── Parse JSON
-  · HG=F ALI=F HRC=F (Cu, Al, Steel)     │   (USX cents & CAD → USD via FX)
-  · ZW=F ZC=F ZS=F ZR=F ZM=F (CBOT)      ├── Convert Units (oz→g, lb→kg,
-  · ZL=F SB=F CT=F KC=F CC=F (softs)     │     MT→kg, bushel/cwt/ton→quintal,
-  · OJ=F LBR=F HE=F LE=F (ICE/CME)       │     mbf→cu ft)
-  · USDINR=X (Forex) + full FX rate map  ├── Apply USD/INR Forex
-                                         ├── Layer Import Duties (date-aware)
-                                         └── Render Cards + Charts (localStorage cache)
-gold-api.com (no proxy needed) ──→ app.js
-  · XAU XAG XPT XPD spot (backup when Yahoo fails)
-
-Indicative levels (in-code, manually updated) ──→ app.js
-  · Zinc, Nickel, Lead, Tin, Iron Ore, Lithium, Cobalt, Canola & Palm oil
-  · (no free live feed; ZN=F is the 10-yr T-Note, RS=F returns empty arrays)
+index.html · docs.html · about.html · 404.html   Pages
+app.js            Commodity table, duty rules, pricing engine, UI logic
+style.css         Design system (light and dark)
+config.js         Where live data is read from
+sw.js             Offline support
+vendor/           Self-hosted charting library with its licence and notice
+scripts/          Data fetchers, publisher and local dev server (Node, no packages)
+.github/workflows Price updates, chart updates, site deploy
+assets/ · brand/ · icons/   Screenshots, Mr. Chartist logo, app icons
 ```
 
-## 🔐 Compliance Notice
+Methodology, the duty matrix, unit conversions and a searchable glossary are in [docs.html](docs.html).
 
-> **SEBI Research Analyst Notice:** This application does **NOT** display live data sourced from the National Stock Exchange (NSE) or Multi Commodity Exchange (MCX).
->
-> All Indian commodity quotes — including "Retail Contract Equivalents" — are strict **mathematical approximations** derived from international COMEX/NYMEX/CBOT/ICE/LME benchmarks converted to INR via live forex rates with published customs duty overlays.
->
-> *Prices are for illustrative and educational purposes only and do not constitute financial advice.*
+## Accuracy and limits
 
-## ☁️ Deployment
+- Quotes are derived from international benchmarks. This is **not** NSE or MCX data, and Indian market prices will differ.
+- Duty rates and their effective dates are entered by hand from public notifications. **Needs verification** against the latest CBIC notifications before you rely on them. Found a wrong rate? Open a [data correction](../../issues/new?template=data_correction.yml).
+- Futures contracts roll, so a day change can occasionally look odd around a roll.
+- For information and education only. Not financial or trading advice.
 
-### Vercel (Recommended)
-```bash
-# Deploy to Vercel (zero-config)
-npx vercel --prod
-```
-The repo includes a `vercel.json` with SPA rewrite rules.
+## Contributing
 
-### Any Static Host
-Since there's no backend, you can deploy to **Netlify, Cloudflare Pages, GitHub Pages**, or any static file host. Just drop the files.
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to run, test and propose changes, and [SECURITY.md](SECURITY.md) to report a security problem. Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
-## 💖 Support This Project
+Good first contributions: a corrected duty rate with its source, a free live feed for any indicative commodity, translations, and accessibility fixes.
 
-If this tool helps you track commodity prices or understand import duty mechanics, consider supporting my work:
+## Credits
 
-<p align="center">
-  <a href="https://buymeacoffee.com/mrchartist"><img src="https://img.shields.io/badge/☕_Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee"></a>
-</p>
+Data: [CFTC](https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm), [Yahoo Finance](https://finance.yahoo.com), [gold-api.com](https://gold-api.com), [ExchangeRate-API](https://www.exchangerate-api.com). Charts: [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts) (Apache-2.0), self-hosted in `vendor/`.
 
-Your support keeps these open-source financial tools free for the entire Indian trading community. 🙏
+Built by [**@MrChartist**](https://mrchartist.com) · [Twitter](https://twitter.com/mr_chartist) · [GitHub](https://github.com/MrChartist) · [Buy me a coffee](https://buymeacoffee.com/mrchartist)
 
-## 🔗 Links
-
-- **Live Dashboard:** [commodity.mrchartist.com](https://commodity.mrchartist.com/)
-- **FII/DII Data Terminal:** [fii-diidata.mrchartist.com](https://fii-diidata.mrchartist.com/)
-- **X (Twitter):** [@mr_chartist](https://twitter.com/mr_chartist)
-- **Support:** [Buy Me A Coffee](https://buymeacoffee.com/mrchartist)
-
----
-
-<p align="center">
-  <b>Made with care by <a href="https://github.com/MrChartist">Mr. Chartist</a></b><br>
-  <i>Decoding commodity prices for the Indian retail trader.</i><br><br>
-  <a href="https://mrchartist.com"><img src="https://img.shields.io/badge/mrchartist.com-6366f1?style=flat-square&logo=safari&logoColor=white" alt="Website"/></a>
-  <a href="https://github.com/MrChartist"><img src="https://img.shields.io/badge/More_Projects-0d1117?style=flat-square&logo=github&logoColor=white" alt="GitHub"/></a>
-</p>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:1a1a2e,100:6366f1&height=100&section=footer" width="100%" />
+Released under the [MIT License](LICENSE).
