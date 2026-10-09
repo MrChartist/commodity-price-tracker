@@ -58,7 +58,7 @@ Yahoo Finance does not allow direct requests from a browser, so a scheduled GitH
 
 ```mermaid
 flowchart LR
-  A[GitHub Action<br/>every 5 min] -->|Yahoo Finance, FX| B[(data branch<br/>prices.json)]
+  A[GitHub Action<br/>scheduled every 5 min] -->|Yahoo Finance, FX| B[(data branch<br/>prices.json)]
   C[GitHub Action<br/>every 6 h] -->|chart history| B
   B -->|raw.githubusercontent.com| D[Your browser]
   E[gold-api.com spot] -->|every 60 s| D
@@ -68,14 +68,14 @@ flowchart LR
 | Data | Source | How fresh |
 |---|---|---|
 | Gold, silver, platinum, palladium | gold-api.com spot, read by the browser | About every minute |
-| Futures, USD/INR, FX strip | Yahoo Finance via the `data` branch | Up to about 5 minutes |
+| Futures, USD/INR, FX strip | Yahoo Finance via the `data` branch | Scheduled every 5 minutes, but GitHub often runs schedules much less often (hours, on new or quiet repositories). The app shows the real age and flags it Stale after 20 minutes |
 | Chart history and volume bars | Yahoo Finance via the `data` branch | Refreshed every 6 hours |
 | Open interest, managed-money net | CFTC Commitments of Traders via the `data` branch | Weekly (as of Tuesday, published Friday) |
 | Nine commodities with no free live feed | Typed-in indicative levels in `app.js` | As of 2026-06-12. **Needs verification** |
 
 The nine indicative commodities (zinc, nickel, lead, tin, iron ore, lithium, cobalt, canola oil, palm oil) are always badged **Indicative**. Their feeds are not freely available, and a stale feed shown as live would be worse than an honest label.
 
-Notes on freshness: GitHub can delay scheduled runs at busy times, and it pauses schedules in a repository with no activity for 60 days. The app flags any price older than 20 minutes as Stale.
+Notes on freshness: GitHub can delay scheduled runs at busy times and on new or quiet repositories (a first measurement here was one run in 13 hours). To keep data fresh, trigger **Update prices** from an external scheduler or press **Run workflow**. Also, and it pauses schedules in a repository with no activity for 60 days. The app flags any price older than 20 minutes as Stale.
 
 ## Run it locally
 
