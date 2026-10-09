@@ -1,5 +1,5 @@
 Contact: https://twitter.com/mr_chartist
 Expires: 2027-10-07T00:00:00.000Z
 Preferred-Languages: en
-Policy: https://github.com/MrChartist/commodity-price-tracker/blob/main/SECURITY.md
+Policy: https://github.com/MrChartist/commodity-price-tracker/blob/master/SECURITY.md
 Canonical: https://commodity.mrchartist.com/.well-known/security.txt

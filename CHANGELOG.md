@@ -4,6 +4,13 @@ All notable changes to this project are listed here. The format follows [Keep a 
 
 ## Unreleased
 
+### Fixed (full project check)
+- Accessibility: axe-core reports no violations on any page, in light and dark, at phone and desktop sizes. Fixed AA colour contrast (muted text, links, the LIVE pill, the duty badge, active buttons), accessible names that did not match visible text, skipped heading levels, an unnamed navigation landmark, a keyboard-unreachable FX strip, an unnamed logo link on small screens, and links that relied on colour alone.
+- Futures contract rolls: a front-month roll (large gap on a volume spike, seen on Lean Hogs at -10.8%) no longer shows as a day change or as "Top loser". The price is kept and the change is explained in a tooltip.
+- Search no longer matches the generic word "Commodity" in category labels, so "co" or "com" does not return every agri card.
+- Small screens: the docs and About header fits at 320px, and its buttons meet the 44px touch size on touch devices.
+- Raw `&` in the page title is encoded; dead code removed; `security.txt` policy link points to the `master` branch.
+
 ### Fixed (final review)
 - Opening docs or About no longer overwrites your theme with dark. They follow the system theme and only save a choice you make.
 - The service worker serves the app shell network-first, so HTML, JS and CSS from different releases are never mixed. Local data files are never cached.

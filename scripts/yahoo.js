@@ -3,7 +3,7 @@
 // results are published as static JSON the browser can read.
 const UA = 'Mozilla/5.0 (compatible; CommodityPriceTracker/1.1; +https://commodity.mrchartist.com)';
 const HOSTS = ['query1.finance.yahoo.com', 'query2.finance.yahoo.com'];
-const SYMBOL_RE = /^[A-Z0-9=^.\-]{1,14}$/;
+const SYMBOL_RE = /^[A-Z0-9=^.-]{1,14}$/;
 
 async function yahooChart(symbol, params, timeoutMs = 7000) {
   let lastErr;

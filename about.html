@@ -29,8 +29,8 @@
 <style>
 *{box-sizing:border-box;margin:0}
 /* ── DOCS PAGE (Apple HIG-style: grouped surfaces, hairlines, translucent sidebar) ── */
-:root,[data-theme="light"]{--bg:#F2F2F7;--l1:#FFFFFF;--l2:#F2F2F7;--l3:#E9E9EE;--sep:rgba(60,60,67,.18);--sep2:rgba(60,60,67,.1);--t1:#000;--t2:#1C1C1E;--t3:#5F5F66;--t4:#8A8A8E;--primary:#007AFF;--green:#248A3D;--red:#D70015;--card-shadow:none;--tile:#fff;--logo:#0D0D0D;--mat:rgba(255,255,255,.88)}
-[data-theme="dark"]{--bg:#000;--l1:#1C1C1E;--l2:#2C2C2E;--l3:#3A3A3C;--sep:rgba(84,84,88,.55);--sep2:rgba(84,84,88,.3);--t1:#fff;--t2:#EBEBF5;--t3:#A1A1A8;--t4:#8E8E93;--primary:#0A84FF;--green:#30D158;--red:#FF453A;--card-shadow:none;--tile:#1C1C1E;--logo:#fff;--mat:rgba(28,28,30,.88)}
+:root,[data-theme="light"]{--fillblue:#0062CC;--bg:#F2F2F7;--l1:#FFFFFF;--l2:#F2F2F7;--l3:#E9E9EE;--sep:rgba(60,60,67,.18);--sep2:rgba(60,60,67,.1);--t1:#000;--t2:#1C1C1E;--t3:#48484A;--t4:#5F5F66;--primary:#0062CC;--green:#248A3D;--red:#D70015;--card-shadow:none;--tile:#fff;--logo:#0D0D0D;--mat:rgba(255,255,255,.88)}
+[data-theme="dark"]{--fillblue:#0A6FD6;--bg:#000;--l1:#1C1C1E;--l2:#2C2C2E;--l3:#3A3A3C;--sep:rgba(84,84,88,.55);--sep2:rgba(84,84,88,.3);--t1:#fff;--t2:#EBEBF5;--t3:#A1A1A8;--t4:#9A9AA0;--primary:#0A84FF;--green:#30D158;--red:#FF453A;--card-shadow:none;--tile:#1C1C1E;--logo:#fff;--mat:rgba(28,28,30,.88)}
 html{scroll-behavior:smooth;scroll-padding-top:76px}
 body{overflow-x:hidden;background:var(--bg);color:var(--t1);font-family:'Inter','Plus Jakarta Sans',-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 .dx-top{position:sticky;top:0;z-index:50;background:var(--mat);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--sep);padding-top:env(safe-area-inset-top)}
@@ -132,7 +132,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 #to-top svg{width:18px;height:18px}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
-@media(max-width:480px){.dx-brand .bt{display:none}.dx-top-in{gap:8px}.dx-nav{margin-left:auto}}
+@media(max-width:480px){.dx-brand .bt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}.dx-top-in{gap:8px}.dx-nav{margin-left:auto}}
 
 .dx-wrap.one{grid-template-columns:minmax(0,1fr);max-width:792px}
 .links{background:var(--l1);border:.5px solid var(--sep);border-radius:16px;overflow:hidden}
@@ -140,6 +140,9 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 .links a:last-child{border-bottom:0}
 .links a span{color:var(--t4);font-size:13px;word-break:break-all;text-align:right}
 .links a:hover{background:var(--l2)}
+.dx-main p a,.dx-main li a,.dx-main .note a,.dx-main td a{text-decoration:underline;text-underline-offset:2px}
+@media(max-width:380px){.dx-nav a,.dx-nav button{padding:7px 5px;font-size:12px}.dx-top-in{gap:4px}}
+@media(pointer:coarse){.dx-nav a,.dx-nav button{min-height:44px}}
 </style>
 </head>
 <body>
@@ -149,7 +152,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
     <nav class="dx-nav" aria-label="Main">
       <a href="index.html">Dashboard</a><a href="docs.html">Docs</a><a href="about.html" class="on" aria-current="page">About</a>
       <a href="https://mrchartist.com" class="hide-s" target="_blank" rel="noopener">mrchartist.com</a>
-      <button type="button" id="theme-toggle" aria-label="Switch theme">Theme</button>
+      <button type="button" id="theme-toggle">Theme</button>
     </nav>
   </div>
 </header>

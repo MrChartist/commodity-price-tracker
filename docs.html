@@ -90,8 +90,8 @@
 }
 </script>
 <style>/* ── DOCS PAGE (Apple HIG-style: grouped surfaces, hairlines, translucent sidebar) ── */
-:root,[data-theme="light"]{--bg:#F2F2F7;--l1:#FFFFFF;--l2:#F2F2F7;--l3:#E9E9EE;--sep:rgba(60,60,67,.18);--sep2:rgba(60,60,67,.1);--t1:#000;--t2:#1C1C1E;--t3:#5F5F66;--t4:#8A8A8E;--primary:#007AFF;--green:#248A3D;--red:#D70015;--card-shadow:none;--tile:#fff;--logo:#0D0D0D;--mat:rgba(255,255,255,.88)}
-[data-theme="dark"]{--bg:#000;--l1:#1C1C1E;--l2:#2C2C2E;--l3:#3A3A3C;--sep:rgba(84,84,88,.55);--sep2:rgba(84,84,88,.3);--t1:#fff;--t2:#EBEBF5;--t3:#A1A1A8;--t4:#8E8E93;--primary:#0A84FF;--green:#30D158;--red:#FF453A;--card-shadow:none;--tile:#1C1C1E;--logo:#fff;--mat:rgba(28,28,30,.88)}
+:root,[data-theme="light"]{--fillblue:#0062CC;--bg:#F2F2F7;--l1:#FFFFFF;--l2:#F2F2F7;--l3:#E9E9EE;--sep:rgba(60,60,67,.18);--sep2:rgba(60,60,67,.1);--t1:#000;--t2:#1C1C1E;--t3:#48484A;--t4:#5F5F66;--primary:#0062CC;--green:#248A3D;--red:#D70015;--card-shadow:none;--tile:#fff;--logo:#0D0D0D;--mat:rgba(255,255,255,.88)}
+[data-theme="dark"]{--fillblue:#0A6FD6;--bg:#000;--l1:#1C1C1E;--l2:#2C2C2E;--l3:#3A3A3C;--sep:rgba(84,84,88,.55);--sep2:rgba(84,84,88,.3);--t1:#fff;--t2:#EBEBF5;--t3:#A1A1A8;--t4:#9A9AA0;--primary:#0A84FF;--green:#30D158;--red:#FF453A;--card-shadow:none;--tile:#1C1C1E;--logo:#fff;--mat:rgba(28,28,30,.88)}
 html{scroll-behavior:smooth;scroll-padding-top:76px}
 body{overflow-x:hidden;background:var(--bg);color:var(--t1);font-family:'Inter','Plus Jakarta Sans',-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 .dx-top{position:sticky;top:0;z-index:50;background:var(--mat);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--sep);padding-top:env(safe-area-inset-top)}
@@ -114,7 +114,7 @@ body{overflow-x:hidden;background:var(--bg);color:var(--t1);font-family:'Inter',
 .dx-toc nav{display:flex;flex-direction:column;gap:1px;margin-top:4px}
 .dx-toc a{color:var(--t2);text-decoration:none;padding:7px 10px;border-radius:8px;font-weight:500}
 .dx-toc a:hover{background:var(--l3)}
-.dx-toc a.active{background:var(--primary);color:#fff;font-weight:600}
+.dx-toc a.active{background:var(--fillblue);color:#fff;font-weight:600}
 @media(min-width:1024px){.dx-toc{position:sticky;top:72px;align-self:start;max-height:calc(100vh - 92px);overflow:auto}.dx-toc summary{pointer-events:none}}
 .dx-main{min-width:0}
 .dx-hero{border-radius:20px;padding:28px 22px;background:var(--l1);border:.5px solid var(--sep);margin-bottom:28px}
@@ -138,7 +138,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 .formula code{display:block;background:var(--l2);padding:12px 14px;border-radius:10px;font-size:13px;font-weight:600;line-height:1.7;white-space:normal}
 .steps{counter-reset:s;list-style:none;margin:16px 0!important;padding:0}
 .steps li{counter-increment:s;position:relative;padding:0 0 18px 46px;margin:0}
-.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;font:700 14px/32px 'Inter',sans-serif;text-align:center}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--fillblue);color:#fff;font:700 14px/32px 'Inter',sans-serif;text-align:center}
 .steps li::after{content:'';position:absolute;left:15.5px;top:38px;bottom:4px;width:1px;background:var(--sep)}
 .steps li:last-child::after{display:none}
 .steps strong{color:var(--t1);display:block;margin-bottom:2px}
@@ -165,7 +165,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 .note p{font-size:14px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0}
 .card2{background:var(--l1);border:.5px solid var(--sep);border-radius:16px;padding:16px}
-.card2 h4{font:600 15px 'Inter',sans-serif;color:var(--t1);margin-bottom:4px}
+.card2 h3{font:600 15px 'Inter',sans-serif;color:var(--t1);margin-bottom:4px}
 .card2 p{font-size:13px;line-height:1.55;color:var(--t3);margin:0}
 .tag{display:inline-block;font:600 11px 'Inter',sans-serif;padding:2px 9px;border-radius:99px;background:var(--l2);color:var(--t3);margin-bottom:8px}
 .seg{display:inline-flex;background:var(--l3);border-radius:10px;padding:2px;gap:2px;max-width:100%;overflow-x:auto;margin:8px 0}
@@ -193,7 +193,10 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
 #to-top svg{width:18px;height:18px}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
-@media(max-width:480px){.dx-brand .bt{display:none}.dx-top-in{gap:8px}.dx-nav{margin-left:auto}}
+@media(max-width:480px){.dx-brand .bt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}.dx-top-in{gap:8px}.dx-nav{margin-left:auto}}
+.dx-main p a,.dx-main li a,.dx-main .note a,.dx-main td a{text-decoration:underline;text-underline-offset:2px}
+@media(max-width:380px){.dx-nav a,.dx-nav button{padding:7px 5px;font-size:12px}.dx-top-in{gap:4px}}
+@media(pointer:coarse){.dx-nav a,.dx-nav button{min-height:44px}}
 </style>
 </head>
 <body>
@@ -206,7 +209,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
       <a href="docs.html" class="on" aria-current="page">Docs</a>
       <a href="about.html">About</a>
       <a href="https://mrchartist.com" class="dx-ext hide-s" target="_blank" rel="noopener">mrchartist.com</a>
-      <button type="button" id="theme-toggle" aria-label="Switch theme">Theme</button>
+      <button type="button" id="theme-toggle">Theme</button>
     </nav>
   </div>
 </header>
@@ -215,7 +218,7 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
   <aside class="dx-toc" aria-label="Table of contents">
     <details class="dx-toc-box" id="toc-box">
       <summary>On this page</summary>
-      <nav><a href="#overview" data-spy="overview">Overview</a><a href="#engine" data-spy="engine">Pricing formula</a><a href="#units" data-spy="units">Unit conversions</a><a href="#duties" data-spy="duties">Duty rate matrix</a><a href="#purity" data-spy="purity">Purity and contracts</a><a href="#sources" data-spy="sources">Data sources</a><a href="#freshness" data-spy="freshness">Data freshness and limitations</a><a href="#disclaimer" data-spy="disclaimer">Disclaimer</a><a href="#glossary" data-spy="glossary">Glossary</a></nav>
+      <nav aria-label="On this page"><a href="#overview" data-spy="overview">Overview</a><a href="#engine" data-spy="engine">Pricing formula</a><a href="#units" data-spy="units">Unit conversions</a><a href="#duties" data-spy="duties">Duty rate matrix</a><a href="#purity" data-spy="purity">Purity and contracts</a><a href="#sources" data-spy="sources">Data sources</a><a href="#freshness" data-spy="freshness">Data freshness and limitations</a><a href="#disclaimer" data-spy="disclaimer">Disclaimer</a><a href="#glossary" data-spy="glossary">Glossary</a></nav>
     </details>
   </aside>
 
@@ -230,10 +233,10 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
       <h2>Overview</h2>
       <p>The tracker is a free, client-side web page. It takes international futures prices, converts them to Indian units, multiplies by the USD/INR rate and adds the customs duty. The result is an estimate of the import landed price in rupees.</p>
       <div class="grid2">
-        <div class="card2"><span class="tag">Precious</span><h4>4 commodities</h4><p>Gold, Silver, Platinum, Palladium.</p></div>
-        <div class="card2"><span class="tag">Industrial</span><h4>10 commodities</h4><p>Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel (HRC), Iron Ore, Lithium, Cobalt.</p></div>
-        <div class="card2"><span class="tag">Energy</span><h4>3 commodities</h4><p>Crude Oil (WTI), Brent Crude, Natural Gas.</p></div>
-        <div class="card2"><span class="tag">Agri</span><h4>16 commodities</h4><p>Wheat, Corn, Soybean, Soybean Oil, Soybean Meal, Sugar, Cotton, Coffee, Cocoa, Rice, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs, Live Cattle.</p></div>
+        <div class="card2"><span class="tag">Precious</span><h3>4 commodities</h3><p>Gold, Silver, Platinum, Palladium.</p></div>
+        <div class="card2"><span class="tag">Industrial</span><h3>10 commodities</h3><p>Copper, Aluminium, Zinc, Nickel, Lead, Tin, Steel (HRC), Iron Ore, Lithium, Cobalt.</p></div>
+        <div class="card2"><span class="tag">Energy</span><h3>3 commodities</h3><p>Crude Oil (WTI), Brent Crude, Natural Gas.</p></div>
+        <div class="card2"><span class="tag">Agri</span><h3>16 commodities</h3><p>Wheat, Corn, Soybean, Soybean Oil, Soybean Meal, Sugar, Cotton, Coffee, Cocoa, Rice, Orange Juice, Lumber, Canola Oil, Palm Oil, Lean Hogs, Live Cattle.</p></div>
       </div>
       <div class="note warn"><strong>Important.</strong> This tool does not use NSE or MCX data. All Indian prices are calculated estimates. See <a href="#disclaimer">Disclaimer</a>.</div>
     </section>
@@ -290,14 +293,14 @@ code{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-size:.88em;b
       <h2>Data sources</h2>
       <p>The site is fully static and hosted on GitHub Pages. There is no server of our own. A GitHub Actions workflow runs about every 5 minutes, fetches Yahoo Finance, gold-api.com spot and FX rates on the Actions runner (so there is no browser CORS problem), and force-pushes a single file, <code>prices.json</code>, to an orphan branch named <code>data</code>. A second workflow that runs every 6 hours publishes chart history to the same branch under <code>charts/</code>. Your browser reads <code>https://raw.githubusercontent.com/&lt;owner&gt;/&lt;repo&gt;/data/prices.json</code> (the location is set in <code>config.js</code> as <code>window.CPT_CONFIG.dataBase</code>) and reads gold, silver, platinum and palladium spot directly from gold-api.com every 60 seconds. Precious metals spot is therefore about a minute old; everything else and USD/INR can be up to about 5 minutes old.</p>
       <div class="grid2">
-        <div class="card2"><span class="tag">Primary</span><h4>Yahoo Finance</h4><p>Futures prices for 24 commodities, the USD/INR rate and chart history. Fetched by GitHub Actions and published as <code>prices.json</code> and <code>charts/</code> on the <code>data</code> branch. The browser never calls Yahoo Finance directly.</p></div>
-        <div class="card2"><span class="tag">FX</span><h4>ExchangeRate API</h4><p>open.er-api.com is called directly from the browser for the other currency rates used for non-USD quotes and the FX strip. It updates once a day, so it is the USD/INR fallback only.</p></div>
-        <div class="card2"><span class="tag">Volume</span><h4>Yahoo Finance volume</h4><p>The latest session's futures volume and the previous session's, shown inside each card's Details. The latest session can be partial. The chart shows a volume histogram under the candles.</p></div>
-        <div class="card2"><span class="tag">Open interest</span><h4>CFTC Commitments of Traders</h4><p>Weekly open interest and managed-money net positions, as of Tuesday and published on Friday. Mapped only where the CFTC contract matches the instrument we price (23 commodities). Not shown for aluminium, lithium, cobalt, canola, palm oil, zinc, nickel, lead, tin or iron ore. It is weekly data and is always labelled with its date.</p></div>
-        <div class="card2"><span class="tag">Spot</span><h4>gold-api.com</h4><p>Spot price for Gold, Silver, Platinum and Palladium, read directly from the browser about every 60 seconds. India's bullion price follows spot, so the price shown is spot; the daily change comes from the COMEX/NYMEX futures in the snapshot. The same feed is also fetched by Actions for the snapshot.</p></div>
-        <div class="card2"><span class="tag">Manual</span><h4>Indicative levels</h4><p>Zinc, Nickel, Lead, Tin, Iron Ore, Lithium (Carbonate), Cobalt, Canola Oil, Palm Oil (CPO). Updated by hand in <code>app.js</code>. Last update: 2026-06-12.</p></div>
-        <div class="card2"><span class="tag">Charts</span><h4>Lightweight Charts</h4><p>Open-source charting library by TradingView (v4.1.3). Chart history comes from Yahoo Finance for the commodities that have a futures symbol.</p></div>
-        <div class="card2"><span class="tag">Browser</span><h4>localStorage cache</h4><p>Last prices and FX are saved in your browser. Chart series are cached for 6 hours.</p></div>
+        <div class="card2"><span class="tag">Primary</span><h3>Yahoo Finance</h3><p>Futures prices for 24 commodities, the USD/INR rate and chart history. Fetched by GitHub Actions and published as <code>prices.json</code> and <code>charts/</code> on the <code>data</code> branch. The browser never calls Yahoo Finance directly.</p></div>
+        <div class="card2"><span class="tag">FX</span><h3>ExchangeRate API</h3><p>open.er-api.com is called directly from the browser for the other currency rates used for non-USD quotes and the FX strip. It updates once a day, so it is the USD/INR fallback only.</p></div>
+        <div class="card2"><span class="tag">Volume</span><h3>Yahoo Finance volume</h3><p>The latest session's futures volume and the previous session's, shown inside each card's Details. The latest session can be partial. The chart shows a volume histogram under the candles.</p></div>
+        <div class="card2"><span class="tag">Open interest</span><h3>CFTC Commitments of Traders</h3><p>Weekly open interest and managed-money net positions, as of Tuesday and published on Friday. Mapped only where the CFTC contract matches the instrument we price (23 commodities). Not shown for aluminium, lithium, cobalt, canola, palm oil, zinc, nickel, lead, tin or iron ore. It is weekly data and is always labelled with its date.</p></div>
+        <div class="card2"><span class="tag">Spot</span><h3>gold-api.com</h3><p>Spot price for Gold, Silver, Platinum and Palladium, read directly from the browser about every 60 seconds. India's bullion price follows spot, so the price shown is spot; the daily change comes from the COMEX/NYMEX futures in the snapshot. The same feed is also fetched by Actions for the snapshot.</p></div>
+        <div class="card2"><span class="tag">Manual</span><h3>Indicative levels</h3><p>Zinc, Nickel, Lead, Tin, Iron Ore, Lithium (Carbonate), Cobalt, Canola Oil, Palm Oil (CPO). Updated by hand in <code>app.js</code>. Last update: 2026-06-12.</p></div>
+        <div class="card2"><span class="tag">Charts</span><h3>Lightweight Charts</h3><p>Open-source charting library by TradingView (v4.1.3). Chart history comes from Yahoo Finance for the commodities that have a futures symbol.</p></div>
+        <div class="card2"><span class="tag">Browser</span><h3>localStorage cache</h3><p>Last prices and FX are saved in your browser. Chart series are cached for 6 hours.</p></div>
       </div>
       <h3 class="dx-h3">Price source per commodity</h3>
       <div class="tbl-wrap"><table class="dx-table src"><thead><tr><th>Commodity</th><th>Source</th></tr></thead><tbody><tr><td data-label="Commodity">Gold</td><td data-label="Source">Yahoo Finance <code>GC=F</code> (day change); price: gold-api.com spot</td></tr><tr><td data-label="Commodity">Silver</td><td data-label="Source">Yahoo Finance <code>SI=F</code> (day change); price: gold-api.com spot</td></tr><tr><td data-label="Commodity">Crude Oil (WTI)</td><td data-label="Source">Yahoo Finance <code>CL=F</code></td></tr><tr><td data-label="Commodity">Brent Crude</td><td data-label="Source">Yahoo Finance <code>BZ=F</code></td></tr><tr><td data-label="Commodity">Natural Gas</td><td data-label="Source">Yahoo Finance <code>NG=F</code></td></tr><tr><td data-label="Commodity">Copper</td><td data-label="Source">Yahoo Finance <code>HG=F</code></td></tr><tr><td data-label="Commodity">Aluminium</td><td data-label="Source">Yahoo Finance <code>ALI=F</code></td></tr><tr><td data-label="Commodity">Zinc</td><td data-label="Source">Indicative (USD 3,500 per metric ton)</td></tr><tr><td data-label="Commodity">Nickel</td><td data-label="Source">Indicative (USD 17,900 per metric ton)</td></tr><tr><td data-label="Commodity">Lead</td><td data-label="Source">Indicative (USD 1,975 per metric ton)</td></tr><tr><td data-label="Commodity">Tin</td><td data-label="Source">Indicative (USD 45,000 per metric ton)</td></tr><tr><td data-label="Commodity">Steel (HRC)</td><td data-label="Source">Yahoo Finance <code>HRC=F</code></td></tr><tr><td data-label="Commodity">Iron Ore</td><td data-label="Source">Indicative (USD 100 per dry metric ton)</td></tr><tr><td data-label="Commodity">Lithium (Carbonate)</td><td data-label="Source">Indicative (USD 20,000 per metric ton)</td></tr><tr><td data-label="Commodity">Cobalt</td><td data-label="Source">Indicative (USD 55,000 per metric ton)</td></tr><tr><td data-label="Commodity">Platinum</td><td data-label="Source">Yahoo Finance <code>PL=F</code> (day change); price: gold-api.com spot</td></tr><tr><td data-label="Commodity">Palladium</td><td data-label="Source">Yahoo Finance <code>PA=F</code> (day change); price: gold-api.com spot</td></tr><tr><td data-label="Commodity">Wheat</td><td data-label="Source">Yahoo Finance <code>ZW=F</code></td></tr><tr><td data-label="Commodity">Corn (Maize)</td><td data-label="Source">Yahoo Finance <code>ZC=F</code></td></tr><tr><td data-label="Commodity">Soybean</td><td data-label="Source">Yahoo Finance <code>ZS=F</code></td></tr><tr><td data-label="Commodity">Soybean Oil</td><td data-label="Source">Yahoo Finance <code>ZL=F</code></td></tr><tr><td data-label="Commodity">Sugar</td><td data-label="Source">Yahoo Finance <code>SB=F</code></td></tr><tr><td data-label="Commodity">Cotton</td><td data-label="Source">Yahoo Finance <code>CT=F</code></td></tr><tr><td data-label="Commodity">Coffee</td><td data-label="Source">Yahoo Finance <code>KC=F</code></td></tr><tr><td data-label="Commodity">Cocoa</td><td data-label="Source">Yahoo Finance <code>CC=F</code></td></tr><tr><td data-label="Commodity">Rice (Rough)</td><td data-label="Source">Yahoo Finance <code>ZR=F</code></td></tr><tr><td data-label="Commodity">Soybean Meal</td><td data-label="Source">Yahoo Finance <code>ZM=F</code></td></tr><tr><td data-label="Commodity">Orange Juice</td><td data-label="Source">Yahoo Finance <code>OJ=F</code></td></tr><tr><td data-label="Commodity">Lumber</td><td data-label="Source">Yahoo Finance <code>LBR=F</code></td></tr><tr><td data-label="Commodity">Canola Oil</td><td data-label="Source">Indicative (USD 1,150 per metric ton)</td></tr><tr><td data-label="Commodity">Palm Oil (CPO)</td><td data-label="Source">Indicative (USD 1,000 per metric ton)</td></tr><tr><td data-label="Commodity">Lean Hogs (Pork)</td><td data-label="Source">Yahoo Finance <code>HE=F</code></td></tr><tr><td data-label="Commodity">Live Cattle</td><td data-label="Source">Yahoo Finance <code>LE=F</code></td></tr></tbody></table></div>

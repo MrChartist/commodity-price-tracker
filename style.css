@@ -36,7 +36,7 @@
   /* System colours: fills use the pure system hue, text uses an accessible shade */
   --green: #34C759;
   --red: #FF3B30;
-  --green-t: #1F7A35;
+  --green-t: #1A6B2E;
   --red-t: #D70015;
   --orange-t: #A24A00;
   --green-bg: rgba(52,199,89,0.15);
@@ -81,6 +81,7 @@
   --t4: #98989D;
   --accent: #8E8CFF;
   --accent-tint: rgba(142,140,255,0.16);
+  --accent-on-tint: #B9B8FF;
   --on-accent: #0A0A1F;
   --green: #30D158;
   --red: #FF453A;
@@ -276,7 +277,7 @@ button.summary-cell:hover { background: var(--fill); }
 .india-landed-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px 10px; padding: 10px 0 8px; border-bottom: 0.5px solid var(--sep); }
 .india-landed-title { font-size: 11px; font-weight: 700; color: var(--t4); letter-spacing: 0.04em; text-transform: uppercase; }
 .india-landed-title .unit { text-transform: none; }
-.india-duty-badge { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--accent-tint); color: var(--accent); }
+.india-duty-badge { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--accent-tint); color: var(--accent-on-tint, var(--accent)); }
 .price-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 36px; padding: 6px 0; }
 .price-row + .price-row { border-top: 0.5px solid var(--sep); }
 .price-row.sub { padding-left: 12px; }

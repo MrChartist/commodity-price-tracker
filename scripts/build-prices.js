@@ -38,7 +38,11 @@ async function quote(sym) {
       break;
     }
     const v = m.regularMarketVolume;
-    return [sym, { price, prev, currency: m.currency || 'USD', marketTime: m.regularMarketTime || null, volume: typeof v === 'number' && v > 0 ? v : null, prevVolume }];
+    // Front-month roll: the continuous series jumps to the next contract, so a big gap on a volume
+    // spike is a contract change, not a market move. The client hides the day change for these.
+    const roll = typeof prev === 'number' && prev > 0 && Math.abs(price / prev - 1) >= 0.08 &&
+      typeof v === 'number' && typeof prevVolume === 'number' && v >= 1.8 * prevVolume;
+    return [sym, { price, prev, currency: m.currency || 'USD', marketTime: m.regularMarketTime || null, volume: typeof v === 'number' && v > 0 ? v : null, prevVolume, roll }];
   } catch (e) { return [sym, null]; }
 }
 

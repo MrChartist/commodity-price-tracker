@@ -824,6 +824,7 @@ function hydrateFromCache() {
         isApprox: !!p.isApprox,
         isSpotBackup: !!p.isSpotBackup,
         isSpot: !!p.isSpot,
+        roll: !!p.roll,
         volume: isNum(p.volume) ? p.volume : null,
         prevVolume: isNum(p.prevVolume) ? p.prevVolume : null,
       };
@@ -873,8 +874,9 @@ async function fetchYahooQuote(symbol) {
     if (!isNum(price) || price <= 0) return null;
     const prevUsd = isNum(q.prev) && q.prev > 0 ? toUsd(q.prev, q.currency) : null;
     const hasPrev = isNum(prevUsd) && prevUsd > 0;
-    const change = hasPrev ? price - prevUsd : 0;
-    return { price, change, changePct: hasPrev ? (change / prevUsd) * 100 : 0, volume: isNum(q.volume) ? q.volume : null, prevVolume: isNum(q.prevVolume) ? q.prevVolume : null };
+    const roll = !!q.roll;
+    const change = hasPrev && !roll ? price - prevUsd : 0;
+    return { price, change, roll, changePct: hasPrev && !roll ? (change / prevUsd) * 100 : 0, volume: isNum(q.volume) ? q.volume : null, prevVolume: isNum(q.prevVolume) ? q.prevVolume : null };
   }
   return null; // no snapshot available: quote stays on its cached value
 }
@@ -965,7 +967,7 @@ async function fetchAllPrices() {
         const spot = live || (bs && isNum(bs.price) ? { price: bs.price } : null);
         if (spot && data) {
           const pct = data.changePct;
-          data = { price: spot.price, change: spot.price - spot.price / (1 + pct / 100), changePct: pct, isSpot: true, volume: data.volume, prevVolume: data.prevVolume };
+          data = { price: spot.price, change: spot.price - spot.price / (1 + pct / 100), changePct: pct, isSpot: true, roll: data.roll, volume: data.volume, prevVolume: data.prevVolume };
         } else if (spot) {
           data = { price: spot.price, change: 0, changePct: 0, isSpotBackup: true };
         }
@@ -1112,7 +1114,7 @@ function fmtAge(ms) {
 }
 
 // Daily change is only meaningful for live futures quotes.
-const hasChange = p => !!p && !p.isApprox && !p.isSpotBackup && isNum(p.changePct);
+const hasChange = p => !!p && !p.isApprox && !p.isSpotBackup && !p.roll && isNum(p.changePct);
 const isPriceStale = p => !!p && !p.isApprox && isNum(p.ts) && (Date.now() - p.ts) > PRICE_STALE_MS;
 
 function tickInfo(p) {
@@ -1167,10 +1169,6 @@ function statsHtml(config, p) {
 // ── CARD HTML ──
 const ICON_STAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
 const ICON_SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
-
-function row(label, value, cls = '') {
-  return `<div class="price-row ${cls}"><span class="price-label">${label}</span><span class="price-value ${cls.includes('hl') ? 'highlight' : ''}">${value}</span></div>`;
-}
 
 function buildLandedRowsHtml(config, landed) {
   let html = '';
@@ -1269,7 +1267,7 @@ function buildCommodityCard(key, index) {
   const change = hasData && hasChange(priceData) ? fmtChange(priceData.change, priceData.changePct) : fmtChange(null);
   const tick = tickInfo(priceData);
   const watched = isWatched(key);
-  const noChangeTitle = hasData && !hasChange(priceData) ? ' title="Daily change is not available for this source"' : '';
+  const noChangeTitle = hasData && !hasChange(priceData) ? ` title="${priceData.roll ? 'The front-month contract rolled, so the day change is not meaningful' : 'Daily change is not available for this source'}"` : '';
 
   return `
     <article class="commodity-card" data-commodity="${key}" data-category="${config.category}" style="--commodity-accent:${config.accentColor};--i:${index}" aria-label="${escapeHtml(config.name)}">
@@ -1382,7 +1380,8 @@ function getVisibleKeys() {
     const c = COMMODITIES[key];
     if (state.activeCategory === 'watchlist') { if (!isWatched(key)) return false; }
     else if (state.activeCategory !== 'all' && c.category !== state.activeCategory) return false;
-    if (q && !`${c.name} ${c.symbol} ${c.categoryLabel} ${key}`.toLowerCase().includes(q)) return false;
+    // Match name, symbol, id and category. The generic word "Commodity" in labels is left out so "co" or "com" does not match every agri card.
+    if (q && !`${c.name} ${c.symbol} ${key} ${c.category} ${String(c.categoryLabel).replace(/commodity/i, '')}`.toLowerCase().includes(q)) return false;
     return true;
   });
   const pct = k => (hasChange(state.prices[k]) ? state.prices[k].changePct : null);
@@ -1509,7 +1508,7 @@ function renderSummary() {
     const sign = p.changePct > 0 ? '+' : '';
     const chartable = !!COMMODITIES[key].yahooSymbol;
     const inner = `<span class="s-label">${label}</span><span class="s-val ${cls}">${sign}${p.changePct.toFixed(2)}%</span><span class="s-name">${escapeHtml(COMMODITIES[key].name)}</span>`;
-    return chartable ? `<button type="button" class="summary-cell pressable" data-action="chart" data-key="${key}" aria-label="${label}: ${escapeHtml(COMMODITIES[key].name)} ${sign}${p.changePct.toFixed(2)} percent. Open chart">${inner}</button>`
+    return chartable ? `<button type="button" class="summary-cell pressable" data-action="chart" data-key="${key}" >${inner}<span class="sr-only">, open chart</span></button>`
       : `<div class="summary-cell">${inner}</div>`;
   };
   el.innerHTML = `
@@ -1804,7 +1803,6 @@ let chartInstance = null;
 let chartSeries = null;
 let chartResizeObserver = null;
 let currentChartKey = null;
-let currentRange = '1y';
 let chartToken = 0;
 let lastFocus = null;
 let closeTimer = null;
@@ -1888,7 +1886,7 @@ async function openChart(key, opts = {}) {
   const modal = $('chart-modal');
   const wasOpen = isChartOpen();
   clearTimeout(closeTimer);
-  currentChartKey = key; currentRange = '1y';
+  currentChartKey = key;
   const exchange = config.exchange || 'Futures';
   $('chart-title').textContent = `${config.name}`;
   $('chart-sub').textContent = `${config.yahooSymbol} · ${exchange} futures · USD`;
@@ -1966,7 +1964,6 @@ async function renderChart(key, range) {
 }
 
 async function changeRange(range) {
-  currentRange = range;
   setRangeButtons(range);
   if (currentChartKey) await renderChart(currentChartKey, range);
 }
